@@ -27,8 +27,17 @@ window.addEventListener('load', function () {
 		// 'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.bets.83'
 		let betType = key.split('.').splice(-2)[1]; // [0 , 'backOdds'] 
 
-		if(betType === 'backOdds' || betType === 'layOdds') {
-			document.getElementById(key + '#odd').innerHTML = value;
+		if(betType === 'backOdds') {
+			// 'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.2#odd'
+			document.getElementById(key + '.0#odd').innerHTML = value[2];
+			document.getElementById(key + '.1#odd').innerHTML = value[1];
+			document.getElementById(key + '.2#odd').innerHTML = value[0];
+		}
+		else if(betType === 'layOdds') {
+			// 'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.layOdds.0#odd'
+			document.getElementById(key + '.0#odd').innerHTML = value[0];
+			document.getElementById(key + '.1#odd').innerHTML = value[1];
+			document.getElementById(key + '.2#odd').innerHTML = value[2];
 		}
 	});
 
@@ -224,7 +233,7 @@ window.addEventListener('load', function () {
 			// available money wrapper
 			elem4 = document.createElement("div");
 			elem4.classList = "odd";
-			elem4.setAttribute("id", idString + playerinfo["oddIndexString"]+ "#odd");
+			elem4.setAttribute("id", idString + playerinfo["oddIndexString"]+ "#odd"); // 'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.2#odd'
 			elem4.innerHTML = players[i].backOdds[2];
 			elem3.appendChild(elem4);
 			// available money
@@ -249,7 +258,7 @@ window.addEventListener('load', function () {
 			// available money wrapper
 			elem4 = document.createElement("div");
 			elem4.classList = "odd";
-			elem4.setAttribute("id", idString + playerinfo["oddIndexString"]+ "#odd");
+			elem4.setAttribute("id", idString + playerinfo["oddIndexString"]+ "#odd"); // 'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.layOdds.0#odd'
 			elem4.innerHTML = players[i].layOdds[0];
 			elem3.appendChild(elem4);
 			// available money

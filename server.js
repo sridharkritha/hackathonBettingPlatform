@@ -147,9 +147,6 @@
 
 			// betstr = horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.2
 			let changeObj = {};
-			// changeObj[oddstr] = oddvalue; // need temp object. Direct object assignment do NOT work => { betstr : oddvalue }
-			// const result = await updateListingByName(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 
-			// 						{}, changeObj);
 
 			changeObj[betstr + '.bets'] =  { 
 								username: user.username, bettype: bettype, profitliabilityvalue: profitliabilityvalue,  
@@ -160,8 +157,6 @@
 
 
 			const betValue = bettype === 'backOdds' ? stakevalue : profitliabilityvalue;
-
-
 
 			// result = await User.updateOne(	{ _id },
 			// 								{$inc: { "userBalance": -betValue }}   // $inc
@@ -177,6 +172,16 @@
 			console.log(result._doc.userBalance); // user balance after update
 
 			console.log("Placed bet successfully: ", result);
+
+
+			// Update the new oddvalue and sort it by descending order
+			// "horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds"
+			let oddArray = oddstr.split('.').slice(0, -1).join('.'); // ....0.backOdds[] or ......0.layOdds[]
+
+			changeObj = {};
+			changeObj[oddArray] =  { $each: [oddvalue], $sort: -1 } ; // need temp object. Direct object assignment do NOT work => { betstr : oddvalue }
+			const oddUpdate = await updateListingByName(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 
+									{}, changeObj, 'push');
 
 			res.json({ status: 'ok', "userBalance": result._doc.userBalance - betValue});
 		} catch (error) {
