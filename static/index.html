@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<script src="client-dist/socket.io.js"></script>
+
+	<link rel="stylesheet" href="css/sportsbook/style.css">
+	<script src="js/sportsbook/login.js"></script>
+	<script src="js/sportsbook/client.js"></script>
+
+	<title>PBP - A Peer Betting Platform</title>
+</head>
+
+<body>
+	<!-- login(start) -->
+	<div id="regLoginWrapperId">
+		<span id="welcomeUserName"></span>
+		<div  id="userBalanceAmount"></div>
+		<div id="regLoginFieldsId">
+			<input type="text" autocomplete="off" id="username" placeholder="Username" />
+			<input type="password" autocomplete="off" id="password" placeholder="Password" />
+			<input type="submit" id="logInId" value="Log in" />
+			<input type="submit" id="joinNowId" value="Join Now!" />
+		</div>
+	</div>
+	<!-- login(end) -->
+
+	<h1>Horse Race - Race Card</h1>
+
+	<!-- Bet Slip -->
+	<div id="betSlipContainer" class="unselectable"></div>
+
+	<!-- Event/Sports Container	 -->
+	<div id="sportsEventContainer" class="gridROw"></div>
+
+</body>
+
+</html>

@@ -1,0 +1,315 @@
+	* {
+		box-sizing: border-box;
+	}
+
+	html, body {
+		padding: 0;
+		margin: 0;
+		direction: ltr;
+		width: 100%;
+		/* color: #323229; */
+		/* background-color: #bfbfbf; */
+		line-height: 1.25;
+		/* font-family: "Lucida Grande","Lucida Sans Unicode",sans-serif; */
+		/* font-family: Verdana, Arial, Helvetica, sans-serif; */
+		font-family: roboto condensed,HelveticaNeue,helvetica neue,Helvetica,Arial,lucida grande,sans-serif;
+		/* font-size: 140%; */
+		font-size: 4vh;
+	}
+
+	div {
+		/* border: 1px solid red;
+		padding: 10px; */
+	}
+
+	/*********************** registration / login (start) *************************/
+
+	#regLoginWrapperId {
+		text-align: right;
+	}
+	/*********************** registration / login (end) *************************/
+
+	.winLossValue {
+		color: red;
+		font-size: 18px;
+		font-weight: bold;
+	}
+
+	.betSlipInputbox {
+
+	/* border-radius: 2px; */
+
+	height: 100%;
+
+	outline: 0;
+
+	width: 100%;
+
+	margin: 0;
+
+	/* padding: 15px 5px 0 0; */
+
+	border: 0;
+
+	text-align: center;
+
+	background-color: inherit;
+
+	/* color: #43444a; */
+
+	font-size: 38px;
+
+	font-weight: bolder;
+
+	/* -webkit-appearance: textfield; */
+
+	/* -moz-appearance: textfield; */
+
+	/* appearance: textfield; */
+
+	letter-spacing: 1px;
+
+	/* padding: 15px 23px 0 0; */
+	}
+
+	/**************************** components (start) ******************************/
+
+	#sportsEventContainer {
+		display: block;
+	}
+
+	#betSlipContainer {
+		display: none;
+	}
+
+	#gameSimulatorContainer {
+		display: none;
+	}
+	/**************************** components (end) ******************************/
+
+	/********************* Grid over another Grid (start) *************************/
+	.wrapperRandomPick {
+		display: grid;
+	}
+
+	/* Placing 'selectorBoxId' grid over 'shuffleItemContainerId' */
+	.shuffleItemsContainer, .pickerBox {
+		grid-area: 1/1;
+	}
+
+	/* Moving cell over the grid */
+	#pickerBoxOneId {
+		/* grid-area: 1/3; */
+		grid-area: 1/1;
+		border: 5px solid blue;
+	}
+
+	#pickerBoxTwoId {
+		/* grid-area: 1/3; */
+		grid-area: 1/1;
+		border: 5px solid green;
+	}
+
+
+	#pickerBoxThreeId {
+		/* grid-area: 1/3; */
+		grid-area: 1/1;
+		border: 5px solid black;
+	}
+	/********************* Grid over another Grid (end) ***************************/
+
+	.sliderOverBox {
+		border: 1px solid blue;
+		position: absolute;
+		z-index: 1;
+
+		/* transition: all 5s ease-in-out; */
+
+	}
+
+	/* .sliderOverBox:hover */
+	/* .sliderOverBox:active
+	{
+	transform: translate(50em,0);
+	} */
+
+
+	.selectorBox {
+		display: grid;
+		grid-gap: .15rem;
+		grid-template-columns: 1fr 5fr;
+	}
+
+	.gridROw {
+		display: grid;
+		grid-gap: .15rem;
+	}
+
+	/* Grid Column Layout and Grid Size */
+	.gridColumnLayout {
+		display: grid;
+		grid-gap: .15rem;
+
+		grid-template-columns: 1fr 1fr;
+		/* grid-template-columns: repeat(auto-fill,minmax(16rem,1fr)); */
+	}
+
+	.gridColumnLayout_2 {
+		grid-template-columns: 1fr 1fr;
+	}
+	.gridColumnLayout_3 {
+		grid-template-columns: repeat(3, 1fr);
+	}
+	.gridColumnLayout_5 {
+		grid-template-columns: repeat(5, 1fr);
+	}
+	.gridColumnLayout_6 {
+		grid-template-columns: repeat(6, 1fr);
+	}
+
+	.size_1_9 {
+		grid-template-columns: 1fr 9fr;
+	}
+
+	.size_4_6 {
+		grid-template-columns: 4fr 6fr;
+	}
+
+	.odd, .player {
+		font-size: 3vh;
+		font-weight: bold;
+	}
+
+	.totalAmt, .playerDesc {
+		font-size: 2vh;
+		opacity: .54;
+	}
+
+	.halfOpaque {
+		opacity: .54;
+	}
+
+	.odd, .totalAmt {
+		text-align: center;
+	}
+
+	.gridCenterVH {
+		display: grid;
+		/* vertical align*/
+		align-items: center;  
+		/* horizontal align */
+		justify-content: center;
+		text-align: center;
+	}
+
+	.cellSize {
+		/* width: 65px; */
+		/* width: 76px;
+		height:36; */
+	}
+
+	/****************************** Bet Slip (start) ******************************/
+
+	/* label or other text is not selectable by a click or double click  */
+	.unselectable {
+		user-select: none;
+	}
+
+	input#backValueId {
+		text-align: center;
+	}
+
+	/* remove the default up/down button for the 'number' type input filed */
+	input[type=number]::-webkit-outer-spin-button,
+	input[type=number]::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	input[type=number] {
+		-moz-appearance:textfield;
+	}
+
+
+
+	.tickButtonBackground {
+		background-color: white;
+		color: #0eb588;
+		transition: 0.3s;
+	}
+
+	.tickButtonBackground:hover { 
+		background-color: #0eb588;
+		color: white;
+		cursor: pointer;
+	}
+
+	.binButtonBackground {
+		background-color: white;
+		color: #c51a1b;
+		transition: 0.3s;
+	}
+
+	.binButtonBackground:hover { 
+		background-color: #c51a1b;
+		color: white;
+		cursor: pointer;
+	}
+
+	/* Back */
+	.backMainBgColor {
+		background-color: #8dd2f0;
+		transition: 0.3s;
+	}
+
+	.backMainBgColor:hover { 
+		background-color: #00b3ff;
+		cursor: pointer;
+	}
+
+	.backOthersBgColor,.backOthersBgColorHover {
+		background-color: #e9f6fc;
+	}
+
+	.backOthersBgColorHover:hover { 
+		background-color: #00b3ff;
+		cursor: pointer;
+	}
+
+	.backMainFontColor {
+		color:#00b2ff;
+		font-weight: bold;
+	}
+
+	/* Lay */
+
+	.layMainBgColor {
+		background-color: #feafb2;
+	}
+
+	.layMainBgColor:hover { 
+		background-color: #FF7A7F;
+		cursor: pointer;
+	}
+
+	.layOthersBgColor,.layOthersBgColorHover {
+		background-color: #fce3e4;
+	}
+
+	.layOthersBgColorHover:hover { 
+		background-color: #FF7A7F;
+		cursor: pointer;
+	}
+
+	.layMainFontColor {
+		color:#FF7A7F;
+		font-weight: bold;
+	}
+
+	/****************************** Bet Slip (end) ********************************/
+
+
+
+
+
+
