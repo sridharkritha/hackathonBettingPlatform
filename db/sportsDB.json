@@ -67,8 +67,10 @@
 										"jockeyName": "D Allan",
 										"trainerName": "T D Easterby",
 										"silk": "assets\/silk\/pinkSilk.png",
-										"backOdds": [2.8,3.05,3.1],
-										"layOdds": [4.2,4.6,4.9],
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
 										"bets":[]
 								},
 								{
@@ -76,8 +78,10 @@
 										"jockeyName": "Joanna Mason",
 										"trainerName": "A Murphy",
 										"silk": "assets\/silk\/blackSilk.png",
-										"backOdds": [4.1,4.5,4.8],
-										"layOdds": [5.3,5.4,5.7],
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
 										"bets":[]
 								},
 								{
@@ -85,8 +89,10 @@
 										"jockeyName": "B A Curtis",
 										"trainerName": "M Johnston",
 										"silk": "assets\/silk\/yellowSilk.png",
-										"backOdds": [7.1,7.5,7.8],
-										"layOdds": [9.3,9.4,9.7],
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
 										"bets":[]
 								}
 							]

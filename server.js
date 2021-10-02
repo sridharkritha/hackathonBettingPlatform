@@ -152,7 +152,12 @@
 								username: user.username, bettype: bettype, profitliabilityvalue: profitliabilityvalue,  
 								oddvalue: oddvalue, stakevalue: stakevalue };
 
-			let result = await updateListingByName(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 
+			// working
+			// let result = await updateListingByName(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 
+			// 						{}, changeObj, 'push'); // 'push' - add a new element in the existing array.
+
+			// Alternate
+			let result = await findOneAndUpdateDB(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 
 									{}, changeObj, 'push'); // 'push' - add a new element in the existing array.
 
 
@@ -173,7 +178,8 @@
 
 			console.log("Placed bet successfully: ", result);
 
-
+/*
+			// Working
 			// Update the new oddvalue and sort it by descending order
 			// "horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds"
 			let oddArray = oddstr.split('.').slice(0, -1).join('.'); // ....0.backOdds[] or ......0.layOdds[]
@@ -182,6 +188,7 @@
 			changeObj[oddArray] =  { $each: [oddvalue], $sort: -1 } ; // need temp object. Direct object assignment do NOT work => { betstr : oddvalue }
 			const oddUpdate = await updateListingByName(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 
 									{}, changeObj, 'push');
+*/
 
 			res.json({ status: 'ok', "userBalance": result._doc.userBalance - betValue});
 		} catch (error) {
@@ -343,6 +350,143 @@
 		// console.log(result);
 	}
 
+	async function findDocument(client, dataBaseName, collectionName, findObject, updateObject, operation) {
+		// findOne - working
+		// client.db(dataBaseName).collection(collectionName).findOne({}, function(err, result) {
+		// 	if (err) throw err;
+
+		// 	// "horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds"
+		// 	console.log(result.horseRace.uk.Cartmel['2021-09-20']['12:00'].players[0].backOdds); 
+		//   });
+
+
+		// findOneAndUpdate - working
+		// let temp = {};
+		// temp["horseRace.uk.Cartmel.2021-09-20.12:00.players.0.lo"] = { "name": "bose", "odd": 45 };
+		// const result = await client.db(dataBaseName).collection(collectionName).findOneAndUpdate(
+		// 	{},
+		// 	{$set: temp},   // $inc
+		// 	{ returnNewDocument: true }
+		//  );
+
+		// console.log(result.value.horseRace.uk.Cartmel['2021-09-20']['12:00'].players[0].backOdds);
+	}
+
+	async function findOneAndUpdateDB(client, dataBaseName, collectionName, findObject, updateObject, operation) {
+
+		let obj = null;
+
+		if(operation == 'push') {
+			obj = { $push: updateObject };
+		}
+		else {
+			obj = { $set: updateObject };
+		}
+
+/*
+		const result = await client.db(dataBaseName).collection(collectionName).findOneAndUpdate(
+									findObject,
+									obj, // {$set: temp},   // $inc
+									{returnNewDocument: true}
+								);
+		let bets = result.value;
+*/
+
+		let result = await client.db(dataBaseName).collection(collectionName).updateOne(findObject, obj);
+		result = await client.db(dataBaseName).collection(collectionName).findOne({});
+		let bets = result;
+
+		// console.log(result.value.horseRace.uk.Cartmel['2021-09-20']['12:00'].players[0].bets);
+		// let bets = result.value.horseRace.uk.Cartmel['2021-09-20']['12:00'].players[0].bets;
+		// let bets = result.value[Object.keys(updateObject)[0]]; // Does NOT work
+
+		// ['horseRace', 'uk', 'Cartmel', '2021-09-20', '12:00', 'players', '2', 'bets']
+		let keyStr = Object.keys(updateObject)[0];
+		let keyStrLst = Object.keys(updateObject)[0].split('.'); // str => object accessor
+
+		for(let i = 0, n = keyStrLst.length; i < n; ++i) {
+			bets = bets[keyStrLst[i]];
+		}
+
+		let oddsObj = {};
+		oddsObj.back = {};
+		oddsObj.lay =  {};
+		oddsObj.backList = { odd: [], cash:[]};
+		oddsObj.layList =  { odd: [], cash:[]};
+		let oddKey = null;
+
+		for(let i = 0, n = bets.length; i < n; ++i) {
+			// Browse through the objects
+			for (let key in bets[i]) {
+				if (bets[i].hasOwnProperty(key)) {
+					if(key === 'bettype' && bets[i][key] === 'backOdds') {
+						oddKey = 'back_'+ bets[i].oddvalue;
+						if(!oddsObj.back[oddKey]) {
+							oddsObj.back[oddKey] = 0;
+							oddsObj.backList.odd.push(bets[i].oddvalue);
+						}
+						oddsObj.back[oddKey] += Number(bets[i].stakevalue);
+					}
+					else if(key === 'bettype' && bets[i][key] === 'layOdds') {
+						oddKey = 'lay_'+ bets[i].oddvalue;
+						if(!oddsObj.lay[oddKey]) {
+							oddsObj.lay[oddKey] = 0;
+							oddsObj.layList.odd.push(bets[i].oddvalue);
+						}
+						oddsObj.lay[oddKey] += Number(bets[i].stakevalue);
+					}
+				}
+			}
+		}
+
+		console.log(oddsObj); // { 'back_2.8': 4, 'back_3.05': 3, 'back_3.1': 71 }
+		oddsObj.backList.odd.sort((a,b) => b - a); // sort the odds
+		oddsObj.layList.odd.sort((a,b)  => b - a); // sort the odds
+		console.log(oddsObj);
+		oddsObj.backList.cash = [...Array(oddsObj.backList.odd.length).fill(0)];
+		oddsObj.layList.cash  = [...Array(oddsObj.layList.odd.length).fill(0)];
+
+		for (let key in oddsObj.back) {
+			if (oddsObj.back.hasOwnProperty(key)) {
+				// { 'back_2.8': 4, 'back_3.05': 3, 'back_3.1': 75 },
+				// { odd: [ 3.1, 3.05, 2.8 ], cash: [ 75, 3, 4 ] } <= Descending order
+				oddsObj.backList.cash[oddsObj.backList.odd.indexOf(Number(key.replace('back_','')))] = oddsObj.back[key];
+			}
+		}
+
+		for (let key in oddsObj.lay) {
+			if (oddsObj.lay.hasOwnProperty(key)) {
+				// { 'back_2.8': 4, 'back_3.05': 3, 'back_3.1': 75 },
+				// { odd: [ 3.1, 3.05, 2.8 ], cash: [ 75, 3, 4 ] } <= Descending order
+				oddsObj.layList.cash[oddsObj.layList.odd.indexOf(Number(key.replace('lay_','')))] = oddsObj.lay[key];
+			}
+		}
+
+		console.log(oddsObj);
+
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		// horseRace.uk.Cartmel.2021-09-20.12:00.players.2.bets
+
+		// Update the new oddvalue and sort it by descending order
+		// "horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds"
+		let oddArray = keyStr.split('.').slice(0, -1).join('.'); // ....0.backOdds[] or ......0.layOdds[]
+
+		changeObj = {};
+		// changeObj[oddArray] =  { $each: [oddvalue], $sort: -1 } ; // need temp object. Direct object assignment do NOT work => { betstr : oddvalue }
+		changeObj[oddArray +'.backOdds'] = oddsObj.backList.odd;
+		changeObj[oddArray + '.layOdds'] = oddsObj.layList.odd;
+		changeObj[oddArray +'.backCash'] = oddsObj.backList.cash;
+		changeObj[oddArray + '.layCash'] = oddsObj.layList.cash;
+		const oddUpdate = await updateManyDB(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 
+								{}, changeObj);
+		// const oddUpdate = await updateListingByName(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 
+		// 						{}, changeObj);
+
+		console.log(oddUpdate);
+	}
+
 
 	// Update an listing with the given name
 	// Note: If more than one listing has the same name, only the first listing the database finds will be updated.
@@ -350,10 +494,10 @@
 		let obj = null;
 
 		if(operation == 'push') {
-			obj ={ $push: updateObject };
+			obj = { $push: updateObject };
 		}
 		else {
-			obj = { $push: updateObject };
+			obj = { $set: updateObject };
 		}
 
 		// See https://mongodb.github.io/node-mongodb-native/3.6/api/Collection.html#updateOne for the updateOne() docs
@@ -362,6 +506,25 @@
 		console.log(`${result.matchedCount} document(s) matched the query criteria.`);
 		console.log(`${result.modifiedCount} document(s) was/were updated.`);
 	}
+
+		// Update an listing with the given name
+	// Note: If more than one listing has the same name, only the first listing the database finds will be updated.
+	async function updateManyDB(client, dataBaseName, collectionName, findObject, updateObject, operation) {
+		let obj = null;
+
+		if(operation == 'push') {
+			obj = { $push: updateObject };
+		}
+		else {
+			obj = { $set: updateObject };
+		}
+
+		// See https://mongodb.github.io/node-mongodb-native/3.6/api/Collection.html#updateOne for the updateOne() docs
+		const result = await client.db(dataBaseName).collection(collectionName).updateMany(findObject, obj);
+
+		console.log(`${result.matchedCount} document(s) matched the query criteria.`);
+		console.log(`${result.modifiedCount} document(s) was/were updated.`);
+	}	
 
 	// Monitor listings in the collections for change
 	// This function uses the on() function from the EventEmitter class to monitor changes
