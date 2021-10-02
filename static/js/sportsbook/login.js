@@ -4,12 +4,8 @@ window.addEventListener('load', function () {
 	const joinBtn = document.getElementById("joinNowId");
 		  joinBtn.addEventListener('click', registerUser);
 
-	// log in
-	async function loginUser(event) {
-		event.preventDefault();
-		const username = document.getElementById('username').value;
-		const password = document.getElementById('password').value;
-
+	// login method
+	async function login(username, password) {
 		const result = await fetch('/api/login', {
 			method: 'POST',
 			headers: {
@@ -25,7 +21,9 @@ window.addEventListener('load', function () {
 			// everything went fine
 			console.log('Got the token: ', result.data);
 			localStorage.setItem('token', result.data); // store in cookie
-			alert('Success');
+			localStorage.setItem('username', username); // store in cookie
+			localStorage.setItem('password', password); // store in cookie
+			// alert('Success');
 			document.getElementById("regLoginFieldsId").style.display = 'none';
 			document.getElementById("welcomeUserName").textContent = "Welcome " + username;
 			document.getElementById("userBalanceAmount").textContent = "Balance: " + result.userBalance;
@@ -33,6 +31,22 @@ window.addEventListener('load', function () {
 			alert(result.error);
 		}
 	}
+
+	// log in
+	async function loginUser(event) {
+		event.preventDefault();
+		const username = document.getElementById('username').value;
+		const password = document.getElementById('password').value;
+		login(username, password);
+	}
+
+	// Auto login on refresh
+	function autoLoginAfterRefresh() {
+		const username = localStorage.getItem('username'); // get it from cookie
+		const password = localStorage.getItem('password'); // get it from cookie
+		if(username && username) login(username, password);
+	}
+	autoLoginAfterRefresh();
 
 	// new user registration
 	async function registerUser(event) {
@@ -56,6 +70,8 @@ window.addEventListener('load', function () {
 			// everything went fine
 			console.log('Got the token: ', result.data);
 			localStorage.setItem('token', result.data); // store in cookie
+			localStorage.setItem('username', username); // store in cookie
+			localStorage.setItem('password', password); // store in cookie
 			alert('Success');
 
 			document.getElementById("regLoginFieldsId").style.display = 'none';

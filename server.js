@@ -54,7 +54,7 @@
 		}
 
 		const password = await bcrypt.hash(plainTextPassword, 10); // passes = 10
-		const userBalance = 100; // £100 free money for a new customer 
+		const userBalance = 1000; // £1000 free money for a new customer 
 
 		try {
 				const response = await User.create({
