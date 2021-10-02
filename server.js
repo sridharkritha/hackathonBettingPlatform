@@ -57,11 +57,11 @@
 		const userBalance = 100; // £100 free money for a new customer 
 
 		try {
-			const response = await User.create({
-				username,
-				password,
-				userBalance
-			});
+				const response = await User.create({
+													username,
+													password,
+													userBalance
+												});
 			console.log('User created successfully: ', response);
 		} catch (error) {
 			if (error.code === 11000) {
@@ -71,7 +71,20 @@
 			throw error;
 		}
 
-		res.json({ status: 'ok', 'userBalance': userBalance });
+		const user = await User.findOne({ username }).lean();
+		if(user) {
+					// generate jwt token
+					const token = jwt.sign(	{
+											id: user._id,
+											username: username
+										},
+										JWT_SECRET
+									);
+
+					return res.json({ status: 'ok', data: token, 'userBalance': userBalance });
+		}
+
+		return res.json({ status: 'error', error: 'Storage Error' });
 	});
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	

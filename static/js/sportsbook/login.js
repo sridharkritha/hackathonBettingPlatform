@@ -54,7 +54,10 @@ window.addEventListener('load', function () {
 
 		if (result.status === 'ok') {
 			// everything went fine
+			console.log('Got the token: ', result.data);
+			localStorage.setItem('token', result.data); // store in cookie
 			alert('Success');
+
 			document.getElementById("regLoginFieldsId").style.display = 'none';
 			document.getElementById("welcomeUserName").textContent = "Welcome " + username;
 			document.getElementById("userBalanceAmount").textContent = "Balance: " + result.userBalance;

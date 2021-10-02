@@ -36,9 +36,9 @@ window.addEventListener('load', function () {
 			}
 			else if(betType === 'backCash') {
 				// 'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.2#odd'
-				document.getElementById(key + '.0#cash').innerHTML = value[2]? value[2] : "0.00";
-				document.getElementById(key + '.1#cash').innerHTML = value[1]? value[1] : "0.00";
-				document.getElementById(key + '.2#cash').innerHTML = value[0]? value[0] : "0.00";
+				document.getElementById(key + '.0#cash').innerHTML = "£ " + (value[2]? value[2] : "0.00");
+				document.getElementById(key + '.1#cash').innerHTML = "£ " + (value[1]? value[1] : "0.00");
+				document.getElementById(key + '.2#cash').innerHTML = "£ " + (value[0]? value[0] : "0.00");
 			}
 			else if(betType === 'layOdds') {
 				// 'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.layOdds.0#odd'
@@ -48,9 +48,9 @@ window.addEventListener('load', function () {
 			}
 			else if(betType === 'layCash') {
 				// 'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.layOdds.0#odd'
-				document.getElementById(key + '.0#cash').innerHTML = value[0]? value[0] : "0.00";
-				document.getElementById(key + '.1#cash').innerHTML = value[1]? value[1] : "0.00";
-				document.getElementById(key + '.2#cash').innerHTML = value[2]? value[2] : "0.00";
+				document.getElementById(key + '.0#cash').innerHTML = "£ " + (value[0]? value[0] : "0.00");
+				document.getElementById(key + '.1#cash').innerHTML = "£ " + (value[1]? value[1] : "0.00");
+				document.getElementById(key + '.2#cash').innerHTML = "£ " + (value[2]? value[2] : "0.00");
 			}
 		});
 	});
