@@ -24,6 +24,8 @@ window.addEventListener('load', function () {
 		Object.keys(changedObject).forEach((key) => {
 			let value = changedObject[key];
 
+			// console.error(value);
+
 			// 'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.0'
 			// 'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.bets.83'
 			let betType = key.split('.').splice(-2)[1]; // [0 , 'backOdds'] 
@@ -589,8 +591,69 @@ window.addEventListener('load', function () {
 		elemRef.setAttribute("placeholder","0.0");
 		elemRef.setAttribute("data-playercount", playerCount);
 		elemRef.addEventListener('input', onInputValueUpdated);
-		document.getElementById(key+"_profitValueBackMainFontColorId").appendChild(elemRef); 
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+		document.getElementById(key+"_profitValueBackMainFontColorId").appendChild(elemRef);
+
+//////////////////////////////// AFTER BET (START) /////////////////////////////////////////////////////////////////////
+
+// 4th COLUMN - Confirm the accepted bet 
+
+elemRef = document.createElement("DIV");
+elemRef.setAttribute("id",key+"_betConfirmWrapper");
+elemRef.setAttribute("class","backOthersBgColor");
+elemRef.style.display = 'none'; // hide at start
+document.getElementById(key+"_backStakeProfitBetBinId").appendChild(elemRef); 
+
+// TOP
+elemRef = document.createElement("DIV");
+elemRef.setAttribute("id",key+"_betConfirm");
+
+elemRef.setAttribute("class","backMainFontColor");
+document.getElementById(key+"_betConfirmWrapper").appendChild(elemRef);
+
+elemRef = document.createTextNode("BET ACCEPTED ✔");
+document.getElementById(key+"_betConfirm").appendChild(elemRef);
+
+// bottom
+elemRef = document.createElement("DIV");
+elemRef.setAttribute("id",key+"_betCancelWrapperId");
+elemRef.setAttribute("class","blink_me");
+
+
+document.getElementById(key+"_betConfirmWrapper").appendChild(elemRef); 
+elemRef = document.createTextNode("WAITING FOR THE MATCH BET...");
+
+document.getElementById(key+"_betCancelWrapperId").appendChild(elemRef);
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// 5th COLUMN - SHOW THE MATCHED MONEY
+
+elemRef = document.createElement("DIV");
+elemRef.setAttribute("id",key+"_betMatchingWrapperId");
+elemRef.setAttribute("class","backOthersBgColor");
+elemRef.style.display = 'none'; // hide at start
+document.getElementById(key+"_backStakeProfitBetBinId").appendChild(elemRef); 
+
+// TOP
+elemRef = document.createElement("DIV");
+elemRef.setAttribute("id",key+"_betMatchingId");
+
+elemRef.setAttribute("class","backMainFontColor");
+document.getElementById(key+"_betMatchingWrapperId").appendChild(elemRef);
+
+elemRef = document.createTextNode("£ Matched / £ Total");
+document.getElementById(key+"_betMatchingId").appendChild(elemRef);
+
+// bottom
+elemRef = document.createElement("DIV");
+elemRef.setAttribute("id",key+"_betMatchedAmtWrapperId");
+document.getElementById(key+"_betMatchingWrapperId").appendChild(elemRef); 
+elemRef = document.createTextNode("£ 5.00 / £ 24.00");
+document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
+//////////////////////////////// AFTER BET (END) /////////////////////////////////////////////////////////////////////
+
 
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_placeBetButtonId");
@@ -604,6 +667,7 @@ window.addEventListener('load', function () {
 		elemRef = document.createTextNode("✔");
 		document.getElementById(key+"_placeBetButtonId").appendChild(elemRef); 
 
+		// Delete the bet slip
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_deleteBetButtonId");
 		elemRef.setAttribute("class","binButtonBackground");
@@ -691,6 +755,15 @@ window.addEventListener('load', function () {
 			// {'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds' : [1,2,3]});
 			// console.log(JSON.parse(this.dataset.betinfo));
 			sendBetRequest(betstr, oddstr, oddvalue, stakevalue, profitliabilityvalue, bettype);
+
+			// hide (bet/bin) buttons and show (bet placed Confirm / Matched Bet Amt) text's
+			// hide
+// 			document.getElementById(this.id).style.display = 'none';
+// 			document.getElementById(this.id.replace('_placeBetButtonId','_deleteBetButtonId')).style.display = 'none';
+// 			// show
+// 			document.getElementById(this.id.replace('_placeBetButtonId','_betConfirmWrapper')).style.display = 'block';
+// 			document.getElementById(this.id.replace('_placeBetButtonId','_betMatchingWrapperId')).style.display = 'block';
+
 		}
 		else console.error("Invalid bet amount: ", stakevalue);
 	}
@@ -698,7 +771,7 @@ window.addEventListener('load', function () {
 	// Send a bet request to the server
 	function sendBetRequest(betstr, oddstr, oddvalue, stakevalue, profitliabilityvalue, bettype) {
 		if( typeof stakevalue == 'number' && stakevalue > 0 &&
-		    typeof oddvalue == 'number' && oddvalue > 0 &&
+			typeof oddvalue == 'number' && oddvalue > 0 &&
 			typeof profitliabilityvalue == 'number' && profitliabilityvalue > 0 ) {
 			// oddstr = horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.2
 			// oddstr = horseRace.uk.Cartmel.2021-09-20.12:00.players.0.layOdds.2
@@ -719,6 +792,49 @@ window.addEventListener('load', function () {
 
 				if (res.status === 'ok') {
 					document.getElementById("userBalanceAmount").textContent = "Balance: " + res.userBalance;
+
+					// hide (bet/bin) buttons and show (bet placed Confirm / Matched Bet Amt) text's
+					// hide
+					document.getElementById(oddstr + '_placeBetButtonId').style.display = 'none';
+					document.getElementById(oddstr + '_deleteBetButtonId').style.display = 'none';
+					// show
+					document.getElementById(oddstr + '_betConfirmWrapper').style.display = 'block';
+					document.getElementById(oddstr + '_betMatchingWrapperId').style.display = 'block';
+
+					let str = null;
+
+					str = (bettype == 'backOdds') ? '£ '+ 0 + ' / ' + '£ '+ stakevalue : '£ '+ 0 + ' / ' + '£ '+ profitliabilityvalue;
+
+					document.getElementById(oddstr + '_betMatchedAmtWrapperId').textContent = str;
+
+
+					let key = null;
+					let matchvalue = 0;
+					let cashvalue = 0;
+					for(let i = 0, n = res.matchedOdds.length; i < n; ++i) {
+						Object.keys(g_BetSlipSheet).forEach((key) => {
+							if(g_BetSlipSheet[key].playerinfo.odd === Number(Object.keys(res.matchedOdds[i])[0]))
+							{
+						// 		g_BetSlipSheet[key].playerinfo.betType = 'Lay' // 'Back'
+						// 		if(res.matchedOdds[i][key].bettype == 'backOdds' && g_BetSlipSheet[key].playerinfo.betType = 'Back')
+						// 		{
+						// 		}
+
+								key = Object.keys(res.matchedOdds[i])[0];
+								matchvalue = res.matchedOdds[i][key].matchvalue;
+								cashvalue = res.matchedOdds[i][key].bettype == 'backOdds' ? res.matchedOdds[i][key].stakevalue: res.matchedOdds[i][key].profitliabilityvalue;
+
+								str = '£ '+ (cashvalue -  matchvalue) + ' / ' + '£ '+ cashvalue;
+
+								if(!matchvalue) {
+									document.getElementById(res.matchedOdds[i][key].oddstr + '_betCancelWrapperId').textContent = 'Matched !';
+									document.getElementById(res.matchedOdds[i][key].oddstr + '_betCancelWrapperId').classList.remove("blink_me");
+								}
+
+								document.getElementById(res.matchedOdds[i][key].oddstr + '_betMatchedAmtWrapperId').textContent = str;
+							}
+						});
+					}
 					// everything went fine
 					console.log("Bet Placed Successfully");
 				} else {
@@ -756,6 +872,9 @@ window.addEventListener('load', function () {
 			Object.keys(g_BetSlipSheet).forEach((key) => {
 				// key = "horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.0"
 				if(g_CurrentDisplayedMatch.idString && g_CurrentDisplayedMatch.idString === g_BetSlipSheet[key].eventinfo.evtStr) {
+					
+					g_BetSlipSheet[key].playerinfo.odd = Number(document.getElementById(key +'_oddValueId').value);
+
 					if("players."+i  === g_BetSlipSheet[key].playerinfo.playerIndexString) // "players.0"
 					{
 						stakeValue = Number(document.getElementById(key +'_stakeValueId').value);

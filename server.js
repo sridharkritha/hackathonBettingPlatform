@@ -7,7 +7,7 @@
 	const fs = require('fs');
 	const { MongoClient } = require('mongodb');
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	app.use('/', express.static(path.join(__dirname, 'static')));
 	app.use(express.json());// app.use(bodyParser.json());
 	/////////////////////////// login(start) ///////////////////////////////////////////////////////////////////////////
@@ -34,7 +34,7 @@
 
 	})();	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	app.post('/api/register', async (req, res) => {
 		const { username, password: plainTextPassword } = req.body;
 
@@ -87,7 +87,7 @@
 		return res.json({ status: 'error', error: 'Storage Error' });
 	});
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	app.post('/api/login', async (req, res) => {
 		const { username, password } = req.body;
 		const user = await User.findOne({ username }).lean();
@@ -112,7 +112,7 @@
 		res.json({ status: 'error', error: 'Invalid username/password' });
 	});
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	app.post('/api/change-password', async (req, res) => {
 		const { token, newpassword: plainTextPassword } = req.body;
 
@@ -165,7 +165,8 @@
 
 			changeObj[betstr + '.bets'] =  { 
 								username: user.username, bettype: bettype, profitliabilityvalue: profitliabilityvalue,  
-								oddvalue: oddvalue, stakevalue: stakevalue, matchvalue: betValue
+								oddvalue: oddvalue, stakevalue: stakevalue, matchvalue: betValue,
+								oddstr:oddstr
 							};
 
 			// working
@@ -173,7 +174,7 @@
 			// 						{}, changeObj, 'push'); // 'push' - add a new element in the existing array.
 
 			// Alternate
-			let result = await findOneAndUpdateDB(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 
+			const matchedOdds = await findOneAndUpdateDB(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 
 									{}, changeObj, 'push'); // 'push' - add a new element in the existing array.
 
 			// result = await User.updateOne(	{ _id },
@@ -182,16 +183,16 @@
 
 			// Subtract the bet amount from the user balance
 			// updateOne - NOT return the result but findOneAndUpdate return the result after update
-			result = await User.findOneAndUpdate(	{ _id },
+			let result = await User.findOneAndUpdate(	{ _id },
 											{$inc: { "userBalance": -betValue }},   // $inc
 											{returnOriginal: false }
-										 );
+										);
 
 			console.log(result._doc.userBalance); // user balance after update
 
 			console.log("Placed bet successfully: ", result);
 
-/*
+	/*
 			// Working
 			// Update the new oddvalue and sort it by descending order
 			// "horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds"
@@ -201,22 +202,22 @@
 			changeObj[oddArray] =  { $each: [oddvalue], $sort: -1 } ; // need temp object. Direct object assignment do NOT work => { betstr : oddvalue }
 			const oddUpdate = await updateListingByName(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 
 									{}, changeObj, 'push');
-*/
+	*/
 
-			res.json({ status: 'ok', "userBalance": result._doc.userBalance - betValue});
+			res.json({ status: 'ok', matchedOdds: matchedOdds, "userBalance": result._doc.userBalance - betValue});
 		} catch (error) {
 			console.log(error);
 			res.json({ status: 'error', error });
 		}
 	});
 	/////////////////////////// login(end) /////////////////////////////////////////////////////////////
-	
+
 	const MONGO_DATABASE_NAME = 'p2pbettingplatformdb';
 	const MONGO_COLLECTION_NAME = 'sportscollection';
 	let client = null; // mongodb client
 	let DB = null;     // database
 	let COLL = null;   // collection
-	
+
 	/**
 	 * An aggregation pipeline that matches on new listings in the country of Australia and the Sydney market
 	 */
@@ -326,14 +327,14 @@
 		//////////////////////////// Read json by nodejs fs (start) ////////////////////
 		// var jsonObject;
 		fs.readFile('db/sportsDB.json', 'utf8', function (err, data) {
-		  if (err) {
+		if (err) {
 			console.error("Unable to read the json file");
 			throw err;
-		  }
-		  console.error("Read the local json successfully");
-		  const jsonObject = JSON.parse(data);
-		  console.log(jsonObject);
-		  createMultipleDocuments(client, dataBaseName, collectionName, [jsonObject]);
+		}
+		console.error("Read the local json successfully");
+		const jsonObject = JSON.parse(data);
+		console.log(jsonObject);
+		createMultipleDocuments(client, dataBaseName, collectionName, [jsonObject]);
 		});
 		//////////////////////////// Read json by nodejs fs (end) //////////////////////
 	}
@@ -396,14 +397,14 @@
 			obj = { $set: updateObject };
 		}
 
-/*
+	/*
 		const result = await client.db(dataBaseName).collection(collectionName).findOneAndUpdate(
 									findObject,
 									obj, // {$set: temp},   // $inc
 									{returnNewDocument: true}
 								);
 		let bets = result.value;
-*/
+	*/
 
 		let result = await client.db(dataBaseName).collection(collectionName).updateOne(findObject, obj);
 		result = await client.db(dataBaseName).collection(collectionName).findOne({});
@@ -476,13 +477,15 @@
 		}
 
 		console.log(oddsObj);
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		// Match the back/lay bets by the odd values
 
 		let cashMatched = 0;
 		let cashMatchedLay = 0;
 		let backCashTotal = 0;
+
+		let matchedOdds = [];
 		for(let i = 0, n = oddsObj.backList['odd'].length; i < n; ++i) {
 		
 			for(let j = 0, m = oddsObj.layList['odd'].length; j < m; ++j) {
@@ -505,7 +508,7 @@
 					oddsObj.layList['cash'][j]  -= cashMatched;
 					cashMatchedLay = cashMatched;
 
-					// update bets listing
+					// update bet listing
 					let amountAvail = 0;
 					let subtractedAmt = 0;
 					let value = 0;
@@ -513,6 +516,8 @@
 						if(bets[b].oddvalue === oddsObj.backList['odd'][i]) {
 
 							if(bets[b].matchvalue) {
+								let obj = {};
+
 								if(bets[b].bettype === 'backOdds') {
 									amountAvail = bets[b].matchvalue * (bets[b].oddvalue - 1);
 
@@ -525,7 +530,7 @@
 									else {
 										subtractedAmt += amountAvail;
 										bets[b].matchvalue = 0;
-										cashMatched   -= amountAvail;										
+										cashMatched   -= amountAvail;
 									}
 								}
 								else { // layOdds
@@ -540,16 +545,19 @@
 										cashMatchedLay -= amountAvail;
 									}
 								}
+								// collect all the matched bet strings
+								obj[bets[b].oddvalue] = bets[b];
+								matchedOdds.push(obj);
 							}
 						}
 					} // for-loop
 				}
 			}
 		}
-	
+
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 		// horseRace.uk.Cartmel.2021-09-20.12:00.players.2.bets
 
 		// Update the new oddvalue and sort it by descending order
@@ -569,6 +577,8 @@
 		// 						{}, changeObj);
 
 		console.log(oddUpdate);
+
+		return matchedOdds;
 	}
 
 
