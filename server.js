@@ -158,12 +158,15 @@
 
 			console.log("betAfter: ", betstr);
 
+			const betValue = bettype === 'backOdds' ? stakevalue : profitliabilityvalue;
+
 			// betstr = horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.2
 			let changeObj = {};
 
 			changeObj[betstr + '.bets'] =  { 
 								username: user.username, bettype: bettype, profitliabilityvalue: profitliabilityvalue,  
-								oddvalue: oddvalue, stakevalue: stakevalue };
+								oddvalue: oddvalue, stakevalue: stakevalue, matchvalue: betValue
+							};
 
 			// working
 			// let result = await updateListingByName(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 
@@ -172,9 +175,6 @@
 			// Alternate
 			let result = await findOneAndUpdateDB(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 
 									{}, changeObj, 'push'); // 'push' - add a new element in the existing array.
-
-
-			const betValue = bettype === 'backOdds' ? stakevalue : profitliabilityvalue;
 
 			// result = await User.updateOne(	{ _id },
 			// 								{$inc: { "userBalance": -betValue }}   // $inc
@@ -446,7 +446,7 @@
 							oddsObj.lay[oddKey] = 0;
 							oddsObj.layList.odd.push(bets[i].oddvalue);
 						}
-						oddsObj.lay[oddKey] += Number(bets[i].stakevalue);
+						oddsObj.lay[oddKey] += Number(bets[i].profitliabilityvalue);
 					}
 				}
 			}
@@ -476,10 +476,80 @@
 		}
 
 		console.log(oddsObj);
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+		// Match the back/lay bets by the odd values
+
+		let cashMatched = 0;
+		let cashMatchedLay = 0;
+		let backCashTotal = 0;
+		for(let i = 0, n = oddsObj.backList['odd'].length; i < n; ++i) {
+		
+			for(let j = 0, m = oddsObj.layList['odd'].length; j < m; ++j) {
+		
+				if(oddsObj.backList['odd'][i]  === oddsObj.layList['odd'][j] && 
+					oddsObj.backList['cash'][i] > 0 && oddsObj.layList['cash'][j] > 0) {
+
+					backCashTotal = oddsObj.backList['cash'][i] * (oddsObj.backList['odd'][i] - 1);
+
+					if(backCashTotal > oddsObj.layList['cash'][j]) {
+						// cashMatched = oddsObj.backList['cash'][i] - oddsObj.layList['cash'][j];
+						cashMatched = oddsObj.layList['cash'][j];
+					}
+					else {
+						// cashMatched = oddsObj.layList['cash'][j] - oddsObj.backList['cash'][i];
+						cashMatched = backCashTotal;
+					}
+
+					oddsObj.backList['cash'][i] -= (cashMatched/(oddsObj.backList['odd'][i] - 1)).toFixed(2);
+					oddsObj.layList['cash'][j]  -= cashMatched;
+					cashMatchedLay = cashMatched;
+
+					// update bets listing
+					let amountAvail = 0;
+					let subtractedAmt = 0;
+					let value = 0;
+					for(let b = 0, bn = bets.length; b < bn; ++b) {
+						if(bets[b].oddvalue === oddsObj.backList['odd'][i]) {
+
+							if(bets[b].matchvalue) {
+								if(bets[b].bettype === 'backOdds') {
+									amountAvail = bets[b].matchvalue * (bets[b].oddvalue - 1);
+
+									if(amountAvail > cashMatched) {
+										value = (cashMatched / (bets[b].oddvalue - 1)).toFixed(2);
+										subtractedAmt      += value;
+										bets[b].matchvalue -=  value;
+										cashMatched = 0;
+									}
+									else {
+										subtractedAmt += amountAvail;
+										bets[b].matchvalue = 0;
+										cashMatched   -= amountAvail;										
+									}
+								}
+								else { // layOdds
+									amountAvail = bets[b].matchvalue;
+
+									if(amountAvail > cashMatchedLay) {
+										bets[b].matchvalue -= cashMatchedLay;
+										cashMatchedLay = 0;
+									}
+									else {
+										bets[b].matchvalue = 0;
+										cashMatchedLay -= amountAvail;
+									}
+								}
+							}
+						}
+					} // for-loop
+				}
+			}
+		}
+	
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+	
 		// horseRace.uk.Cartmel.2021-09-20.12:00.players.2.bets
 
 		// Update the new oddvalue and sort it by descending order
@@ -492,6 +562,7 @@
 		changeObj[oddArray + '.layOdds'] = oddsObj.layList.odd;
 		changeObj[oddArray +'.backCash'] = oddsObj.backList.cash;
 		changeObj[oddArray + '.layCash'] = oddsObj.layList.cash;
+		changeObj[oddArray + '.bets']    = bets;
 		const oddUpdate = await updateManyDB(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 
 								{}, changeObj);
 		// const oddUpdate = await updateListingByName(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 
