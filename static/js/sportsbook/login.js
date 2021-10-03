@@ -46,7 +46,7 @@ window.addEventListener('load', function () {
 		const password = localStorage.getItem('password'); // get it from cookie
 		if(username && username) login(username, password);
 	}
-	autoLoginAfterRefresh();
+	// autoLoginAfterRefresh();
 
 	// new user registration
 	async function registerUser(event) {

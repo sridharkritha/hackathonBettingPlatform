@@ -896,8 +896,9 @@ window.addEventListener('load', function () {
 	//////////////// TEST the bet request(start)////////////////////////////////////////////////////////////////////////
 	function test_betRequest() {
 		let betOdd = 1;
+		let betOdds = [1.50, 2.00, 2.50, 3.00, 3.50, 4.00, 4.50, 5.00, 5.50];
 		let keyStr = 'horseRace.uk.Cartmel.2021-09-20.12:00.players.'; // 0.backOdds.1
-		let nPlayers = g_CurrentDisplayedMatch.playerCount || 0; 	
+		let nPlayers = g_CurrentDisplayedMatch.playerCount || 0;
 		let betType = ['backOdds', 'layOdds'];
 		let stakevalue = 1;
 
@@ -909,12 +910,15 @@ window.addEventListener('load', function () {
 		let oddstr = null;
 		let betChoice = null;
 		let profitliabilityvalue = 0;
+
+		// Sequential bet placement - test
+		/*
 		setInterval(() => {
 			++betOdd;
 			betstr = keyStr + player;
 			oddstr = betstr + '.' + betType[betTypeIdx] + '.' + oddRangeIdx;
 			betChoice = betType[betTypeIdx];
-			profitliabilityvalue = (stakevalue * (betOdd - 1)).toFixed(2);
+			profitliabilityvalue = Number((stakevalue * (betOdd - 1)).toFixed(2));
 
 
 			if(betTypeIdx == 1 && oddRangeIdx == 2) { // layOdds
@@ -933,6 +937,23 @@ window.addEventListener('load', function () {
 			sendBetRequest(betstr, oddstr, betOdd, stakevalue, profitliabilityvalue, betChoice);
 
 		}, 1);
+		*/
+
+		// Random ordered bet placement - test
+		setInterval(() => {
+			betOdd = betOdds[randomIntFromInterval(0,betOdds.length-1)]; // randomly pick predefined odds
+			betstr = keyStr + player;
+			oddstr = betstr + '.' + betType[betTypeIdx] + '.' + oddRangeIdx;
+			betChoice = betType[betTypeIdx];
+			profitliabilityvalue = Number((stakevalue * (betOdd - 1)).toFixed(2));
+
+			betTypeIdx  = randomIntFromInterval(0,1);
+			oddRangeIdx = randomIntFromInterval(0,2);
+			player = randomIntFromInterval(0, nPlayers-1);
+
+			sendBetRequest(betstr, oddstr, betOdd, stakevalue, profitliabilityvalue, betChoice);
+
+		}, 500);
 	}
 
 	// setTimeout(() => {
