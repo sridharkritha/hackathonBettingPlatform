@@ -1162,6 +1162,147 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 	// 	test_betRequest();
 	// }, 5000);
 
-	//////////////// TEST bet request(end)//////////////////////////////////////////////////////////////////////////////	
+	//////////////// TEST bet request(end)//////////////////////////////////////////////////////////////////////////////
 
+	////////////////////////////////////////////////// win  predictor graphics animation (start) /////////////////////////
+
+	function winPredictorScroller(nPlayers) {
+		let elemRef = null;
+		let elemRef2 = null;
+		let str = null;
+
+
+		elemRef = document.createElement("DIV");
+		elemRef.setAttribute("id","gameSimulatorContainer");
+		document.getElementById("gameSimulatorWrapper").appendChild(elemRef);
+	
+		elemRef = document.createElement("DIV");
+		elemRef.setAttribute("class","wrapperRandomPick");
+		elemRef.setAttribute("id","myParentId_gameSimulatorContainer_myId_0");
+		document.getElementById("gameSimulatorContainer").appendChild(elemRef);
+	
+		elemRef = document.createElement("DIV");
+		elemRef.setAttribute("id","shuffleItemsContainerId");
+		elemRef.setAttribute("class","shuffleItemsContainer gridColumnLayout gridCenterVH");
+		// elemRef.classList.add('gridColumnLayout_'+nPlayers); // .gridColumnLayout_6
+		str = "repeat("+ nPlayers +", 1fr)";
+		elemRef.style.gridTemplateColumns = str;  // grid-template-columns: repeat(6, 1fr);
+		document.getElementById("myParentId_gameSimulatorContainer_myId_0").appendChild(elemRef);
+
+		// player silk list
+		for(let i = 0, n = nPlayers; i < n; ++i) {
+			elemRef = document.createElement("DIV");
+			if(i + 1 == n) elemRef.setAttribute("id","shuffleLastItemId"); // last element id for marking end point
+			document.getElementById("shuffleItemsContainerId").appendChild(elemRef);
+		
+			elemRef2 = document.createElement("IMG");
+			elemRef2.setAttribute("src","assets/silk/blackSilk.png");
+			elemRef2.setAttribute("alt","Trulli");
+			// elemRef.setAttribute("id","myParentId_myParentId_shuffleItemsContainerId_myId_5_myId_6");
+			elemRef.appendChild(elemRef2);
+		}
+
+		elemRef = document.createElement("DIV");
+		elemRef.setAttribute("class","pickerBox gridColumnLayout gridCenterVH");
+		// elemRef.classList.add('gridColumnLayout_'+nPlayers); // .gridColumnLayout_6
+		str = "repeat("+ nPlayers +", 1fr)";
+		elemRef.style.gridTemplateColumns = str;  // grid-template-columns: repeat(6, 1fr);
+		elemRef.setAttribute("id","myParentId_myParentId_gameSimulatorContainer_myId_0_myId_12");
+		document.getElementById("myParentId_gameSimulatorContainer_myId_0").appendChild(elemRef);
+	
+		elemRef = document.createElement("DIV");
+		elemRef.setAttribute("id","pickerBoxOneId");
+		elemRef.setAttribute("class","overItem");
+		document.getElementById("myParentId_myParentId_gameSimulatorContainer_myId_0_myId_12").appendChild(elemRef);
+	}
+	////////////////////////////////////////////////// win  predictor graphics animation (end) /////////////////////////
+   
+
+	////////////////////////////////////////////////// win predictor animation (start ) //////////////////////////////////////////
+
+		function translationAnimation(containerElementId, sliderObjs) {
+			let shuffleItemsContainer = document.querySelector('#'+containerElementId);
+			let children = shuffleItemsContainer.children; // gets array of children from the parent
+
+			let startPos = children[0].offsetLeft;
+			let endPos = children[children.length -  1].offsetLeft - startPos; // containerWidth - shuffleItemWidth;
+
+			let sliderObjects = []; // array of objects
+			for (let key in sliderObjs) {
+				if (sliderObjs.hasOwnProperty(key)) {
+					let obj = {};
+					obj.sliderElement = document.querySelector('#'+key);  // slider element
+					obj.stopPos = children[sliderObjs[key]].offsetLeft - startPos; // stop position in pixels
+					obj.isForwardMove = true;
+					obj.isFinalPositionReached = false;
+					obj.currentPos = 0;
+					obj.delta = randomIntFromInterval(20, 40); // speed of movement = 18; // 
+					// obj.delta = randomIntFromInterval(60, 90); // speed of movement = 18; // 
+					obj.timeout = randomIntFromInterval(3500, 4500); // between 3 and 5 seconds = 4801; // 
+					// obj.timeout = randomIntFromInterval(3000, 9000); // between 3 and 9 seconds = 4801; // 
+					sliderObjects.push(obj);
+					console.log(`delta: ${obj.delta}, timeout: ${obj.timeout}`);
+				}
+			}
+
+
+			let arrayIndex = 0;
+			let arrayLength = sliderObjects.length;
+			let countFinalPositionReached = 0;
+			let startTimeStamp; //  = window.performance.now();
+			
+			function callbackLoop(currentTimeStamp) {
+				if (startTimeStamp === undefined) startTimeStamp = currentTimeStamp;
+				let elapsed = currentTimeStamp - startTimeStamp;
+				
+				if(!sliderObjects[arrayIndex].isFinalPositionReached) {
+					if(sliderObjects[arrayIndex].isForwardMove) {
+						// currentPos += elapsed * 0.01;
+						sliderObjects[arrayIndex].currentPos += sliderObjects[arrayIndex].delta;
+						if(sliderObjects[arrayIndex].currentPos < endPos) {
+							sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + sliderObjects[arrayIndex].currentPos + 'px)';
+						}
+						else {
+							sliderObjects[arrayIndex].isForwardMove = false;
+							sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + endPos + 'px)';
+						}
+					}
+					else {
+						// currentPos -= elapsed * 0.01;
+						sliderObjects[arrayIndex].currentPos -= sliderObjects[arrayIndex].delta;
+						if(sliderObjects[arrayIndex].currentPos > 0) {
+							sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + sliderObjects[arrayIndex].currentPos + 'px)';
+						}
+						else {
+							sliderObjects[arrayIndex].isForwardMove = true;
+							sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + 0 + 'px)';
+						}
+					}
+				}
+
+				if(!sliderObjects[arrayIndex].isFinalPositionReached && elapsed > sliderObjects[arrayIndex].timeout && 
+					Math.abs(sliderObjects[arrayIndex].currentPos - sliderObjects[arrayIndex].stopPos) <= sliderObjects[arrayIndex].delta &&
+					((sliderObjects[arrayIndex].isForwardMove && sliderObjects[arrayIndex].currentPos > sliderObjects[arrayIndex].stopPos) || 
+					(!sliderObjects[arrayIndex].isForwardMove && sliderObjects[arrayIndex].currentPos < sliderObjects[arrayIndex].stopPos))) {
+					sliderObjects[arrayIndex].isFinalPositionReached = true;
+					++countFinalPositionReached;
+					sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + sliderObjects[arrayIndex].stopPos + 'px)';
+					// exit condition - after 3 sec
+					if(arrayLength != countFinalPositionReached) window.requestAnimationFrame(callbackLoop);
+				}
+				else {
+					arrayIndex = ++arrayIndex % arrayLength;
+					window.requestAnimationFrame(callbackLoop);
+				}
+			}
+			window.requestAnimationFrame(callbackLoop);
+		}
+
+
+
+	winPredictorScroller(8); // nPlayers
+	translationAnimation('shuffleItemsContainerId', { "pickerBoxOneId": 1});  // where to stop the slider 
+
+
+	////////////////////////////////////////////////// win predictor animation (end) //////////////////////////////////////////
 });
