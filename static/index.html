@@ -15,29 +15,58 @@
 </head>
 
 <body>
-	<!-- login(start) -->
-	<div id="regLoginWrapperId">
-		<span id="welcomeUserName"></span>
-		<div  id="userBalanceAmount"></div>
-		<div id="regLoginFieldsId">
-			<input type="text" autocomplete="off" id="username" placeholder="Username" />
-			<input type="password" autocomplete="off" id="password" placeholder="Password" />
-			<input type="submit" id="logInId" value="Log in" />
-			<input type="submit" id="joinNowId" value="Join Now!" />
+
+<div class="parent">
+
+	<div class="header">
+		<div id="headerLogo">
+			<h2>Ethereal</h2>
 		</div>
+		<!-- login(start) -->
+		<div id="regLoginWrapperId">
+			<span id="welcomeUserName" class="account"></span>
+			<div  id="userBalanceAmount" class="account"></div>
+			<div id="regLoginFieldsId">
+				<input type="text" autocomplete="off" id="username" placeholder="Username" class="textField" />
+				<input type="password" autocomplete="off" id="password" placeholder="Password" class="textField" />
+				<input type="submit" id="logInId" value="Log in" class="regLoginButton" />
+				<input type="submit" id="joinNowId" value="Join Now!" class="regLoginButton" />
+			</div>
+		</div>
+		<!-- login(end) -->
 	</div>
-	<!-- login(end) -->
+
+	<div id="bodyWrapper">
+		<div id="leftSidebar">
+			<div class="sectionTitle">Racing</div>
+			<div class="section">
+				<a href="#">Horse Racing</a>
+			</div>
+		</div>
+
+		<div id="rightMain">
+			<div class="titleBar">
+				<div class="h1title">Horse Race - Race Card</div>
+			</div>
+
+			<!-- Event/Sports Container	 -->
+			<div id="sportsEventContainer" class="gridROw"></div>
+		</div>
+		<div id="rightSidebar">
+			<div class="h1title">Bet Slip</div>
+			<!-- Bet Slip -->
+			<div id="betSlipContainer" class="unselectable"></div>
+
+		</div>
+
+	</div>
 
 	<div id = "publishResultId"> publishResult </div>
 	<div id = "showPublishedResultId"></div>
 
 	<h1>Horse Race - Race Card</h1>
 
-	<!-- Bet Slip -->
-	<div id="betSlipContainer" class="unselectable"></div>
 
-	<!-- Event/Sports Container	 -->
-	<div id="sportsEventContainer" class="gridROw"></div>
 
 </body>
 

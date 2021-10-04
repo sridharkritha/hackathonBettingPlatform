@@ -211,10 +211,14 @@ window.addEventListener('load', function () {
 		raceCardContainer.textContent = ''; // reset at start
 
 		let elem = document.createElement("div");
+		elem.setAttribute("id", "raceName");
+		elem.classList.add("raceCardTitle");
 		elem.innerHTML = time + '&nbsp' + raceName;
 		raceCardContainer.appendChild(elem);
 
 		elem = document.createElement("div");
+		elem.setAttribute("id", "matchType");
+		elem.classList.add("raceCardTitle");
 		elem.innerHTML = matchType + '&nbsp' + '|' + '&nbsp' + runLength;
 		raceCardContainer.appendChild(elem);
 
