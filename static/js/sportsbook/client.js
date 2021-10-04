@@ -5,6 +5,50 @@ window.addEventListener('load', function () {
 	}
 	//////////////////////////// Utility Functions (end) ///////////////////////////////////////////////////////////////
 
+	//////////////////////////////// Tester (start) ////////////////////////////////////////////////////////////////////
+
+	function run() {
+		const elem = document.getElementById('publishResultId');
+		elem.addEventListener('click', publishResult); // works
+	}
+	run();
+
+	function publishResult(e) {
+
+		sendEventResultRequest();
+
+		console.log(this);
+		console.log(e.currentTarget); // element you clicked
+		// console.log(JSON.parse(this.dataset.eventinfo));
+		// console.log(JSON.parse(this.dataset.playerinfo));
+	}
+
+	// Send a bet request to the server
+	function sendEventResultRequest() {
+		(async () => {
+			const res = await fetch('/api/publishResult', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					betstr: 'sridhar',
+					oddstr: 9999
+				})
+			}).then((res) => res.json());
+
+			if (res.status === 'ok') {
+				// everything went fine
+				console.log("Bet Placed Successfully");
+				console.log(res.data);
+
+				document.getElementById('showPublishedResultId').textContent = JSON.stringify(res.data);
+			} else {
+				console.error("Bet Placed Error: ", res.error);
+				// alert(res.error);
+			}
+		})();
+	}
+	/////////////////////////////// Tester (end) ///////////////////////////////////////////////////////////////////////
+
 	//////////////////////////// Client to Server communication (start) ////////////////////////////////////////////////	
 	// Using HTML - Load "client.html" (do NOT run "node client.js")
 	// It uses 'io' from the distributed version of socket.io from "client-dist/socket.io.js"
@@ -15,6 +59,44 @@ window.addEventListener('load', function () {
 		socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
 	});
 	socket.connect(); // need bcos 'autoConnect:false'
+
+	// Update the balance after match has been completed
+	socket.on("notifyEvent_BalancedUpdated", (data) => { 
+
+		const username = localStorage.getItem('username'); // get it from cookie
+		const password = localStorage.getItem('password'); // get it from cookie
+		// login(username, password);
+
+		(async() => {
+			if(username && username) {
+			
+				const result = await fetch('/api/login', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						username,
+						password
+					})
+				}).then((res) => res.json());
+	
+				if (result.status === 'ok') {
+					// everything went fine
+					console.log('Got the token: ', result.data);
+					localStorage.setItem('token', result.data); // store in cookie
+					localStorage.setItem('username', username); // store in cookie
+					localStorage.setItem('password', password); // store in cookie
+					// alert('Success');
+					document.getElementById("regLoginFieldsId").style.display = 'none';
+					document.getElementById("welcomeUserName").textContent = "Welcome " + username;
+					document.getElementById("userBalanceAmount").textContent = "Balance: " + result.userBalance;
+				} else {
+					alert(result.error);
+				}
+			}
+		})();
+	});
 
 
 	// "{"horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.1":7}"

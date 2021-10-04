@@ -32,8 +32,18 @@
 			console.log("UserAccount DB connection error :", error);
 		}
 
-	})();	
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	})();
+	/////////////////////////////////////////////// Tester(start) //////////////////////////////////////////////////////
+
+	app.post('/api/publishResult', async (req, res) => {
+		const { betstr, oddstr } = req.body;
+		console.log(betstr, oddstr);
+
+		const matchedOdds = await setWinnerOfTheMatch(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME);
+
+		res.json({ status: 'ok', data: {'name': 'jay', 'code': 123} });
+	});
+	///////////////////////////////////////////////// Tester(end) //////////////////////////////////////////////////////
 
 	app.post('/api/register', async (req, res) => {
 		const { username, password: plainTextPassword } = req.body;
@@ -214,6 +224,7 @@
 
 	const MONGO_DATABASE_NAME = 'p2pbettingplatformdb';
 	const MONGO_COLLECTION_NAME = 'sportscollection';
+	// const MONGO_COLLECTION_NAME = 'testcollection';
 	let client = null; // mongodb client
 	let DB = null;     // database
 	let COLL = null;   // collection
@@ -360,7 +371,7 @@
 		// console.log("drop =>" + result);
 
 		// Re-create a collection again
-		result = await client.db(dataBaseName).createCollection(collectionName);
+		// result = await client.db(dataBaseName).createCollection(collectionName);
 		// console.log(result);
 	}
 
@@ -384,6 +395,82 @@
 		//  );
 
 		// console.log(result.value.horseRace.uk.Cartmel['2021-09-20']['12:00'].players[0].backOdds);
+	}
+
+	//////////////////////////// Utility Functions (start) /////////////////////////////////////////////////////////////
+	function randomIntFromInterval(min, max) { // min and max included 
+		return Math.floor(Math.random() * (max - min + 1) + min);
+	}
+	//////////////////////////// Utility Functions (end) ///////////////////////////////////////////////////////////////
+
+	async function updateUserBalanceAfterMatch(findObject, updateObject) {
+				let result = await User.findOneAndUpdate(
+											findObject, // { username: 'sridhar123' }, 											
+											{$inc: updateObject},   // {$inc: { "userBalance": 4567 }},   // $inc
+											{returnOriginal: false }
+									);
+
+	}
+
+	// set the winner of the match
+	async function setWinnerOfTheMatch(client, dataBaseName, collectionName, findObject, updateObject, operation) {
+		let bets = await client.db(dataBaseName).collection(collectionName).findOne({});
+		// console.log(bets.value.horseRace.uk.Cartmel['2021-09-20']['12:00'].players[0].bets);
+
+		updateObject = {"horseRace.uk.Cartmel.2021-09-20.12:00.players": 0 }; // .2.bets
+
+		// updateObject = horseRace.uk.Cartmel.2021-09-20.12:00.players.2.bets
+		// ['horseRace', 'uk', 'Cartmel', '2021-09-20', '12:00', 'players', '2', 'bets']
+		let keyStr = Object.keys(updateObject)[0];
+		let keyStrLst = Object.keys(updateObject)[0].split('.'); // str => object accessor
+		let winner = -1;
+
+		for(let i = 0, n = keyStrLst.length; i < n; ++i) {
+			bets = bets[keyStrLst[i]];
+			if(bets.players && bets.players.length) {
+				let nPlayers = bets.players.length;
+				winner = randomIntFromInterval(0 , nPlayers-1);
+			}
+		}
+
+		// winner = 1; // test
+
+		// Win Calculation after the match has been completed
+		for(let i = 0, n = bets.length; i < n; ++i) {
+			for(let j = 0, m = bets[i].bets.length; j < m; ++j) {
+				if(winner === i && bets[i].bets[j].bettype === "backOdds" && bets[i].bets[j].matchvalue < bets[i].bets[j].stakevalue) {
+					
+					bets[i].bets[j].wins = (bets[i].bets[j].matchvalue ? bets[i].bets[j].matchvalue + ((bets[i].bets[j].stakevalue - bets[i].bets[j].matchvalue) * bets[i].bets[j].oddvalue) : bets[i].bets[j].stakevalue + bets[i].bets[j].profitliabilityvalue).toFixed(2);
+					updateUserBalanceAfterMatch({ username: bets[i].bets[j].username }, { "userBalance": Number(bets[i].bets[j].wins) });
+				}
+				else if(winner != i && bets[i].bets[j].bettype === "backOdds" && bets[i].bets[j].matchvalue < bets[i].bets[j].stakevalue) {
+					// return back the unmatched stake money back and no need to add additional stake value
+					bets[i].bets[j].wins = (bets[i].bets[j].matchvalue ? bets[i].bets[j].matchvalue : 0).toFixed(2);
+					updateUserBalanceAfterMatch({ username: bets[i].bets[j].username }, { "userBalance": Number(bets[i].bets[j].wins) });
+				}
+				else if(winner == i && bets[i].bets[j].bettype === "layOdds" && bets[i].bets[j].matchvalue < bets[i].bets[j].profitliabilityvalue) {
+					bets[i].bets[j].wins = (bets[i].bets[j].matchvalue ? bets[i].bets[j].matchvalue : 0).toFixed(2);
+					updateUserBalanceAfterMatch({ username: bets[i].bets[j].username }, { "userBalance": Number(bets[i].bets[j].wins) });
+				}
+				else if(winner != i && bets[i].bets[j].bettype === "layOdds" && bets[i].bets[j].matchvalue < bets[i].bets[j].profitliabilityvalue) {
+					bets[i].bets[j].wins = (bets[i].bets[j].matchvalue ? bets[i].bets[j].matchvalue * 2 : 2 * bets[i].bets[j].stakevalue).toFixed(2);
+					updateUserBalanceAfterMatch({ username: bets[i].bets[j].username }, { "userBalance": Number(bets[i].bets[j].wins) });
+				}
+				else {
+					bets[i].bets[j].wins = 0;
+				}
+			}
+		}
+
+		// Update the DB with the final winnings
+		// let changeObj = {};
+		// changeObj[oddArray + '.bets']    = bets;
+		// const winUpdate = await updateManyDB(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 
+		// 										{}, changeObj);
+
+
+		// Notify all the user that winnings have been awarded
+		io.emit('notifyEvent_BalancedUpdated', JSON.stringify({'data': 'Match Completed and Balance Updated'}));
 	}
 
 	async function findOneAndUpdateDB(client, dataBaseName, collectionName, findObject, updateObject, operation) {
@@ -715,12 +802,17 @@
 				}
 				console.log(`Collection - ${MONGO_COLLECTION_NAME} - connected successfully`);
 
-				// 0. Upload json doc(a set of collection) to db
-				// uploadLocalJsonCollectionToDB(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME);
+				// drop a collection and upload data from the json
+
+
+				// dropAllDocuments(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME);
+				// uploadLocalJsonCollectionToDB(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME); // 0. Upload json doc(a set of collection) to db
+
+
+
 
 		} catch(e) {
 			console.error(e);
 		}
 		
 	});
-
