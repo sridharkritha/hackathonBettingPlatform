@@ -269,7 +269,7 @@
 		cursor: pointer;
 	}
 
-	/* Back */
+	/* backOdds */
 	.backMainBgColor {
 		background-color: #8dd2f0;
 		transition: 0.3s;
@@ -294,7 +294,7 @@
 		font-weight: bold;
 	}
 
-	/* Lay */
+	/* layOdds */
 
 	.layMainBgColor {
 		background-color: #feafb2;
