@@ -16,7 +16,7 @@
 										"horseName": "6 Bollin May",
 										"jockeyName": "D Allan",
 										"trainerName": "T D Easterby",
-										"silk": "assets\/silk\/blackSilk.png",
+										"silk": "assets\/silk\/silk_0.png",
 										"backOdds": [2.8,3.05,3.1],
 										"layOdds": [4.2,4.6,4.9]
 								},
@@ -24,7 +24,7 @@
 										"horseName": "8 Waxwing",
 										"jockeyName": "Joanna Mason",
 										"trainerName": "A Murphy",
-										"silk": "assets\/silk\/brownSilk.png",
+										"silk": "assets\/silk\/silk_1.png",
 										"backOdds": [4.1,4.5,4.8],
 										"layOdds": [5.3,5.4,5.7]
 								}
@@ -38,7 +38,7 @@
 										"horseName": "1 Man Of The Night",
 										"jockeyName": "Jack Mitchell",
 										"trainerName": "D O' Meara",
-										"silk": "assets\/silk\/pinkSilk.png",
+										"silk": "assets\/silk\/silk_2.png",
 										"backOdds": [3.8,3.95,4.1],
 										"layOdds": [5.3,5.6,5.9]
 								},
@@ -46,7 +46,7 @@
 										"horseName": "2 Dream With Me",
 										"jockeyName": "B A Curtis",
 										"trainerName": "M Johnston",
-										"silk": "assets\/silk\/redSilk.png",
+										"silk": "assets\/silk\/silk_3.png",
 										"backOdds": [7.1,7.5,7.8],
 										"layOdds": [9.3,9.4,9.7]
 								}
@@ -66,7 +66,7 @@
 										"horseName": "11 French Company",
 										"jockeyName": "D Allan",
 										"trainerName": "T D Easterby",
-										"silk": "assets\/silk\/pinkSilk.png",
+										"silk": "assets\/silk\/silk_2.png",
 										"backOdds": [],
 										"layOdds": [],
 										"backCash":[],
@@ -77,7 +77,7 @@
 										"horseName": "5 Rock Ya Boy Ya",
 										"jockeyName": "Joanna Mason",
 										"trainerName": "A Murphy",
-										"silk": "assets\/silk\/blackSilk.png",
+										"silk": "assets\/silk\/silk_0.png",
 										"backOdds": [],
 										"layOdds": [],
 										"backCash":[],
@@ -88,7 +88,7 @@
 										"horseName": "2 Triggered",
 										"jockeyName": "B A Curtis",
 										"trainerName": "M Johnston",
-										"silk": "assets\/silk\/yellowSilk.png",
+										"silk": "assets\/silk\/silk_4.png",
 										"backOdds": [],
 										"layOdds": [],
 										"backCash":[],
@@ -105,7 +105,7 @@
 										"horseName": "1 Air Show",
 										"jockeyName": "Jack Mitchell",
 										"trainerName": "D O' Meara",
-										"silk": "assets\/silk\/blackSilk.png",
+										"silk": "assets\/silk\/silk_0.png",
 										"backOdds": [3.8,3.95,4.1],
 										"layOdds": [5.3,5.6,5.9],
 										"bets":[]
@@ -114,7 +114,7 @@
 										"horseName": "2 Triggered",
 										"jockeyName": "B A Curtis",
 										"trainerName": "M Johnston",
-										"silk": "assets\/silk\/blackSilk.png",
+										"silk": "assets\/silk\/silk_0.png",
 										"backOdds": [7.1,7.5,7.8],
 										"layOdds": [9.3,9.4,9.7],
 										"bets":[]
@@ -138,7 +138,7 @@
 										"horseName": "3. Dawn Tapper",
 										"jockeyName": "D Allan",
 										"trainerName": "T D Easterby",
-										"silk": "assets\/silk\/blackSilk.png",
+										"silk": "assets\/silk\/silk_0.png",
 										"backOdds": [2.8,3.05,3.1],
 										"layOdds": [4.2,4.6,4.9]
 								},
@@ -146,7 +146,7 @@
 										"horseName": "6. Calvados",
 										"jockeyName": "Joanna Mason",
 										"trainerName": "A Murphy",
-										"silk": "assets\/silk\/blackSilk.png",
+										"silk": "assets\/silk\/silk_0.png",
 										"backOdds": [4.1,4.5,4.8],
 										"layOdds": [5.3,5.4,5.7]
 								}
@@ -160,7 +160,7 @@
 										"horseName": "7 Classical Memories",
 										"jockeyName": "Jack Mitchell",
 										"trainerName": "D O' Meara",
-										"silk": "assets\/silk\/blackSilk.png",
+										"silk": "assets\/silk\/silk_0.png",
 										"backOdds": [3.8,3.95,4.1],
 										"layOdds": [5.3,5.6,5.9]
 								},
@@ -168,7 +168,7 @@
 										"horseName": "4 Too Bright",
 										"jockeyName": "B A Curtis",
 										"trainerName": "M Johnston",
-										"silk": "assets\/silk\/blackSilk.png",
+										"silk": "assets\/silk\/silk_0.png",
 										"backOdds": [7.1,7.5,7.8],
 										"layOdds": [9.3,9.4,9.7]
 								}
@@ -190,7 +190,7 @@
 										"horseName": "1 Artistic Work",
 										"jockeyName": "D Allan",
 										"trainerName": "T D Easterby",
-										"silk": "assets\/silk\/blackSilk.png",
+										"silk": "assets\/silk\/silk_0.png",
 										"backOdds": [2.8,3.05,3.1],
 										"layOdds": [4.2,4.6,4.9]
 								},
@@ -198,7 +198,7 @@
 										"horseName": "6 See The Love",
 										"jockeyName": "Joanna Mason",
 										"trainerName": "A Murphy",
-										"silk": "assets\/silk\/blackSilk.png",
+										"silk": "assets\/silk\/silk_0.png",
 										"backOdds": [4.1,4.5,4.8],
 										"layOdds": [5.3,5.4,5.7]
 								}
@@ -212,7 +212,7 @@
 										"horseName": "3 Baryshnikov",
 										"jockeyName": "Jack Mitchell",
 										"trainerName": "D O' Meara",
-										"silk": "assets\/silk\/blackSilk.png",
+										"silk": "assets\/silk\/silk_0.png",
 										"backOdds": [3.8,3.95,4.1],
 										"layOdds": [5.3,5.6,5.9]
 								},
@@ -220,7 +220,7 @@
 										"horseName": "6 Myristica",
 										"jockeyName": "B A Curtis",
 										"trainerName": "M Johnston",
-										"silk": "assets\/silk\/blackSilk.png",
+										"silk": "assets\/silk\/silk_0.png",
 										"backOdds": [7.1,7.5,7.8],
 										"layOdds": [9.3,9.4,9.7]
 								}

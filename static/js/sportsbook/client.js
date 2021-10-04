@@ -1196,7 +1196,8 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 			document.getElementById("shuffleItemsContainerId").appendChild(elemRef);
 		
 			elemRef2 = document.createElement("IMG");
-			elemRef2.setAttribute("src","assets/silk/blackSilk.png");
+			str = "assets/silk/silk_" + i + ".png";
+			elemRef2.setAttribute("src",str); // image url
 			elemRef2.setAttribute("alt","Trulli");
 			// elemRef.setAttribute("id","myParentId_myParentId_shuffleItemsContainerId_myId_5_myId_6");
 			elemRef.appendChild(elemRef2);
