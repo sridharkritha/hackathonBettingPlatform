@@ -53,18 +53,22 @@
 
 			<div id="rightMainInner">
 				<!-- Event/Sports Container	 -->
-				<div id="sportsEventContainer" class="gridROw"></div>
+				<div id="sportsEventTitle" class=""></div>
+				<div id="sportsEventContainer" class="gridROw" style="overflow:scroll; height:500px;"></div>
 
 				<div id="matchResultSimulator">
 					<h1 id="marketStatusId" class = "blink_me centered"></h1>
 					<div id="digitalClock"  class = "centered"></div>
 					<!-- game simulator -->
+				</div>
+				<div id="gameSimulator" >
 					<div id="gameSimulatorWrapper"></div>
 					<div id="resultDeclarationWrapper" class="centered"></div>
 					<div id ="showPublishedResultId" class="centered"></div>
 				</div>
 			</div>
-			<input type="submit" id="publishResultId" value="Start Race" class="regLoginButton" >
+			<input type="submit" id="publishResultId" value="Start Race" class="regLoginButton" />
+			<img src="assets/loading.gif" id="publishResultIdLoader" width="30px" style="display: none;" />
 		</div>
 
 		<div id="rightSidebar">

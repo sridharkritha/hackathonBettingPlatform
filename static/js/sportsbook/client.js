@@ -134,17 +134,20 @@ window.addEventListener('load', function () {
 		let raceCardContainer = document.getElementById('sportsEventContainer');
 		raceCardContainer.textContent = ''; // reset at start
 
+		let sportsEventTitle = document.getElementById('sportsEventTitle');
+		sportsEventTitle.textContent = ''; // reset at start
+
 		let elem = document.createElement("div");
 		elem.setAttribute("id", "raceName");
 		elem.classList.add("raceCardTitle");
 		elem.innerHTML = time + '&nbsp' + raceName;
-		raceCardContainer.appendChild(elem);
+		sportsEventTitle.appendChild(elem);
 
 		elem = document.createElement("div");
 		elem.setAttribute("id", "matchType");
 		elem.classList.add("raceCardTitle");
 		elem.innerHTML = matchType + '&nbsp' + '|' + '&nbsp' + runLength;
-		raceCardContainer.appendChild(elem);
+		sportsEventTitle.appendChild(elem);
 
 		// idString = "horseRace.uk.Cartmel.2021-09-20.12:00"
 		g_CurrentDisplayedMatch.idString =  eventinfo.gameName +'.'+ eventinfo.region +'.'
@@ -1290,6 +1293,10 @@ window.addEventListener('load', function () {
 
 	function publishResult(e) {
 
+		document.getElementById('publishResultId').style.display = 'none';
+		document.getElementById('publishResultIdLoader').style.display = 'block';
+		document.getElementById("sportsEventContainer").classList.add("raceInProgress");
+
 		sendEventResultRequest();
 
 // 		console.log(this);
@@ -1308,11 +1315,11 @@ window.addEventListener('load', function () {
 			}).then((res) => res.json());
 
 			if (res.status === 'ok') {
+
+				document.getElementById('publishResultIdLoader').style.display = 'none';
 				// everything went fine
 				console.log("Match Winner Recieved Successfully");
 				console.log(res.data);
-
-				document.getElementById("sportsEventContainer").classList.add("raceInProgress")
 
 				g_CurrentDisplayedMatch.winData = res.data.winData;
 

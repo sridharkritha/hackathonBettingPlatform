@@ -90,8 +90,8 @@
 		border: 2px solid #43444a;
 		border-top: none;
 		clear: both;
-		height: 100%;
-		min-height: 610px;
+		height: 700px;
+		margin-bottom: 10px;
 	}
 
 	#sportsEventContainer {
@@ -114,7 +114,7 @@
 	.raceCardTitle {
 		font-size: 16px;
 		font-weight: bold;
-		margin-bottom: 20px;
+		margin-bottom: 10px;
 		padding: 2px;
 	}
 
@@ -153,17 +153,23 @@
 
 	#digitalClock {
 		width: 100%;
-		font-size: 400%;
+		font-size: 300%;
 		font-weight: bolder;
 		text-align: center;
 	}
 
 	#resultDeclarationWrapper {
 		width: 100%;
-		font-size: 400%;
+		font-size: 300%;
 		font-weight: bolder;
 		text-align: center;
 	}
+
+	#gameSimulator {
+		clear: both;
+		margin-top: 175px;
+	}
+
 	/************************* Result Display (start) *************************/
 
 	/****************** General utility style (start) *************************/
@@ -256,8 +262,13 @@
 
 	/**************************** components (start) ******************************/
 
+	#sportsEventTitle {
+		padding: 10px 15px 0 15px;
+	}
+
 	#sportsEventContainer {
 		display: block;
+		clear: both;
 	}
 
 	#betSlipContainer {
@@ -281,13 +292,18 @@
 	
 	#matchResultSimulator {
 		display: block;
-		margin:-300px 0 20px 0;
+		margin:-310px 0 20px 0;
 	}
 
 	#publishResultId {
 		background-color: #0eb588;
 		color: #fff;
 		float: right;
+	}
+
+	#publishResultIdLoader {
+		float: right;
+		margin: 5px 30px;
 	}
 
 	/**************************** components (end) ******************************/
@@ -306,7 +322,7 @@
 	#pickerBoxOneId {
 		/* grid-area: 1/3; */
 		grid-area: 1/1;
-		border: 5px solid blue;
+		border: 3px solid #0eb588;
 		height: 70px;
 	}
 
