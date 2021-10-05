@@ -99,7 +99,7 @@ window.addEventListener('load', function () {
 	/////////////////////////////// Global Variables (start)////////////////////////////////////////////////////////////
 	// At the start display the horse race
 	let g_NextSportsToDisplay = {
-		'gameName': 'horseRace',
+		'gameName': 'Horse Race',
 		'region': 'uk',
 		'raceName': 'Cartmel',
 		'date': '2021-09-20',
@@ -124,7 +124,7 @@ window.addEventListener('load', function () {
 			switch(href) {
 				case 'horseRace':
 									g_NextSportsToDisplay = {
-										'gameName': 'horseRace',
+										'gameName': 'Horse Race',
 										'region': 'uk',
 										'raceName': 'Cartmel',
 										'date': '2021-09-20',
@@ -134,7 +134,7 @@ window.addEventListener('load', function () {
 				break;
 				case 'greyhoundRace':
 									g_NextSportsToDisplay = {
-										'gameName': 'greyhoundRace',
+										'gameName': 'Greyhound Race',
 										'region': 'uk',
 										'raceName': 'Towcester',
 										'date': '2021-10-09',
@@ -178,7 +178,7 @@ window.addEventListener('load', function () {
 					};
 
 		let titleBarTxtRef = document.getElementById('titleBarTxtId');
-		titleBarTxtRef.textContent = eventinfo.gameName + " Race Card"; // reset at start
+		titleBarTxtRef.textContent = eventinfo.gameName + " - Race Card"; // reset at start
 
 		let raceCardContainer = document.getElementById('sportsEventContainer');
 		raceCardContainer.textContent = ''; // reset at start

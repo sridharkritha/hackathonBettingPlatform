@@ -1,6 +1,6 @@
 {
-	"games": ["horseRace", "cricket"],
-	"horseRace": {
+	"games": ["Horse Race", "Greyhound Race", "cricket"],
+	"Horse Race": {
 		"region": ["uk"],
 		"uk": {
 			"venues": ["Cartmel"],
@@ -128,7 +128,7 @@
 			}
 		}
 	},
-	"greyhoundRace": {
+	"Greyhound Race": {
 		"region": ["uk"],
 		"uk": {
 			"venues": ["Towcester"],
@@ -207,7 +207,7 @@
 		}
 	},
 
-	"cricket": {
+	"Cricket": {
 		"region": ["india", "england"],
 		"india": {
 			"venues": ["Chennai","Mumbai"],
