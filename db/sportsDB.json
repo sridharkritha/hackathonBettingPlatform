@@ -1,63 +1,13 @@
 {
 	"games": ["horseRace", "cricket"],
 	"horseRace": {
-		"region": ["uk", "ireland"],
+		"region": ["uk"],
 		"uk": {
-			"venues": ["Wolverhampton","Cartmel"],
-			"Wolverhampton": {
-					"dates": ["2021-08-30"],
-					"2021-08-30": {
-						"timings": ["13:00","14:30"],
-						"13:00": {
-							"matchType": "Handicap",
-							"runLength": "0m 6f 20y",
-							"players": [
-								{
-										"horseName": "6 Bollin May",
-										"jockeyName": "D Allan",
-										"trainerName": "T D Easterby",
-										"silk": "assets\/silk\/silk_0.png",
-										"backOdds": [2.8,3.05,3.1],
-										"layOdds": [4.2,4.6,4.9]
-								},
-								{
-										"horseName": "8 Waxwing",
-										"jockeyName": "Joanna Mason",
-										"trainerName": "A Murphy",
-										"silk": "assets\/silk\/silk_1.png",
-										"backOdds": [4.1,4.5,4.8],
-										"layOdds": [5.3,5.4,5.7]
-								}
-							]
-						},
-						"14:30": {
-							"matchType": "Flat",
-							"runLength": "1m 3f 170y",
-							"players": [
-								{
-										"horseName": "1 Man Of The Night",
-										"jockeyName": "Jack Mitchell",
-										"trainerName": "D O' Meara",
-										"silk": "assets\/silk\/silk_2.png",
-										"backOdds": [3.8,3.95,4.1],
-										"layOdds": [5.3,5.6,5.9]
-								},
-								{
-										"horseName": "2 Dream With Me",
-										"jockeyName": "B A Curtis",
-										"trainerName": "M Johnston",
-										"silk": "assets\/silk\/silk_3.png",
-										"backOdds": [7.1,7.5,7.8],
-										"layOdds": [9.3,9.4,9.7]
-								}
-							]
-						}
-					}
-			},
+			"venues": ["Cartmel"],
 			"Cartmel": {
 					"dates": ["2021-09-20"],
 					"2021-09-20": {
-						"timings": ["12:00","12:30"],
+						"timings": ["12:00"],
 						"12:00": {
 							"matchType": "Handicap",
 							"runLength": "0m 6f 20y",
@@ -173,133 +123,82 @@
 										"bets":[]
 								}
 							]
-						},
-						"12:30": {
-							"matchType": "Flat",
-							"runLength": "1m 3f 170y",
-							"players": [
-								{
-										"horseName": "1 Air Show",
-										"jockeyName": "Jack Mitchell",
-										"trainerName": "D O' Meara",
-										"silk": "assets\/silk\/silk_0.png",
-										"backOdds": [3.8,3.95,4.1],
-										"layOdds": [5.3,5.6,5.9],
-										"bets":[]
-								},
-								{
-										"horseName": "2 Triggered",
-										"jockeyName": "B A Curtis",
-										"trainerName": "M Johnston",
-										"silk": "assets\/silk\/silk_0.png",
-										"backOdds": [7.1,7.5,7.8],
-										"layOdds": [9.3,9.4,9.7],
-										"bets":[]
-								}
-							]
 						}
 					}
 			}
-		},
-		"ireland": {
-			"venues": ["Roscommon","Downpatrick"],
-			"Roscommon": {
-					"dates": ["2021-09-20"],
-					"2021-09-20": {
-						"timings": ["14:00","15:30"],
-						"14:00": {
-							"matchType": "Handicap",
-							"runLength": "0m 6f 20y",
+		}
+	},
+	"greyhoundRace": {
+		"region": ["uk"],
+		"uk": {
+			"venues": ["Towcester"],
+			"Towcester": {
+					"dates": ["2021-10-09"],
+					"2021-10-09": {
+						"timings": ["18:05"],
+						"18:05": {
+							"matchType": "Greyhound Racing",
+							"runLength": "500 mtrs",
 							"players": [
 								{
-										"horseName": "3. Dawn Tapper",
-										"jockeyName": "D Allan",
+										"horseName": "1 Salacres Delight",
+										"trainerName": "P H Harnden",
+										"silk": "assets\/dog\/dog_1.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
+								},
+								{
+										"horseName": "2 Therehegoes",
+										"trainerName": "M J Richards",
+										"silk": "assets\/dog\/dog_2.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
+								},
+								{
+										"horseName": "3 Rolling Eske",
+										"trainerName": "R Jones",
+										"silk": "assets\/dog\/dog_3.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
+								},
+								{
+										"horseName": "4 Sun Crystal",
+										"trainerName": "V A Lea",
+										"silk": "assets\/dog\/dog_4.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
+								},
+								{
+										"horseName": "5 Lightfoot Tolu",
+										"trainerName": "K R Hutton",
+										"silk": "assets\/dog\/dog_5.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
+								},
+								{
+										"horseName": "6 Empire King",
 										"trainerName": "T D Easterby",
-										"silk": "assets\/silk\/silk_0.png",
-										"backOdds": [2.8,3.05,3.1],
-										"layOdds": [4.2,4.6,4.9]
-								},
-								{
-										"horseName": "6. Calvados",
-										"jockeyName": "Joanna Mason",
-										"trainerName": "A Murphy",
-										"silk": "assets\/silk\/silk_0.png",
-										"backOdds": [4.1,4.5,4.8],
-										"layOdds": [5.3,5.4,5.7]
-								}
-							]
-						},
-						"15:30": {
-							"matchType": "Flat",
-							"runLength": "1m 3f 170y",
-							"players": [
-								{
-										"horseName": "7 Classical Memories",
-										"jockeyName": "Jack Mitchell",
-										"trainerName": "D O' Meara",
-										"silk": "assets\/silk\/silk_0.png",
-										"backOdds": [3.8,3.95,4.1],
-										"layOdds": [5.3,5.6,5.9]
-								},
-								{
-										"horseName": "4 Too Bright",
-										"jockeyName": "B A Curtis",
-										"trainerName": "M Johnston",
-										"silk": "assets\/silk\/silk_0.png",
-										"backOdds": [7.1,7.5,7.8],
-										"layOdds": [9.3,9.4,9.7]
-								}
-							]
-						}
-					}
-
-
-			},
-			"Downpatrick": {
-					"dates": ["2021-09-20"],
-					"2021-09-20": {
-						"timings": ["16:00","16:30"],
-						"16:00": {
-							"matchType": "Handicap",
-							"runLength": "0m 6f 20y",
-							"players": [
-								{
-										"horseName": "1 Artistic Work",
-										"jockeyName": "D Allan",
-										"trainerName": "T D Easterby",
-										"silk": "assets\/silk\/silk_0.png",
-										"backOdds": [2.8,3.05,3.1],
-										"layOdds": [4.2,4.6,4.9]
-								},
-								{
-										"horseName": "6 See The Love",
-										"jockeyName": "Joanna Mason",
-										"trainerName": "A Murphy",
-										"silk": "assets\/silk\/silk_0.png",
-										"backOdds": [4.1,4.5,4.8],
-										"layOdds": [5.3,5.4,5.7]
-								}
-							]
-						},
-						"16:30": {
-							"matchType": "Flat",
-							"runLength": "1m 3f 170y",
-							"players": [
-								{
-										"horseName": "3 Baryshnikov",
-										"jockeyName": "Jack Mitchell",
-										"trainerName": "D O' Meara",
-										"silk": "assets\/silk\/silk_0.png",
-										"backOdds": [3.8,3.95,4.1],
-										"layOdds": [5.3,5.6,5.9]
-								},
-								{
-										"horseName": "6 Myristica",
-										"jockeyName": "B A Curtis",
-										"trainerName": "M Johnston",
-										"silk": "assets\/silk\/silk_0.png",
-										"backOdds": [7.1,7.5,7.8],
-										"layOdds": [9.3,9.4,9.7]
+										"silk": "assets\/dog\/dog_6.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
 								}
 							]
 						}
@@ -307,7 +206,6 @@
 			}
 		}
 	},
-
 
 	"cricket": {
 		"region": ["india", "england"],

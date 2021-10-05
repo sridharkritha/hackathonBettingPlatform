@@ -751,26 +751,29 @@
 		});
 	}
 
-	////////////////////////////////////////////////////////////////////////////////
 
-	// io.on('myEventClientReady', async (data) => {
-	// 	console.log("Server: Recieved 'myEventClientReady' even from client");
-	// 	if(JSON.parse(data).isClientReady) {
-	// 		await returnAllDouments(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME);
-	// 	}
-	// });
-
+	// Client request for a new connection
 	io.on('connection', async (socket) => {
 		console.log('Server: A new client connected to me');
 		await returnAllDouments(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME);
 		// await monitorListingsUsingEventEmitter(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 30000, pipeline);
 		await monitorListingsUsingEventEmitter(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 30000);
 
+		// client => server 
+		socket.on('myEventClientReady', async (data) => {
+			console.log("Server: Recieved 'myEventClientReady' even from client");
+			if(JSON.parse(data).isClientReady) {
+				await returnAllDouments(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME);
+			}
+		});
+
 		socket.on('mySubmitEvent', async (data) => {      // note: async
 			console.log('user joined room');
 			console.log(data);
 			// socket.join(data.myID);
 			try {
+				
+
 				// await updateListingByName(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, {name: "Sridhar"}, { wins: 12799 });
 				await updateListingByName(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, JSON.parse(data).findObject, JSON.parse(data).updateObject);
 			} catch (e) {

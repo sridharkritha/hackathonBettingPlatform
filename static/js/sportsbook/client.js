@@ -12,7 +12,7 @@ window.addEventListener('load', function () {
 
 	socket.on("connect", async () => {
 		// console.log('myEventClientReady - event is sent');
-		socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
+		// socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
 	});
 	socket.connect(); // need bcos 'autoConnect:false'
 
@@ -97,19 +97,65 @@ window.addEventListener('load', function () {
 	*/
 
 	/////////////////////////////// Global Variables (start)////////////////////////////////////////////////////////////
+	// At the start display the horse race
+	let g_NextSportsToDisplay = {
+		'gameName': 'horseRace',
+		'region': 'uk',
+		'raceName': 'Cartmel',
+		'date': '2021-09-20',
+		'time': '12:00'
+	};
 	let g_CurrentDisplayedMatch = {};
 	let g_BetSlipSheet = {};
 	let g_WinLossByPlayers = []; // global variable for displaying win / loss by player 
 	/////////////////////////////// Global Variables (end)//////////////////////////////////////////////////////////////
 
+	// All anchors tags only under '#rightSidebarLinks'
+	let rightSidebarLinks = document.querySelector('#rightSidebarLinks');
+	let anchorsElms = rightSidebarLinks.querySelectorAll('a'); // return array of all anchor elemRefs
+	anchorsElms.forEach(anchor => {
+		anchor.addEventListener('click', function(e) {
+			console.log('Link is clicked!');
+			e.preventDefault();
+			e.stopPropagation();
+			
+			let href = this.getAttribute("href"); // #
+
+			switch(href) {
+				case 'horseRace':
+									g_NextSportsToDisplay = {
+										'gameName': 'horseRace',
+										'region': 'uk',
+										'raceName': 'Cartmel',
+										'date': '2021-09-20',
+										'time': '12:00'
+									};
+									socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
+				break;
+				case 'greyhoundRace':
+									g_NextSportsToDisplay = {
+										'gameName': 'greyhoundRace',
+										'region': 'uk',
+										'raceName': 'Towcester',
+										'date': '2021-10-09',
+										'time': '18:05'
+									};
+									socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
+				break;
+			}
+
+			return false;
+		}, this); // this - MUST
+	});
+	
 	////////////////////// Dynamically construct - Race Card (start) ///////////////////////////////////////////////////
 	// data <-- server <-- db
 	function processInputData(data) {
-		const gameName = 'horseRace';
-		const region = 'uk';
-		const raceName = 'Cartmel';
-		const date = '2021-09-20';
-		const time = '12:00';
+		const gameName = g_NextSportsToDisplay.gameName; // 'horseRace';
+		const region   = g_NextSportsToDisplay.region;   // 'uk';
+		const raceName = g_NextSportsToDisplay.raceName; // 'Cartmel';
+		const date     = g_NextSportsToDisplay.date;     // '2021-09-20';
+		const time     = g_NextSportsToDisplay.time;     // '12:00';
 
 		const ref = data[gameName][region][raceName][date][time];
 		const matchType = ref.matchType;
@@ -130,6 +176,9 @@ window.addEventListener('load', function () {
 						'playerCount': playerCount,
 						'evtStr': gameName +'.'+ region +'.'+ raceName +'.'+ date +'.'+ time // "horseRace.uk.Cartmel.2021-09-20.12:00"
 					};
+
+		let titleBarTxtRef = document.getElementById('titleBarTxtId');
+		titleBarTxtRef.textContent = eventinfo.gameName + " Race Card"; // reset at start
 
 		let raceCardContainer = document.getElementById('sportsEventContainer');
 		raceCardContainer.textContent = ''; // reset at start
@@ -185,7 +234,7 @@ window.addEventListener('load', function () {
 			// Jockey and Trainer Name
 			elem4 = document.createElement("div");
 			elem4.classList = "playerDesc";
-			elem4.innerHTML = 'J:' + players[i].jockeyName + '&nbsp' + 'T:'+ players[i].trainerName;
+			elem4.innerHTML = (players[i].jockeyName ? ('J:' + players[i].jockeyName) : '') + '&nbsp' + 'T:'+ players[i].trainerName;
 			elem3.appendChild(elem4);
 			// display potential win/loss
 			elem4 = document.createElement("div");
