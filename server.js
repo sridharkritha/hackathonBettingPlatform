@@ -36,10 +36,11 @@
 	/////////////////////////////////////////////// Tester(start) //////////////////////////////////////////////////////
 
 	app.post('/api/publishResult', async (req, res) => {
-	// 		const { betstr, oddstr } = req.body;
-	// 		console.log(betstr, oddstr);
+			const { msg, matchstr } = req.body;
+	// 		msg: 'PUBLISH_THE_MATCH_WINNER',
+	// 		matchstr: {"Horse Race.uk.Cartmel.2021-09-20.12:00.players": 0 } // .2.bets
 
-		const winData = await setWinnerOfTheMatch(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME);
+		const winData = await setWinnerOfTheMatch(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, {}, matchstr);
 
 		res.json({ status: 'ok', data: {"winData" : winData} });
 	});
@@ -417,7 +418,7 @@
 		let bets = await client.db(dataBaseName).collection(collectionName).findOne({});
 		// console.log(bets.value.horseRace.uk.Cartmel['2021-09-20']['12:00'].players[0].bets);
 
-		updateObject = {"horseRace.uk.Cartmel.2021-09-20.12:00.players": 0 }; // .2.bets
+		// updateObject = {"Horse Race.uk.Cartmel.2021-09-20.12:00.players": 0 }; // .2.bets
 
 		// updateObject = horseRace.uk.Cartmel.2021-09-20.12:00.players.2.bets
 		// ['horseRace', 'uk', 'Cartmel', '2021-09-20', '12:00', 'players', '2', 'bets']
@@ -435,11 +436,16 @@
 
 		winner = 1; // test - always 2nd player in the list wins - for testing purpose
 
-		let winData = {"winnerIndex": winner}
+		let winData = {
+			"winnerIndex": winner,
+			"horseName": bets[1].horseName // winer of the match
+			};
 
 		// Win Calculation after the match has been completed
 		for(let i = 0, n = bets.length; i < n; ++i) {
 			for(let j = 0, m = bets[i].bets.length; j < m; ++j) {
+
+				// Calculate the winnings
 				if(winner === i && bets[i].bets[j].bettype === "backOdds" && bets[i].bets[j].matchvalue < bets[i].bets[j].stakevalue) {
 					
 					bets[i].bets[j].wins = (bets[i].bets[j].matchvalue ? bets[i].bets[j].matchvalue + ((bets[i].bets[j].stakevalue - bets[i].bets[j].matchvalue) * bets[i].bets[j].oddvalue) : bets[i].bets[j].stakevalue + bets[i].bets[j].profitliabilityvalue).toFixed(2);

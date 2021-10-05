@@ -103,7 +103,9 @@ window.addEventListener('load', function () {
 		'region': 'uk',
 		'raceName': 'Cartmel',
 		'date': '2021-09-20',
-		'time': '12:00'
+		'time': '12:00',
+
+		'publishMatchResultStr': {"Horse Race.uk.Cartmel.2021-09-20.12:00.players": 0 }
 	};
 	let g_CurrentDisplayedMatch = {};
 	let g_BetSlipSheet = {};
@@ -128,7 +130,8 @@ window.addEventListener('load', function () {
 										'region': 'uk',
 										'raceName': 'Cartmel',
 										'date': '2021-09-20',
-										'time': '12:00'
+										'time': '12:00',
+										'publishMatchResultStr': {"Horse Race.uk.Cartmel.2021-09-20.12:00.players": 0 }
 									};
 									socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
 				break;
@@ -138,7 +141,8 @@ window.addEventListener('load', function () {
 										'region': 'uk',
 										'raceName': 'Towcester',
 										'date': '2021-10-09',
-										'time': '18:05'
+										'time': '18:05',
+										'publishMatchResultStr': {"Greyhound Race.uk.Towcester.2021-10-09.18:05.players": 0 }
 									};
 									socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
 				break;
@@ -1352,7 +1356,8 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
-					msg: 'PUBLISH_THE_MATCH_WINNER'
+					'msg': 'PUBLISH_THE_MATCH_WINNER',
+					'matchstr': g_NextSportsToDisplay.publishMatchResultStr
 				})
 			}).then((res) => res.json());
 
