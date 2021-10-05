@@ -3,58 +3,7 @@ window.addEventListener('load', function () {
 	function randomIntFromInterval(min, max) { // min and max included 
 		return Math.floor(Math.random() * (max - min + 1) + min);
 	}
-	//////////////////////////// Utility Functions (end) ///////////////////////////////////////////////////////////////
-
-	//////////////////////////////// Tester (start) ////////////////////////////////////////////////////////////////////
-
-	function run() {
-		const elem = document.getElementById('publishResultId');
-		elem.addEventListener('click', publishResult); // works
-
-	}
-	run();
-
-	function publishResult(e) {
-
-		sendEventResultRequest();
-
-		[].forEach.call(document.querySelectorAll('.gameBetContainer'), function (el) {
-			el.remove();
-		});
-
-		startRace();
-
-		console.log(this);
-		console.log(e.currentTarget); // element you clicked
-		// console.log(JSON.parse(this.dataset.eventinfo));
-		// console.log(JSON.parse(this.dataset.playerinfo));
-	}
-
-	// Send a bet request to the server
-	function sendEventResultRequest() {
-		(async () => {
-			const res = await fetch('/api/publishResult', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					betstr: 'sridhar',
-					oddstr: 9999
-				})
-			}).then((res) => res.json());
-
-			if (res.status === 'ok') {
-				// everything went fine
-				console.log("Bet Placed Successfully");
-				console.log(res.data);
-
-				document.getElementById('showPublishedResultId').textContent = JSON.stringify(res.data['winData']['horseName']);
-			} else {
-				console.error("Bet Placed Error: ", res.error);
-				// alert(res.error);
-			}
-		})();
-	}
-	/////////////////////////////// Tester (end) ///////////////////////////////////////////////////////////////////////
+	//////////////////////////// Utility Functions (end) ///////////////////////////////////////////////////////////////	
 
 	//////////////////////////// Client to Server communication (start) ////////////////////////////////////////////////	
 	// Using HTML - Load "client.html" (do NOT run "node client.js")
@@ -67,42 +16,10 @@ window.addEventListener('load', function () {
 	});
 	socket.connect(); // need bcos 'autoConnect:false'
 
+
 	// Update the balance after match has been completed
 	socket.on("notifyEvent_BalancedUpdated", (data) => { 
-
-		const username = localStorage.getItem('username'); // get it from cookie
-		const password = localStorage.getItem('password'); // get it from cookie
-		// login(username, password);
-
-		(async() => {
-			if(username && username) {
-			
-				const result = await fetch('/api/login', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						username,
-						password
-					})
-				}).then((res) => res.json());
-	
-				if (result.status === 'ok') {
-					// everything went fine
-					console.log('Got the token: ', result.data);
-					localStorage.setItem('token', result.data); // store in cookie
-					localStorage.setItem('username', username); // store in cookie
-					localStorage.setItem('password', password); // store in cookie
-					// alert('Success');
-					document.getElementById("regLoginFieldsId").style.display = 'none';
-					document.getElementById("welcomeUserName").textContent = "Welcome " + username;
-					document.getElementById("userBalanceAmount").textContent = "Balance: " + result.userBalance;
-				} else {
-					alert(result.error);
-				}
-			}
-		})();
+		// updateBalanceAfterResult();
 	});
 
 
@@ -234,8 +151,11 @@ window.addEventListener('load', function () {
 											+ eventinfo.raceName +'.'+ eventinfo.date +'.'+ eventinfo.time;
 		g_CurrentDisplayedMatch.playerCount = playerCount;
 
+		g_CurrentDisplayedMatch.playerInfo = []; // stores player info for declaring the winner from the losers
+
 		for(let i = 0; i < playerCount; ++i) {
 			let playerinfo = { 'playerIndexString': 'players.' + i };
+			g_CurrentDisplayedMatch.playerInfo.push( {horseName: players[i].horseName , silk: players[i].silk});
 
 			// "horseRace.uk.Cartmel.2021-09-20.12:00.players.0."
 			let idString = g_CurrentDisplayedMatch.idString + '.' + 'players' + '.' + i + '.';
@@ -1173,7 +1093,11 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 
 	////////////////////////////////////////////////// win  predictor graphics animation (start) /////////////////////////
 
-	function winPredictorScroller(nPlayers) {
+	function winPredictorScroller(currentDisplayedMatch) {
+
+		if(!currentDisplayedMatch.playerInfo) return;
+
+		const nPlayers = currentDisplayedMatch.playerInfo.length; // playerInfo. 
 		let elemRef = null;
 		let elemRef2 = null;
 		let str = null;
@@ -1202,8 +1126,8 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 			document.getElementById("shuffleItemsContainerId").appendChild(elemRef);
 		
 			elemRef2 = document.createElement("IMG");
-			str = "assets/silk/silk_" + i + ".png";
-			elemRef2.setAttribute("src",str); // image url
+// 			str = "assets/silk/silk_" + i + ".png";
+			elemRef2.setAttribute("src",currentDisplayedMatch.playerInfo[i].silk); // image url
 			elemRef2.setAttribute("alt","Trulli");
 			// elemRef.setAttribute("id","myParentId_myParentId_shuffleItemsContainerId_myId_5_myId_6");
 			elemRef.appendChild(elemRef2);
@@ -1226,7 +1150,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
    
 	////////////////////////////////////////////////// win predictor animation (start ) //////////////////////////////////////////
 
-		function translationAnimation(containerElementId, sliderObjs) {
+		function translationAnimation(containerElementId, sliderObjs, winnerPlayer) {
 			let shuffleItemsContainer = document.querySelector('#'+containerElementId);
 			let children = shuffleItemsContainer.children; // gets array of children from the parent
 
@@ -1256,6 +1180,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 			let arrayLength = sliderObjects.length;
 			let countFinalPositionReached = 0;
 			let startTimeStamp; //  = window.performance.now();
+			
 			
 			function callbackLoop(currentTimeStamp) {
 				if (startTimeStamp === undefined) startTimeStamp = currentTimeStamp;
@@ -1296,9 +1221,9 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 					// exit condition - after 3 sec
 					if(arrayLength != countFinalPositionReached) window.requestAnimationFrame(callbackLoop);
 					else {
-
-						document.getElementById("showPublishedResultId").style.display = 'block';
-						document.getElementById("resultDeclarationWrapper").textContent = "Winner: Team Ethereal !!!";
+						// declare the match winner
+						document.getElementById("resultDeclarationWrapper").textContent = "WINNER: " + winnerPlayer; // "Winner: Team Ethereal !!!";
+						updateBalanceAfterResult();
 					}
 				}
 				else {
@@ -1318,61 +1243,122 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 	let clockStr = null;
 
 	var last = 0; // timestamp of the last render() call
+	function countdownClock(now) {
+		if(!last || now - last >= 0.01 *1000) { // 0.01 sec elapsed time between the calls
+			last = now;
 
-	const startRaceBtn = document.getElementById("startRace");
-	startRaceBtn.addEventListener('click', startRace);
+			clockStr =  ("0" + (sec < 0 ? 0 : Math.floor(sec / (60 * 1)))).slice(-2)   + 
+						' : ' + 
+						("0" + (sec % 60 + 1)).slice(-2);
 
-	function startRace(event){
+			document.getElementById("digitalClock").textContent = clockStr;
 
-		document.getElementById("matchResultSimulator").style.display = 'block';
-
-		[].forEach.call(document.querySelectorAll('.gameBetContainer'), function (el) {
-			el.remove();
-		});
-
-		function countdownClock(now) {
-			if(!last || now - last >= 0.01 *1000) { // 0.01 sec elapsed time between the calls
-				last = now;
-
-				clockStr =  ("0" + (sec < 0 ? 0 : Math.floor(sec / (60 * 1)))).slice(-2)   +
-					' : ' +
-					("0" + (sec % 60 + 1)).slice(-2);
-
-				document.getElementById("digitalClock").textContent = clockStr;
-
-				if(--sec == -2) {
-					runClockCounter = false;
-					document.getElementById("marketStatusId").classList.remove('blink_me');
-					document.getElementById("marketStatusId").textContent = "NO MORE BETS";
+			if(--sec == -2) {
+				runClockCounter = false;
+				document.getElementById("marketStatusId").classList.remove('blink_me');
+				document.getElementById("marketStatusId").textContent = "NO MORE BETS";
+				setTimeout(()=> {
 					setTimeout(()=> {
+						document.getElementById("digitalClock").textContent = "MATCH GOING TO START SOON!!!";
+						document.getElementById("digitalClock").classList.add('blink_me');
+
 						setTimeout(()=> {
-							document.getElementById("digitalClock").textContent = "Race starting soon...";
-							document.getElementById("digitalClock").classList.add('blink_me');
+							document.getElementById("digitalClock").classList.remove('blink_me');
+							document.getElementById("digitalClock").textContent = "MATCH STARTED !!!";
 
-							setTimeout(()=> {
-								document.getElementById("digitalClock").classList.remove('blink_me');
-								document.getElementById("digitalClock").textContent = "Race Started!! ";
-
-								winPredictorScroller(8); // nPlayers
-								translationAnimation('shuffleItemsContainerId', { "pickerBoxOneId": 1});  // where to stop the slider
-							}, 5000);
-						}, 1000);
+							// List players silk for slide over animation
+							winPredictorScroller(g_CurrentDisplayedMatch); // nPlayers
+							//  player who won's the match
+							translationAnimation('shuffleItemsContainerId', { "pickerBoxOneId": g_CurrentDisplayedMatch.winData.winnerIndex || 0}, g_CurrentDisplayedMatch.winData.horseName);  // where to stop the slider 
+						}, 5000);
 					}, 1000);
-				}
+				}, 1000);
 			}
-			if(runClockCounter) requestAnimationFrame(countdownClock);
 		}
-
-		setTimeout(()=> {
-			countdownClock();
-			document.getElementById("marketStatusId").textContent = "Market closing soon...";
-		}, 2000);
-
-
+		if(runClockCounter) requestAnimationFrame(countdownClock);
 	}
 
-
-
-
 	//////////////////////////////////////////////// Digital Clock Countdown (end) ///////////////////////////////////
+
+	//////////////////////////////// Tester (start) ////////////////////////////////////////////////////////////////////
+
+	function run() {
+		const elem = document.getElementById('publishResultId');
+		elem.addEventListener('click', publishResult); // works
+	}
+	run();
+
+	function publishResult(e) {
+
+		sendEventResultRequest();
+
+// 		console.log(this);
+// 		console.log(e.currentTarget); // element you clicked
+	}
+
+	// Send a bet request to the server
+	function sendEventResultRequest() {
+		(async () => {
+			const res = await fetch('/api/publishResult', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					msg: 'PUBLISH_THE_MATCH_WINNER'
+				})
+			}).then((res) => res.json());
+
+			if (res.status === 'ok') {
+				// everything went fine
+				console.log("Match Winner Recieved Successfully");
+				console.log(res.data);
+
+				g_CurrentDisplayedMatch.winData = res.data.winData;
+				
+				// Start Win perdition animation
+				setTimeout(()=> {
+					countdownClock();
+					document.getElementById("marketStatusId").textContent = "MARKET CLOSING DOWN SOON.....";
+				}, 2000);
+
+
+			} else {
+				console.error("Bet Placed Error: ", res.error);
+				// alert(res.error);
+			}
+		})();
+	}
+
+	// Update the balance after the match result
+	async function updateBalanceAfterResult() {
+		const username = localStorage.getItem('username'); // get it from cookie
+		const password = localStorage.getItem('password'); // get it from cookie
+		if(username && username) {
+			
+			const result = await fetch('/api/login', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					username,
+					password
+				})
+			}).then((res) => res.json());
+
+			if (result.status === 'ok') {
+				// everything went fine
+				console.log('Got the token: ', result.data);
+				localStorage.setItem('token', result.data); // store in cookie
+				localStorage.setItem('username', username); // store in cookie
+				localStorage.setItem('password', password); // store in cookie
+				// alert('Success');
+				document.getElementById("regLoginFieldsId").style.display = 'none';
+				document.getElementById("welcomeUserName").textContent = "Welcome " + username;
+				document.getElementById("userBalanceAmount").textContent = "Balance: " + result.userBalance;
+			} else {
+				alert(result.error);
+			}
+		}
+	}
+	/////////////////////////////// Tester (end) ///////////////////////////////////////////////////////////////////////
 });
