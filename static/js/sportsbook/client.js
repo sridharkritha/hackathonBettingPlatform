@@ -16,42 +16,10 @@ window.addEventListener('load', function () {
 	});
 	socket.connect(); // need bcos 'autoConnect:false'
 
+
 	// Update the balance after match has been completed
 	socket.on("notifyEvent_BalancedUpdated", (data) => { 
-
-		const username = localStorage.getItem('username'); // get it from cookie
-		const password = localStorage.getItem('password'); // get it from cookie
-		// login(username, password);
-
-		(async() => {
-			if(username && username) {
-			
-				const result = await fetch('/api/login', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						username,
-						password
-					})
-				}).then((res) => res.json());
-	
-				if (result.status === 'ok') {
-					// everything went fine
-					console.log('Got the token: ', result.data);
-					localStorage.setItem('token', result.data); // store in cookie
-					localStorage.setItem('username', username); // store in cookie
-					localStorage.setItem('password', password); // store in cookie
-					// alert('Success');
-					document.getElementById("regLoginFieldsId").style.display = 'none';
-					document.getElementById("welcomeUserName").textContent = "Welcome " + username;
-					document.getElementById("userBalanceAmount").textContent = "Balance: " + result.userBalance;
-				} else {
-					alert(result.error);
-				}
-			}
-		})();
+		// updateBalanceAfterResult();
 	});
 
 
@@ -1255,6 +1223,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 					else {
 						// declare the match winner
 						document.getElementById("resultDeclarationWrapper").textContent = "WINNER: " + winnerPlayer; // "Winner: Team Ethereal !!!";
+						updateBalanceAfterResult();
 					}
 				}
 				else {
@@ -1309,12 +1278,6 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 		if(runClockCounter) requestAnimationFrame(countdownClock);
 	}
 
-// 	setTimeout(()=> {
-// 		countdownClock();
-// 		document.getElementById("marketStatusId").textContent = "MARKET CLOSING DOWN SOON.....";
-// 	}, 2000);
-
-
 	//////////////////////////////////////////////// Digital Clock Countdown (end) ///////////////////////////////////
 
 	//////////////////////////////// Tester (start) ////////////////////////////////////////////////////////////////////
@@ -1363,6 +1326,39 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 				// alert(res.error);
 			}
 		})();
+	}
+
+	// Update the balance after the match result
+	async function updateBalanceAfterResult() {
+		const username = localStorage.getItem('username'); // get it from cookie
+		const password = localStorage.getItem('password'); // get it from cookie
+		if(username && username) {
+			
+			const result = await fetch('/api/login', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					username,
+					password
+				})
+			}).then((res) => res.json());
+
+			if (result.status === 'ok') {
+				// everything went fine
+				console.log('Got the token: ', result.data);
+				localStorage.setItem('token', result.data); // store in cookie
+				localStorage.setItem('username', username); // store in cookie
+				localStorage.setItem('password', password); // store in cookie
+				// alert('Success');
+				document.getElementById("regLoginFieldsId").style.display = 'none';
+				document.getElementById("welcomeUserName").textContent = "Welcome " + username;
+				document.getElementById("userBalanceAmount").textContent = "Balance: " + result.userBalance;
+			} else {
+				alert(result.error);
+			}
+		}
 	}
 	/////////////////////////////// Tester (end) ///////////////////////////////////////////////////////////////////////
 });
