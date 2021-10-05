@@ -36,10 +36,12 @@
 	/////////////////////////////////////////////// Tester(start) //////////////////////////////////////////////////////
 
 	app.post('/api/publishResult', async (req, res) => {
-	// 		const { betstr, oddstr } = req.body;
-	// 		console.log(betstr, oddstr);
+	 		const { betstr, oddstr } = req.body;
+	 		console.log(betstr, oddstr);
 
 		const winData = await setWinnerOfTheMatch(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME);
+
+		console.log(winData);
 
 		res.json({ status: 'ok', data: {"winData" : winData} });
 	});
@@ -433,7 +435,7 @@
 			}
 		}
 
-		winner = 1; // test - always 2nd player in the list wins - for testing purpose
+		//winner = 1; // test - always 2nd player in the list wins - for testing purpose
 
 		let winData = {"winnerIndex": winner}
 
@@ -476,6 +478,8 @@
 
 		// Notify all the user that winnings have been awarded
 		io.emit('notifyEvent_BalancedUpdated', JSON.stringify({'data': 'Match Completed and Balance Updated'}));
+
+		console.log(winData);
 
 		return winData; // return match winner information
 	}

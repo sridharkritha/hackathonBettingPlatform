@@ -1,11 +1,11 @@
 window.addEventListener('load', function () {
 	//////////////////////////// Utility Functions (start) /////////////////////////////////////////////////////////////
-	function randomIntFromInterval(min, max) { // min and max included 
+	function randomIntFromInterval(min, max) { // min and max included
 		return Math.floor(Math.random() * (max - min + 1) + min);
 	}
-	//////////////////////////// Utility Functions (end) ///////////////////////////////////////////////////////////////	
+	//////////////////////////// Utility Functions (end) ///////////////////////////////////////////////////////////////
 
-	//////////////////////////// Client to Server communication (start) ////////////////////////////////////////////////	
+	//////////////////////////// Client to Server communication (start) ////////////////////////////////////////////////
 	// Using HTML - Load "client.html" (do NOT run "node client.js")
 	// It uses 'io' from the distributed version of socket.io from "client-dist/socket.io.js"
 	const socket = io("http://localhost:3000", { autoConnect:false, transports : ['websocket'] }); // internally emits "connection" event
@@ -18,13 +18,13 @@ window.addEventListener('load', function () {
 
 
 	// Update the balance after match has been completed
-	socket.on("notifyEvent_BalancedUpdated", (data) => { 
+	socket.on("notifyEvent_BalancedUpdated", (data) => {
 		// updateBalanceAfterResult();
 	});
 
 
 	// "{"horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.1":7}"
-	socket.on("myEventChangeHappened", (data) => { 
+	socket.on("myEventChangeHappened", (data) => {
 		const changedObject = JSON.parse(data);
 		// let key = Object.keys(changedObject)[0];
 		Object.keys(changedObject).forEach((key) => {
@@ -34,7 +34,7 @@ window.addEventListener('load', function () {
 
 			// 'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.0'
 			// 'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.bets.83'
-			let betType = key.split('.').splice(-2)[1]; // [0 , 'backOdds'] 
+			let betType = key.split('.').splice(-2)[1]; // [0 , 'backOdds']
 
 			if(betType === 'backOdds') {
 				// 'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.2#odd'
@@ -99,7 +99,7 @@ window.addEventListener('load', function () {
 	/////////////////////////////// Global Variables (start)////////////////////////////////////////////////////////////
 	let g_CurrentDisplayedMatch = {};
 	let g_BetSlipSheet = {};
-	let g_WinLossByPlayers = []; // global variable for displaying win / loss by player 
+	let g_WinLossByPlayers = []; // global variable for displaying win / loss by player
 	/////////////////////////////// Global Variables (end)//////////////////////////////////////////////////////////////
 
 	////////////////////// Dynamically construct - Race Card (start) ///////////////////////////////////////////////////
@@ -122,14 +122,14 @@ window.addEventListener('load', function () {
 		// {"horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.1":7}
 
 		let eventinfo = {
-						'gameName':gameName,
-						'region':region,
-						'raceName': raceName,
-						'date':date,
-						'time': time,
-						'playerCount': playerCount,
-						'evtStr': gameName +'.'+ region +'.'+ raceName +'.'+ date +'.'+ time // "horseRace.uk.Cartmel.2021-09-20.12:00"
-					};
+			'gameName':gameName,
+			'region':region,
+			'raceName': raceName,
+			'date':date,
+			'time': time,
+			'playerCount': playerCount,
+			'evtStr': gameName +'.'+ region +'.'+ raceName +'.'+ date +'.'+ time // "horseRace.uk.Cartmel.2021-09-20.12:00"
+		};
 
 		let raceCardContainer = document.getElementById('sportsEventContainer');
 		raceCardContainer.textContent = ''; // reset at start
@@ -148,7 +148,7 @@ window.addEventListener('load', function () {
 
 		// idString = "horseRace.uk.Cartmel.2021-09-20.12:00"
 		g_CurrentDisplayedMatch.idString =  eventinfo.gameName +'.'+ eventinfo.region +'.'
-											+ eventinfo.raceName +'.'+ eventinfo.date +'.'+ eventinfo.time;
+			+ eventinfo.raceName +'.'+ eventinfo.date +'.'+ eventinfo.time;
 		g_CurrentDisplayedMatch.playerCount = playerCount;
 
 		g_CurrentDisplayedMatch.playerInfo = []; // stores player info for declaring the winner from the losers
@@ -204,7 +204,7 @@ window.addEventListener('load', function () {
 			elem3.classList = "backBetLowContainer backOthersBgColorHover";
 			playerinfo["oddIndexString"] = 'backOdds.2';//0
 			// id = "horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.0"
-			elem3.setAttribute("id", idString + playerinfo["oddIndexString"]); 
+			elem3.setAttribute("id", idString + playerinfo["oddIndexString"]);
 			playerinfo["odd"] = players[i].backOdds[2];// 0
 			playerinfo["betType"] = "backOdds";
 			elem3.setAttribute("data-eventinfo",  JSON.stringify(eventinfo));
@@ -286,7 +286,7 @@ window.addEventListener('load', function () {
 			elem3.classList = "layBetLowContainer layMainBgColor";
 			playerinfo["oddIndexString"] = 'layOdds.0';
 			// id = "horseRace.uk.Cartmel.2021-09-20.12:00.players.0.layOdds.0"
-			elem3.setAttribute("id", idString + playerinfo["oddIndexString"]); 
+			elem3.setAttribute("id", idString + playerinfo["oddIndexString"]);
 			playerinfo["odd"] = players[i].layOdds[0];
 			playerinfo["betType"] = "layOdds";
 			elem3.setAttribute("data-eventinfo",  JSON.stringify(eventinfo));
@@ -312,7 +312,7 @@ window.addEventListener('load', function () {
 			elem3.classList = "layBetMidContainer layOthersBgColorHover";
 			playerinfo["oddIndexString"] = 'layOdds.1';
 			// id = "horseRace.uk.Cartmel.2021-09-20.12:00.players.0.layOdds.1"
-			elem3.setAttribute("id", idString + playerinfo["oddIndexString"]); 
+			elem3.setAttribute("id", idString + playerinfo["oddIndexString"]);
 			playerinfo["odd"] = players[i].layOdds[1];
 			playerinfo["betType"] = "layOdds";
 			elem3.setAttribute("data-eventinfo",  JSON.stringify(eventinfo));
@@ -338,7 +338,7 @@ window.addEventListener('load', function () {
 			elem3.classList = "layBetHighContainer layOthersBgColorHover";
 			playerinfo["oddIndexString"] = 'layOdds.2';
 			// id = "horseRace.uk.Cartmel.2021-09-20.12:00.players.0.layOdds.2"
-			elem3.setAttribute("id", idString + playerinfo["oddIndexString"]); 
+			elem3.setAttribute("id", idString + playerinfo["oddIndexString"]);
 			playerinfo["odd"] = players[i].layOdds[2];
 			playerinfo["betType"] = "layOdds";
 			elem3.setAttribute("data-eventinfo",  JSON.stringify(eventinfo));
@@ -357,7 +357,7 @@ window.addEventListener('load', function () {
 			playerinfo["cashString"] = 'layCash.2';
 			elem4.setAttribute("id", idString + playerinfo["cashString"]+ "#cash");
 			elem4.innerHTML = "£ " + (players[i].layCash[2] ? players[i].layCash[2] : "0.00");
-			elem3.appendChild(elem4);	
+			elem3.appendChild(elem4);
 		}
 	}
 	////////////////////// Dynamically construct - Race Card (end) /////////////////////////////////////////////////////
@@ -392,62 +392,62 @@ window.addEventListener('load', function () {
 
 	// Construct the bet slip
 	function constructBetSlip(betSlipSheet, key, playerCount) {
-		let elemRef = null; 
+		let elemRef = null;
 		let parentElemRef = null;
 
 		// key = "horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.0"
 		parentElemRef = document.createElement("DIV");
 		betSlipSheet[key].parentElemRef = parentElemRef;
-		document.getElementById("betSlipContainer").appendChild(parentElemRef); 
+		document.getElementById("betSlipContainer").appendChild(parentElemRef);
 
 		elemRef = document.createElement("DIV");
-		elemRef.setAttribute("id",key+"_timeVenueId"); 
+		elemRef.setAttribute("id",key+"_timeVenueId");
 		elemRef.setAttribute("class","gridColumnLayout gridColumnLayout_2");
-		parentElemRef.appendChild(elemRef); 
+		parentElemRef.appendChild(elemRef);
 
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_timeId");
-		document.getElementById(key+"_timeVenueId").appendChild(elemRef); 
+		document.getElementById(key+"_timeVenueId").appendChild(elemRef);
 
 		elemRef = document.createTextNode(betSlipSheet[key].eventinfo.time); // ("12:00");
-		document.getElementById(key+"_timeId").appendChild(elemRef); 
+		document.getElementById(key+"_timeId").appendChild(elemRef);
 
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_venueId");
-		document.getElementById(key+"_timeVenueId").appendChild(elemRef); 
+		document.getElementById(key+"_timeVenueId").appendChild(elemRef);
 
 		elemRef = document.createTextNode(betSlipSheet[key].eventinfo.raceName); //("Cartmel");
-		document.getElementById(key+"_venueId").appendChild(elemRef); 
+		document.getElementById(key+"_venueId").appendChild(elemRef);
 
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_outcomePlayerId");
 		elemRef.setAttribute("class","gridColumnLayout gridColumnLayout_2");
-		parentElemRef.appendChild(elemRef); 
+		parentElemRef.appendChild(elemRef);
 
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_outcomeId");
-		document.getElementById(key+"_outcomePlayerId").appendChild(elemRef); 
+		document.getElementById(key+"_outcomePlayerId").appendChild(elemRef);
 
 		elemRef = document.createTextNode(betSlipSheet[key].playerinfo.betType); // ("backOdds");
-		document.getElementById(key+"_outcomeId").appendChild(elemRef); 
+		document.getElementById(key+"_outcomeId").appendChild(elemRef);
 
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_playerId");
 		elemRef.setAttribute("class","halfOpaque");
-		document.getElementById(key+"_outcomePlayerId").appendChild(elemRef); 
+		document.getElementById(key+"_outcomePlayerId").appendChild(elemRef);
 
 		elemRef = document.createTextNode(betSlipSheet[key].playerinfo.horseName); // ("11 French Company");
-		document.getElementById(key+"_playerId").appendChild(elemRef); 
+		document.getElementById(key+"_playerId").appendChild(elemRef);
 
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id", key+"_backStakeProfitBetBinId");
 		elemRef.setAttribute("class","gridColumnLayout gridColumnLayout_5 gridCenterVH");
-		parentElemRef.appendChild(elemRef); 
+		parentElemRef.appendChild(elemRef);
 
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_backPlusMinusId");
 		elemRef.setAttribute("class","gridColumnLayout gridColumnLayout_3");
-		document.getElementById(key+"_backStakeProfitBetBinId").appendChild(elemRef); 
+		document.getElementById(key+"_backStakeProfitBetBinId").appendChild(elemRef);
 
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id", key+"_subtractBackId");
@@ -460,10 +460,10 @@ window.addEventListener('load', function () {
 
 		elemRef.setAttribute("data-playercount", playerCount);
 		elemRef.addEventListener('click', subtractOdd);
-		document.getElementById(key+"_backPlusMinusId").appendChild(elemRef); 
+		document.getElementById(key+"_backPlusMinusId").appendChild(elemRef);
 
 		elemRef = document.createTextNode("-");
-		document.getElementById( key+"_subtractBackId").appendChild(elemRef); 
+		document.getElementById( key+"_subtractBackId").appendChild(elemRef);
 
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_backOthersBgColorId");
@@ -474,7 +474,7 @@ window.addEventListener('load', function () {
 			elemRef.setAttribute("class","layOthersBgColor");
 		}
 
-		document.getElementById(key+"_backPlusMinusId").appendChild(elemRef); 
+		document.getElementById(key+"_backPlusMinusId").appendChild(elemRef);
 
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_backMainFontColorId");
@@ -484,14 +484,14 @@ window.addEventListener('load', function () {
 		else {
 			elemRef.setAttribute("class","layMainFontColor");
 		}
-		document.getElementById(key+"_backOthersBgColorId").appendChild(elemRef); 
+		document.getElementById(key+"_backOthersBgColorId").appendChild(elemRef);
 
 		elemRef = document.createTextNode(betSlipSheet[key].playerinfo.betType); //("BACK");
-		document.getElementById(key+"_backMainFontColorId").appendChild(elemRef); 
+		document.getElementById(key+"_backMainFontColorId").appendChild(elemRef);
 
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_backValueContainerId");
-		document.getElementById(key+"_backOthersBgColorId").appendChild(elemRef); 
+		document.getElementById(key+"_backOthersBgColorId").appendChild(elemRef);
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		elemRef = document.createElement("INPUT");
 		elemRef.setAttribute("id", key+"_oddValueId");   // "backValueId");
@@ -502,7 +502,7 @@ window.addEventListener('load', function () {
 		elemRef.setAttribute("data-playercount", playerCount);
 		elemRef.addEventListener('input', onInputValueUpdated);
 		elemRef.addEventListener('focusout', onInputFocusoutMinOddCorrection);
-		document.getElementById(key+"_backValueContainerId").appendChild(elemRef); 
+		document.getElementById(key+"_backValueContainerId").appendChild(elemRef);
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		elemRef = document.createElement("DIV");
@@ -515,10 +515,10 @@ window.addEventListener('load', function () {
 		}
 		elemRef.setAttribute("data-playercount", playerCount);
 		elemRef.addEventListener('click', addOdd);
-		document.getElementById(key+"_backPlusMinusId").appendChild(elemRef); 
+		document.getElementById(key+"_backPlusMinusId").appendChild(elemRef);
 
 		elemRef = document.createTextNode("+");
-		document.getElementById(key+"_additionBackId").appendChild(elemRef); 
+		document.getElementById(key+"_additionBackId").appendChild(elemRef);
 
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_stakeBackOthersBgColor");
@@ -529,7 +529,7 @@ window.addEventListener('load', function () {
 			elemRef.setAttribute("class","layOthersBgColor");
 		}
 
-		document.getElementById(key+"_backStakeProfitBetBinId").appendChild(elemRef); 
+		document.getElementById(key+"_backStakeProfitBetBinId").appendChild(elemRef);
 
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_stakeId");
@@ -540,10 +540,10 @@ window.addEventListener('load', function () {
 			elemRef.setAttribute("class","layMainFontColor");
 		}
 
-		document.getElementById(key+"_stakeBackOthersBgColor").appendChild(elemRef); 
+		document.getElementById(key+"_stakeBackOthersBgColor").appendChild(elemRef);
 
 		elemRef = document.createTextNode("STAKE");
-		document.getElementById(key+"_stakeId").appendChild(elemRef); 
+		document.getElementById(key+"_stakeId").appendChild(elemRef);
 
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_stakeValueContainerId");
@@ -559,7 +559,7 @@ window.addEventListener('load', function () {
 		elemRef.setAttribute("placeholder","0.0");
 		elemRef.setAttribute("data-playercount", playerCount);
 		elemRef.addEventListener('input', onInputValueUpdated);
-		document.getElementById(key+"_stakeValueContainerId").appendChild(elemRef); 
+		document.getElementById(key+"_stakeValueContainerId").appendChild(elemRef);
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		elemRef = document.createElement("DIV");
@@ -571,28 +571,28 @@ window.addEventListener('load', function () {
 			elemRef.setAttribute("class","layOthersBgColor");
 		}
 
-		document.getElementById(key+"_backStakeProfitBetBinId").appendChild(elemRef); 
+		document.getElementById(key+"_backStakeProfitBetBinId").appendChild(elemRef);
 
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_profitBackMainFontColorId");
 		if(betSlipSheet[key].playerinfo.betType === "backOdds") {
 			elemRef.setAttribute("class","backMainFontColor");
-			document.getElementById(key+"_profitBackOthersBgColorId").appendChild(elemRef); 
+			document.getElementById(key+"_profitBackOthersBgColorId").appendChild(elemRef);
 
 			elemRef = document.createTextNode("PROFIT");
 			document.getElementById(key+"_profitBackMainFontColorId").appendChild(elemRef);
 		}
 		else {
 			elemRef.setAttribute("class","layMainFontColor");
-			document.getElementById(key+"_profitBackOthersBgColorId").appendChild(elemRef); 
+			document.getElementById(key+"_profitBackOthersBgColorId").appendChild(elemRef);
 
 			elemRef = document.createTextNode("LIABILITY");
 			document.getElementById(key+"_profitBackMainFontColorId").appendChild(elemRef);
-		} 
+		}
 
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_profitValueBackMainFontColorId");
-		document.getElementById(key+"_profitBackOthersBgColorId").appendChild(elemRef); 
+		document.getElementById(key+"_profitBackOthersBgColorId").appendChild(elemRef);
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		// Profit / Liability input
@@ -608,34 +608,34 @@ window.addEventListener('load', function () {
 
 //////////////////////////////// AFTER BET (START) /////////////////////////////////////////////////////////////////////
 
-// 4th COLUMN - Confirm the accepted bet 
+// 4th COLUMN - Confirm the accepted bet
 
-elemRef = document.createElement("DIV");
-elemRef.setAttribute("id",key+"_betConfirmWrapper");
-elemRef.setAttribute("class","backOthersBgColor");
-elemRef.style.display = 'none'; // hide at start
-document.getElementById(key+"_backStakeProfitBetBinId").appendChild(elemRef); 
+		elemRef = document.createElement("DIV");
+		elemRef.setAttribute("id",key+"_betConfirmWrapper");
+		elemRef.setAttribute("class","backOthersBgColor");
+		elemRef.style.display = 'none'; // hide at start
+		document.getElementById(key+"_backStakeProfitBetBinId").appendChild(elemRef);
 
 // TOP
-elemRef = document.createElement("DIV");
-elemRef.setAttribute("id",key+"_betConfirm");
+		elemRef = document.createElement("DIV");
+		elemRef.setAttribute("id",key+"_betConfirm");
 
-elemRef.setAttribute("class","backMainFontColor");
-document.getElementById(key+"_betConfirmWrapper").appendChild(elemRef);
+		elemRef.setAttribute("class","backMainFontColor");
+		document.getElementById(key+"_betConfirmWrapper").appendChild(elemRef);
 
-elemRef = document.createTextNode("BET ACCEPTED ✔");
-document.getElementById(key+"_betConfirm").appendChild(elemRef);
+		elemRef = document.createTextNode("BET ACCEPTED ✔");
+		document.getElementById(key+"_betConfirm").appendChild(elemRef);
 
 // bottom
-elemRef = document.createElement("DIV");
-elemRef.setAttribute("id",key+"_betCancelWrapperId");
-elemRef.setAttribute("class","blink_me");
+		elemRef = document.createElement("DIV");
+		elemRef.setAttribute("id",key+"_betCancelWrapperId");
+		elemRef.setAttribute("class","blink_me");
 
 
-document.getElementById(key+"_betConfirmWrapper").appendChild(elemRef); 
-elemRef = document.createTextNode("WAITING FOR THE MATCH BET...");
+		document.getElementById(key+"_betConfirmWrapper").appendChild(elemRef);
+		elemRef = document.createTextNode("WAITING FOR THE MATCH BET...");
 
-document.getElementById(key+"_betCancelWrapperId").appendChild(elemRef);
+		document.getElementById(key+"_betCancelWrapperId").appendChild(elemRef);
 
 
 
@@ -643,28 +643,28 @@ document.getElementById(key+"_betCancelWrapperId").appendChild(elemRef);
 
 // 5th COLUMN - SHOW THE MATCHED MONEY
 
-elemRef = document.createElement("DIV");
-elemRef.setAttribute("id",key+"_betMatchingWrapperId");
-elemRef.setAttribute("class","backOthersBgColor");
-elemRef.style.display = 'none'; // hide at start
-document.getElementById(key+"_backStakeProfitBetBinId").appendChild(elemRef); 
+		elemRef = document.createElement("DIV");
+		elemRef.setAttribute("id",key+"_betMatchingWrapperId");
+		elemRef.setAttribute("class","backOthersBgColor");
+		elemRef.style.display = 'none'; // hide at start
+		document.getElementById(key+"_backStakeProfitBetBinId").appendChild(elemRef);
 
 // TOP
-elemRef = document.createElement("DIV");
-elemRef.setAttribute("id",key+"_betMatchingId");
+		elemRef = document.createElement("DIV");
+		elemRef.setAttribute("id",key+"_betMatchingId");
 
-elemRef.setAttribute("class","backMainFontColor");
-document.getElementById(key+"_betMatchingWrapperId").appendChild(elemRef);
+		elemRef.setAttribute("class","backMainFontColor");
+		document.getElementById(key+"_betMatchingWrapperId").appendChild(elemRef);
 
-elemRef = document.createTextNode("£ Matched / £ Total");
-document.getElementById(key+"_betMatchingId").appendChild(elemRef);
+		elemRef = document.createTextNode("£ Matched / £ Total");
+		document.getElementById(key+"_betMatchingId").appendChild(elemRef);
 
 // bottom
-elemRef = document.createElement("DIV");
-elemRef.setAttribute("id",key+"_betMatchedAmtWrapperId");
-document.getElementById(key+"_betMatchingWrapperId").appendChild(elemRef); 
-elemRef = document.createTextNode("£ 5.00 / £ 24.00");
-document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
+		elemRef = document.createElement("DIV");
+		elemRef.setAttribute("id",key+"_betMatchedAmtWrapperId");
+		document.getElementById(key+"_betMatchingWrapperId").appendChild(elemRef);
+		elemRef = document.createTextNode("£ 5.00 / £ 24.00");
+		document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 //////////////////////////////// AFTER BET (END) /////////////////////////////////////////////////////////////////////
 
 
@@ -675,10 +675,10 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 		elemRef.setAttribute("data-betInfo", JSON.stringify(betSlipSheet[key]));
 		elemRef.setAttribute("data-playercount", playerCount);
 		elemRef.addEventListener('click', placeBet);
-		document.getElementById(key+"_backStakeProfitBetBinId").appendChild(elemRef); 
+		document.getElementById(key+"_backStakeProfitBetBinId").appendChild(elemRef);
 
 		elemRef = document.createTextNode("✔");
-		document.getElementById(key+"_placeBetButtonId").appendChild(elemRef); 
+		document.getElementById(key+"_placeBetButtonId").appendChild(elemRef);
 
 		// Delete the bet slip
 		elemRef = document.createElement("DIV");
@@ -686,7 +686,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 		elemRef.setAttribute("class","binButtonBackground");
 		elemRef.setAttribute("data-playercount", playerCount);
 		elemRef.addEventListener('click', deleteBetSlip);
-		document.getElementById(key+"_backStakeProfitBetBinId").appendChild(elemRef); 
+		document.getElementById(key+"_backStakeProfitBetBinId").appendChild(elemRef);
 
 		elemRef = document.createTextNode("🗑");
 		document.getElementById(key+"_deleteBetButtonId").appendChild(elemRef);
@@ -702,7 +702,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 
 		const oddId = this.id.replace('_subtractBackId','_oddValueId'); // src, dst
 
-		const oddValue = document.getElementById(oddId); 
+		const oddValue = document.getElementById(oddId);
 
 		let value = Number(oddValue.value);
 
@@ -716,7 +716,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 				// value = (0).toFixed(2);
 				document.getElementById(oddId).value = 1.01; // min lay/back odd
 			}
-		
+
 			fillInputFields(oddId, value, Number(e.currentTarget.dataset.playercount));
 		}
 		else console.error("Invalid number: ", value);
@@ -727,7 +727,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 		// id = "horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.0_additionBackId"
 		const oddId = this.id.replace('_additionBackId','_oddValueId'); // src, dst
 
-		const oddValue = document.getElementById(oddId); 
+		const oddValue = document.getElementById(oddId);
 
 		let value = Number(oddValue.value);
 
@@ -740,7 +740,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 				value = (0.5).toFixed(2);
 				document.getElementById(oddId).value = (0.5).toFixed(2);
 			}
-		
+
 			fillInputFields(oddId, value, Number(e.currentTarget.dataset.playercount));
 		}
 		else console.error("Invalid number: ", value);
@@ -761,10 +761,10 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 		const profitliabilityvalue = Number(document.getElementById(oddstr + '_profitLiabilityValueId').value);
 
 		if( typeof stakevalue == 'number' && stakevalue > 0 &&
-		    typeof oddvalue == 'number' && oddvalue > 0 &&
+			typeof oddvalue == 'number' && oddvalue > 0 &&
 			typeof profitliabilityvalue == 'number' && profitliabilityvalue > 0 ) {
 
-			// {'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.horseName': "11 French Company"}, 
+			// {'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.horseName': "11 French Company"},
 			// {'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds' : [1,2,3]});
 			// console.log(JSON.parse(this.dataset.betinfo));
 			sendBetRequest(betstr, oddstr, oddvalue, stakevalue, profitliabilityvalue, bettype);
@@ -798,7 +798,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 						oddstr: oddstr,
 						oddvalue: oddvalue,
 						stakevalue: stakevalue,
-						profitliabilityvalue: profitliabilityvalue, 
+						profitliabilityvalue: profitliabilityvalue,
 						bettype: bettype
 					})
 				}).then((res) => res.json());
@@ -828,7 +828,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 						Object.keys(g_BetSlipSheet).forEach((key) => {
 							if( g_BetSlipSheet[key].playerinfo.odd === Number(Object.keys(res.matchedOdds[i])[0]) &&
 								g_BetSlipSheet[key].playerinfo.betType === res.matchedOdds[i][Object.keys(res.matchedOdds[i])[0]].bettype
-							  )
+							)
 							{
 								key = Object.keys(res.matchedOdds[i])[0];
 								matchvalue = res.matchedOdds[i][key].matchvalue;
@@ -869,7 +869,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 		updateProfitLossDisplay(); // display profit and loss for each players
 	}
 
-	// Update the profit and loss for each players 
+	// Update the profit and loss for each players
 	function updateProfitLossDisplay() {
 		let stakeValue = 0;
 		let profitLiabilityValue = 0;
@@ -882,7 +882,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 			Object.keys(g_BetSlipSheet).forEach((key) => {
 				// key = "horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.0"
 				if(g_CurrentDisplayedMatch.idString && g_CurrentDisplayedMatch.idString === g_BetSlipSheet[key].eventinfo.evtStr) {
-					
+
 					g_BetSlipSheet[key].playerinfo.odd = Number(document.getElementById(key +'_oddValueId').value);
 
 					if("players."+i  === g_BetSlipSheet[key].playerinfo.playerIndexString) // "players.0"
@@ -914,7 +914,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 		let winLossId = null;
 
 		for(let i = 0; i < playerCount; ++i) {
-			// finalStr => horseRace.uk.Cartmel.2021-09-20.12:00.players.0.winLossValueId 
+			// finalStr => horseRace.uk.Cartmel.2021-09-20.12:00.players.0.winLossValueId
 			winLossId = g_CurrentDisplayedMatch.idString + '.players.' + i + '.winLossValueId';
 			winLossElementColor(winLossId,  playerProfitLoss[i]);
 		}
@@ -958,7 +958,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 			const oddValueId    = withoutLastWord + '_oddValueId';
 			const stakeValueId  = withoutLastWord + '_stakeValueId';
 			const profitLiabilityValueId = withoutLastWord + '_profitLiabilityValueId';
-			
+
 			// remove last 2 words (backOdds.0)
 			// "horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.0 => 'horseRace.uk.Cartmel.2021-09-20.12:00.players.0'
 			const withoutLast2Words = withoutLastWord.split('.').slice(0, -2).join('.');
@@ -1010,7 +1010,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 
 		let backLay = Number(e.target.value);
 		if (typeof backLay === 'number') {
-				// Minimum odd
+			// Minimum odd
 			if(!backLay || backLay < 1.01) {
 				backLay = 1.01;
 				document.getElementById(this.id).value = backLay;
@@ -1097,7 +1097,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 
 		if(!currentDisplayedMatch.playerInfo) return;
 
-		const nPlayers = currentDisplayedMatch.playerInfo.length; // playerInfo. 
+		const nPlayers = currentDisplayedMatch.playerInfo.length; // playerInfo.
 		let elemRef = null;
 		let elemRef2 = null;
 		let str = null;
@@ -1105,12 +1105,12 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id","gameSimulatorContainer");
 		document.getElementById("gameSimulatorWrapper").appendChild(elemRef);
-	
+
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("class","wrapperRandomPick");
 		elemRef.setAttribute("id","myParentId_gameSimulatorContainer_myId_0");
 		document.getElementById("gameSimulatorContainer").appendChild(elemRef);
-	
+
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id","shuffleItemsContainerId");
 		elemRef.setAttribute("class","shuffleItemsContainer gridColumnLayout gridCenterVH");
@@ -1124,7 +1124,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 			elemRef = document.createElement("DIV");
 			if(i + 1 == n) elemRef.setAttribute("id","shuffleLastItemId"); // last element id for marking end point
 			document.getElementById("shuffleItemsContainerId").appendChild(elemRef);
-		
+
 			elemRef2 = document.createElement("IMG");
 // 			str = "assets/silk/silk_" + i + ".png";
 			elemRef2.setAttribute("src",currentDisplayedMatch.playerInfo[i].silk); // image url
@@ -1140,99 +1140,99 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 		elemRef.style.gridTemplateColumns = str;  // grid-template-columns: repeat(6, 1fr);
 		elemRef.setAttribute("id","myParentId_myParentId_gameSimulatorContainer_myId_0_myId_12");
 		document.getElementById("myParentId_gameSimulatorContainer_myId_0").appendChild(elemRef);
-	
+
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id","pickerBoxOneId");
 		elemRef.setAttribute("class","overItem");
 		document.getElementById("myParentId_myParentId_gameSimulatorContainer_myId_0_myId_12").appendChild(elemRef);
 	}
 	////////////////////////////////////////////////// win  predictor graphics animation (end) /////////////////////////
-   
+
 	////////////////////////////////////////////////// win predictor animation (start ) //////////////////////////////////////////
 
-		function translationAnimation(containerElementId, sliderObjs, winnerPlayer) {
-			let shuffleItemsContainer = document.querySelector('#'+containerElementId);
-			let children = shuffleItemsContainer.children; // gets array of children from the parent
+	function translationAnimation(containerElementId, sliderObjs, winnerPlayer) {
+		let shuffleItemsContainer = document.querySelector('#'+containerElementId);
+		let children = shuffleItemsContainer.children; // gets array of children from the parent
 
-			let startPos = children[0].offsetLeft;
-			let endPos = children[children.length -  1].offsetLeft - startPos; // containerWidth - shuffleItemWidth;
+		let startPos = children[0].offsetLeft;
+		let endPos = children[children.length -  1].offsetLeft - startPos; // containerWidth - shuffleItemWidth;
 
-			let sliderObjects = []; // array of objects
-			for (let key in sliderObjs) {
-				if (sliderObjs.hasOwnProperty(key)) {
-					let obj = {};
-					obj.sliderElement = document.querySelector('#'+key);  // slider element
-					obj.stopPos = children[sliderObjs[key]].offsetLeft - startPos; // stop position in pixels
-					obj.isForwardMove = true;
-					obj.isFinalPositionReached = false;
-					obj.currentPos = 0;
-					obj.delta = randomIntFromInterval(20, 40); // speed of movement = 18; // 
-					// obj.delta = randomIntFromInterval(60, 90); // speed of movement = 18; // 
-					obj.timeout = randomIntFromInterval(3500, 4500); // between 3 and 5 seconds = 4801; // 
-					// obj.timeout = randomIntFromInterval(3000, 9000); // between 3 and 9 seconds = 4801; // 
-					sliderObjects.push(obj);
-					console.log(`delta: ${obj.delta}, timeout: ${obj.timeout}`);
-				}
+		let sliderObjects = []; // array of objects
+		for (let key in sliderObjs) {
+			if (sliderObjs.hasOwnProperty(key)) {
+				let obj = {};
+				obj.sliderElement = document.querySelector('#'+key);  // slider element
+				obj.stopPos = children[sliderObjs[key]].offsetLeft - startPos; // stop position in pixels
+				obj.isForwardMove = true;
+				obj.isFinalPositionReached = false;
+				obj.currentPos = 0;
+				obj.delta = randomIntFromInterval(20, 40); // speed of movement = 18; //
+				// obj.delta = randomIntFromInterval(60, 90); // speed of movement = 18; //
+				obj.timeout = randomIntFromInterval(3500, 4500); // between 3 and 5 seconds = 4801; //
+				// obj.timeout = randomIntFromInterval(3000, 9000); // between 3 and 9 seconds = 4801; //
+				sliderObjects.push(obj);
+				console.log(`delta: ${obj.delta}, timeout: ${obj.timeout}`);
 			}
+		}
 
 
-			let arrayIndex = 0;
-			let arrayLength = sliderObjects.length;
-			let countFinalPositionReached = 0;
-			let startTimeStamp; //  = window.performance.now();
-			
-			
-			function callbackLoop(currentTimeStamp) {
-				if (startTimeStamp === undefined) startTimeStamp = currentTimeStamp;
-				let elapsed = currentTimeStamp - startTimeStamp;
-				
-				if(!sliderObjects[arrayIndex].isFinalPositionReached) {
-					if(sliderObjects[arrayIndex].isForwardMove) {
-						// currentPos += elapsed * 0.01;
-						sliderObjects[arrayIndex].currentPos += sliderObjects[arrayIndex].delta;
-						if(sliderObjects[arrayIndex].currentPos < endPos) {
-							sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + sliderObjects[arrayIndex].currentPos + 'px)';
-						}
-						else {
-							sliderObjects[arrayIndex].isForwardMove = false;
-							sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + endPos + 'px)';
-						}
+		let arrayIndex = 0;
+		let arrayLength = sliderObjects.length;
+		let countFinalPositionReached = 0;
+		let startTimeStamp; //  = window.performance.now();
+
+
+		function callbackLoop(currentTimeStamp) {
+			if (startTimeStamp === undefined) startTimeStamp = currentTimeStamp;
+			let elapsed = currentTimeStamp - startTimeStamp;
+
+			if(!sliderObjects[arrayIndex].isFinalPositionReached) {
+				if(sliderObjects[arrayIndex].isForwardMove) {
+					// currentPos += elapsed * 0.01;
+					sliderObjects[arrayIndex].currentPos += sliderObjects[arrayIndex].delta;
+					if(sliderObjects[arrayIndex].currentPos < endPos) {
+						sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + sliderObjects[arrayIndex].currentPos + 'px)';
 					}
 					else {
-						// currentPos -= elapsed * 0.01;
-						sliderObjects[arrayIndex].currentPos -= sliderObjects[arrayIndex].delta;
-						if(sliderObjects[arrayIndex].currentPos > 0) {
-							sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + sliderObjects[arrayIndex].currentPos + 'px)';
-						}
-						else {
-							sliderObjects[arrayIndex].isForwardMove = true;
-							sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + 0 + 'px)';
-						}
-					}
-				}
-
-				if(!sliderObjects[arrayIndex].isFinalPositionReached && elapsed > sliderObjects[arrayIndex].timeout && 
-					Math.abs(sliderObjects[arrayIndex].currentPos - sliderObjects[arrayIndex].stopPos) <= sliderObjects[arrayIndex].delta &&
-					((sliderObjects[arrayIndex].isForwardMove && sliderObjects[arrayIndex].currentPos > sliderObjects[arrayIndex].stopPos) || 
-					(!sliderObjects[arrayIndex].isForwardMove && sliderObjects[arrayIndex].currentPos < sliderObjects[arrayIndex].stopPos))) {
-					sliderObjects[arrayIndex].isFinalPositionReached = true;
-					++countFinalPositionReached;
-					sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + sliderObjects[arrayIndex].stopPos + 'px)';
-					// exit condition - after 3 sec
-					if(arrayLength != countFinalPositionReached) window.requestAnimationFrame(callbackLoop);
-					else {
-						// declare the match winner
-						document.getElementById("resultDeclarationWrapper").textContent = "WINNER: " + winnerPlayer; // "Winner: Team Ethereal !!!";
-						updateBalanceAfterResult();
+						sliderObjects[arrayIndex].isForwardMove = false;
+						sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + endPos + 'px)';
 					}
 				}
 				else {
-					arrayIndex = ++arrayIndex % arrayLength;
-					window.requestAnimationFrame(callbackLoop);
+					// currentPos -= elapsed * 0.01;
+					sliderObjects[arrayIndex].currentPos -= sliderObjects[arrayIndex].delta;
+					if(sliderObjects[arrayIndex].currentPos > 0) {
+						sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + sliderObjects[arrayIndex].currentPos + 'px)';
+					}
+					else {
+						sliderObjects[arrayIndex].isForwardMove = true;
+						sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + 0 + 'px)';
+					}
 				}
 			}
-			window.requestAnimationFrame(callbackLoop);
+
+			if(!sliderObjects[arrayIndex].isFinalPositionReached && elapsed > sliderObjects[arrayIndex].timeout &&
+				Math.abs(sliderObjects[arrayIndex].currentPos - sliderObjects[arrayIndex].stopPos) <= sliderObjects[arrayIndex].delta &&
+				((sliderObjects[arrayIndex].isForwardMove && sliderObjects[arrayIndex].currentPos > sliderObjects[arrayIndex].stopPos) ||
+					(!sliderObjects[arrayIndex].isForwardMove && sliderObjects[arrayIndex].currentPos < sliderObjects[arrayIndex].stopPos))) {
+				sliderObjects[arrayIndex].isFinalPositionReached = true;
+				++countFinalPositionReached;
+				sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + sliderObjects[arrayIndex].stopPos + 'px)';
+				// exit condition - after 3 sec
+				if(arrayLength != countFinalPositionReached) window.requestAnimationFrame(callbackLoop);
+				else {
+					// declare the match winner
+					document.getElementById("resultDeclarationWrapper").textContent = "WINNER: " + winnerPlayer; // "Winner: Team Ethereal !!!";
+					updateBalanceAfterResult();
+				}
+			}
+			else {
+				arrayIndex = ++arrayIndex % arrayLength;
+				window.requestAnimationFrame(callbackLoop);
+			}
 		}
+		window.requestAnimationFrame(callbackLoop);
+	}
 
 	////////////////////////////////////////////////// win predictor animation (end) ///////////////////////////////////
 
@@ -1247,9 +1247,9 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 		if(!last || now - last >= 0.01 *1000) { // 0.01 sec elapsed time between the calls
 			last = now;
 
-			clockStr =  ("0" + (sec < 0 ? 0 : Math.floor(sec / (60 * 1)))).slice(-2)   + 
-						' : ' + 
-						("0" + (sec % 60 + 1)).slice(-2);
+			clockStr =  ("0" + (sec < 0 ? 0 : Math.floor(sec / (60 * 1)))).slice(-2)   +
+				' : ' +
+				("0" + (sec % 60 + 1)).slice(-2);
 
 			document.getElementById("digitalClock").textContent = clockStr;
 
@@ -1269,7 +1269,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 							// List players silk for slide over animation
 							winPredictorScroller(g_CurrentDisplayedMatch); // nPlayers
 							//  player who won's the match
-							translationAnimation('shuffleItemsContainerId', { "pickerBoxOneId": g_CurrentDisplayedMatch.winData.winnerIndex || 0}, g_CurrentDisplayedMatch.winData.horseName);  // where to stop the slider 
+							translationAnimation('shuffleItemsContainerId', { "pickerBoxOneId": g_CurrentDisplayedMatch.winData.winnerIndex || 0}, g_CurrentDisplayedMatch.winData.horseName);  // where to stop the slider
 						}, 5000);
 					}, 1000);
 				}, 1000);
@@ -1313,7 +1313,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 				console.log(res.data);
 
 				g_CurrentDisplayedMatch.winData = res.data.winData;
-				
+
 				// Start Win perdition animation
 				setTimeout(()=> {
 					countdownClock();
@@ -1333,7 +1333,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 		const username = localStorage.getItem('username'); // get it from cookie
 		const password = localStorage.getItem('password'); // get it from cookie
 		if(username && username) {
-			
+
 			const result = await fetch('/api/login', {
 				method: 'POST',
 				headers: {
