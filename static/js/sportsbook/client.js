@@ -1312,6 +1312,8 @@ window.addEventListener('load', function () {
 				console.log("Match Winner Recieved Successfully");
 				console.log(res.data);
 
+				document.getElementById("sportsEventContainer").classList.add("raceInProgress")
+
 				g_CurrentDisplayedMatch.winData = res.data.winData;
 
 				// Start Win perdition animation
