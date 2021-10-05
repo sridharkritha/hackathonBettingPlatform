@@ -10,12 +10,19 @@ window.addEventListener('load', function () {
 	function run() {
 		const elem = document.getElementById('publishResultId');
 		elem.addEventListener('click', publishResult); // works
+
 	}
 	run();
 
 	function publishResult(e) {
 
 		sendEventResultRequest();
+
+		[].forEach.call(document.querySelectorAll('.gameBetContainer'), function (el) {
+			el.remove();
+		});
+
+		startRace();
 
 		console.log(this);
 		console.log(e.currentTarget); // element you clicked
@@ -1314,13 +1321,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 	const startRaceBtn = document.getElementById("startRace");
 	startRaceBtn.addEventListener('click', startRace);
 
-	function startRace(event){
-
-		document.getElementById("matchResultSimulator").style.display = 'block';
-
-		[].forEach.call(document.querySelectorAll('.gameBetContainer'), function (el) {
-			el.remove();
-		});
+	function startRace(){
 
 		function countdownClock(now) {
 			if(!last || now - last >= 0.01 *1000) { // 0.01 sec elapsed time between the calls
@@ -1344,6 +1345,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 							setTimeout(()=> {
 								document.getElementById("digitalClock").classList.remove('blink_me');
 								document.getElementById("digitalClock").textContent = "Race Started!! ";
+								document.getElementById("marketStatusId").style.display = 'none';
 
 								winPredictorScroller(8); // nPlayers
 								translationAnimation('shuffleItemsContainerId', { "pickerBoxOneId": 1});  // where to stop the slider

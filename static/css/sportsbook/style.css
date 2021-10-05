@@ -139,14 +139,14 @@
 
 	#digitalClock {
 		width: 100%;
-		font-size: 427%;
+		font-size: 400%;
 		font-weight: bolder;
 		text-align: center;
 	}
 
 	#resultDeclarationWrapper {
 		width: 100%;
-		font-size: 427%;
+		font-size: 400%;
 		font-weight: bolder;
 		text-align: center;
 	}
@@ -264,7 +264,7 @@
 		margin:-230px 0 20px 0;
 	}
 
-	#startRace {
+	#publishResultId {
 		background-color: #0eb588;
 		color: #fff;
 		float: right;
@@ -366,7 +366,7 @@
 	}
 
 	.odd, .player {
-		font-size: 14px;
+		font-size: 16px;
 		font-weight: bold;
 	}
 
