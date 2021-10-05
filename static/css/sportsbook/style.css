@@ -256,11 +256,11 @@
 	}
 
 	#gameSimulatorContainer {
-		/*display: display;*/
+		display: block;
 	}
 	
 	#matchResultSimulator {
-		/*display: none;*/
+		display: block;
 		margin:-230px 0 20px 0;
 	}
 
