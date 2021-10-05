@@ -105,7 +105,8 @@ window.addEventListener('load', function () {
 		'date': '2021-09-20',
 		'time': '12:00',
 
-		'publishMatchResultStr': {"Horse Race.uk.Cartmel.2021-09-20.12:00.players": 0 }
+		'publishMatchResultStr': {"Horse Race.uk.Cartmel.2021-09-20.12:00.players": 0 },
+		'isWinPredictorActive': false
 	};
 	let g_CurrentDisplayedMatch = {};
 	let g_BetSlipSheet = {};
@@ -131,8 +132,10 @@ window.addEventListener('load', function () {
 										'raceName': 'Cartmel',
 										'date': '2021-09-20',
 										'time': '12:00',
-										'publishMatchResultStr': {"Horse Race.uk.Cartmel.2021-09-20.12:00.players": 0 }
+										'publishMatchResultStr': {"Horse Race.uk.Cartmel.2021-09-20.12:00.players": 0 },
+										'isWinPredictorActive': false
 									};
+									document.getElementById("matchResultSimulator").replaceChildren();
 									socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
 				break;
 				case 'greyhoundRace':
@@ -142,8 +145,10 @@ window.addEventListener('load', function () {
 										'raceName': 'Towcester',
 										'date': '2021-10-09',
 										'time': '18:05',
-										'publishMatchResultStr': {"Greyhound Race.uk.Towcester.2021-10-09.18:05.players": 0 }
+										'publishMatchResultStr': {"Greyhound Race.uk.Towcester.2021-10-09.18:05.players": 0 },
+										'isWinPredictorActive': false
 									};
+									document.getElementById("matchResultSimulator").replaceChildren();
 									socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
 				break;
 			}
@@ -1145,9 +1150,32 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 	//////////////// TEST bet request(end)//////////////////////////////////////////////////////////////////////////////
 
 	////////////////////////////////////////////////// win  predictor graphics animation (start) /////////////////////////
+	// win predictor element
+	function addChildrenToWinPreditor() {
+		let elemRef = null;
+
+		elemRef = document.createElement("H1");
+		elemRef.setAttribute("id","marketStatusId");
+		elemRef.setAttribute("class","blink_me centered");
+		document.getElementById("matchResultSimulator").appendChild(elemRef);
+	
+		elemRef = document.createElement("DIV");
+		elemRef.setAttribute("id","digitalClock");
+		elemRef.setAttribute("class","centered");
+		document.getElementById("matchResultSimulator").appendChild(elemRef);
+	
+		elemRef = document.createElement("DIV");
+		elemRef.setAttribute("id","gameSimulatorWrapper");
+		document.getElementById("matchResultSimulator").appendChild(elemRef);
+	
+		elemRef = document.createElement("DIV");
+		elemRef.setAttribute("id","resultDeclarationWrapper");
+		elemRef.setAttribute("class","centered");
+		document.getElementById("matchResultSimulator").appendChild(elemRef);
+	}
 
 	function winPredictorScroller(currentDisplayedMatch) {
-
+		if(!g_NextSportsToDisplay.isWinPredictorActive) return;
 		if(!currentDisplayedMatch.playerInfo) return;
 
 		const nPlayers = currentDisplayedMatch.playerInfo.length; // playerInfo. 
@@ -1204,6 +1232,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 	////////////////////////////////////////////////// win predictor animation (start ) //////////////////////////////////////////
 
 		function translationAnimation(containerElementId, sliderObjs, winnerPlayer) {
+			if(!g_NextSportsToDisplay.isWinPredictorActive) return;
 			let shuffleItemsContainer = document.querySelector('#'+containerElementId);
 			let children = shuffleItemsContainer.children; // gets array of children from the parent
 
@@ -1236,6 +1265,8 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 			
 			
 			function callbackLoop(currentTimeStamp) {
+				if(!g_NextSportsToDisplay.isWinPredictorActive) return;
+
 				if (startTimeStamp === undefined) startTimeStamp = currentTimeStamp;
 				let elapsed = currentTimeStamp - startTimeStamp;
 				
@@ -1295,8 +1326,23 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 	let sec = mins * 60;
 	let clockStr = null;
 
+	function startWinPreditor() {
+		g_NextSportsToDisplay.isWinPredictorActive = true;
+		runClockCounter = true;
+		mins = 5;
+		sec = mins * 60;
+		clockStr = null;
+
+		addChildrenToWinPreditor();
+		countdownClock();
+		document.getElementById("marketStatusId").textContent = "MARKET CLOSING DOWN SOON.....";
+	}
+
+
 	var last = 0; // timestamp of the last render() call
 	function countdownClock(now) {
+		if(!g_NextSportsToDisplay.isWinPredictorActive) return;
+
 		if(!last || now - last >= 0.01 *1000) { // 0.01 sec elapsed time between the calls
 			last = now;
 
@@ -1370,10 +1416,8 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 				
 				// Start Win perdition animation
 				setTimeout(()=> {
-					countdownClock();
-					document.getElementById("marketStatusId").textContent = "MARKET CLOSING DOWN SOON.....";
+					startWinPreditor();
 				}, 2000);
-
 
 			} else {
 				console.error("Bet Placed Error: ", res.error);
