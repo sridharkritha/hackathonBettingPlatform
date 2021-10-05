@@ -130,6 +130,25 @@
 		text-decoration: none;
 	}
 
+	/************************ Result Display (start) *************************/
+
+	#digitalClock {
+		width: 100%;
+		font-size: 427%;
+		font-weight: bolder;
+		text-align: center;
+	}
+
+	#resultDeclarationWrapper {
+		width: 100%;
+		font-size: 427%;
+		font-weight: bolder;
+		text-align: center;
+	}
+	/************************* Result Display (start) *************************/
+
+	/****************** General utility style (start) *************************/
+
 	/****************** Blink the Element / Text (start) ***********************/
 
 	.blink_me {
@@ -143,19 +162,17 @@
 	}
 	/****************** Blink the Element / Text (start) ***********************/
 
-	/****************** General utility style (start) *************************/
-
 	.centered {
 		display: block;
 		margin-left: auto;
 		margin-right: auto;
-		width: 40%;
+		width: 100%;
+		text-align: center;
 	}
 
 	.hideOut {
 		display: none;
 	}
-	  
 
 	/****************** General utility style (end) ***************************/
 

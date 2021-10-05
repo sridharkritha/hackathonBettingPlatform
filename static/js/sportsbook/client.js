@@ -1171,7 +1171,6 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 		let elemRef2 = null;
 		let str = null;
 
-
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id","gameSimulatorContainer");
 		document.getElementById("gameSimulatorWrapper").appendChild(elemRef);
@@ -1218,7 +1217,6 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 	}
 	////////////////////////////////////////////////// win  predictor graphics animation (end) /////////////////////////
    
-
 	////////////////////////////////////////////////// win predictor animation (start ) //////////////////////////////////////////
 
 		function translationAnimation(containerElementId, sliderObjs) {
@@ -1290,6 +1288,10 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 					sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + sliderObjects[arrayIndex].stopPos + 'px)';
 					// exit condition - after 3 sec
 					if(arrayLength != countFinalPositionReached) window.requestAnimationFrame(callbackLoop);
+					else {
+						
+						document.getElementById("resultDeclarationWrapper").textContent = "Winner: Team Ethereal !!!";
+					}
 				}
 				else {
 					arrayIndex = ++arrayIndex % arrayLength;
@@ -1299,11 +1301,52 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 			window.requestAnimationFrame(callbackLoop);
 		}
 
+	////////////////////////////////////////////////// win predictor animation (end) ///////////////////////////////////
 
+	//////////////////////////////////////////////// Digital Clock Countdown (start) ///////////////////////////////////
+	let runClockCounter = true;
+	let mins = 5;
+	let sec = mins * 60;
+	let clockStr = null;
 
-	winPredictorScroller(8); // nPlayers
-	translationAnimation('shuffleItemsContainerId', { "pickerBoxOneId": 1});  // where to stop the slider 
+	var last = 0; // timestamp of the last render() call
+	function countdownClock(now) {
+		if(!last || now - last >= 0.01 *1000) { // 0.01 sec elapsed time between the calls
+			last = now;
 
+			clockStr =  ("0" + (sec < 0 ? 0 : Math.floor(sec / (60 * 1)))).slice(-2)   + 
+						' : ' + 
+						("0" + (sec % 60 + 1)).slice(-2);
 
-	////////////////////////////////////////////////// win predictor animation (end) //////////////////////////////////////////
+			document.getElementById("digitalClock").textContent = clockStr;
+
+			if(--sec == -2) {
+				runClockCounter = false;
+				document.getElementById("marketStatusId").classList.remove('blink_me');
+				document.getElementById("marketStatusId").textContent = "NO MORE BETS";
+				setTimeout(()=> {
+					setTimeout(()=> {
+						document.getElementById("digitalClock").textContent = "MATCH GOING TO START SOON!!!";
+						document.getElementById("digitalClock").classList.add('blink_me');
+
+						setTimeout(()=> {
+							document.getElementById("digitalClock").classList.remove('blink_me');
+							document.getElementById("digitalClock").textContent = "MATCH STARTED !!!";
+
+							winPredictorScroller(8); // nPlayers
+							translationAnimation('shuffleItemsContainerId', { "pickerBoxOneId": 1});  // where to stop the slider 
+						}, 5000);
+					}, 1000);
+				}, 1000);
+			}
+		}
+		if(runClockCounter) requestAnimationFrame(countdownClock);
+	}
+
+	setTimeout(()=> {
+		countdownClock();
+		document.getElementById("marketStatusId").textContent = "MARKET CLOSING DOWN SOON.....";
+	}, 2000);
+
+	//////////////////////////////////////////////// Digital Clock Countdown (end) ///////////////////////////////////
 });
