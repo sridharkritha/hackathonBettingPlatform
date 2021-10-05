@@ -36,12 +36,12 @@
 	/////////////////////////////////////////////// Tester(start) //////////////////////////////////////////////////////
 
 	app.post('/api/publishResult', async (req, res) => {
-		const { betstr, oddstr } = req.body;
-		console.log(betstr, oddstr);
+	// 		const { betstr, oddstr } = req.body;
+	// 		console.log(betstr, oddstr);
 
-		const matchedOdds = await setWinnerOfTheMatch(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME);
+		const winData = await setWinnerOfTheMatch(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME);
 
-		res.json({ status: 'ok', data: {'name': 'jay', 'code': 123} });
+		res.json({ status: 'ok', data: {"winData" : winData} });
 	});
 	///////////////////////////////////////////////// Tester(end) //////////////////////////////////////////////////////
 
@@ -433,7 +433,9 @@
 			}
 		}
 
-		// winner = 1; // test
+		winner = 1; // test - always 2nd player in the list wins - for testing purpose
+
+		let winData = {"winnerIndex": winner}
 
 		// Win Calculation after the match has been completed
 		for(let i = 0, n = bets.length; i < n; ++i) {
@@ -442,6 +444,9 @@
 					
 					bets[i].bets[j].wins = (bets[i].bets[j].matchvalue ? bets[i].bets[j].matchvalue + ((bets[i].bets[j].stakevalue - bets[i].bets[j].matchvalue) * bets[i].bets[j].oddvalue) : bets[i].bets[j].stakevalue + bets[i].bets[j].profitliabilityvalue).toFixed(2);
 					updateUserBalanceAfterMatch({ username: bets[i].bets[j].username }, { "userBalance": Number(bets[i].bets[j].wins) });
+
+					winData.horseName = bets[i].horseName; 
+					winData.silk = bets[i].silk;
 				}
 				else if(winner != i && bets[i].bets[j].bettype === "backOdds" && bets[i].bets[j].matchvalue < bets[i].bets[j].stakevalue) {
 					// return back the unmatched stake money back and no need to add additional stake value
@@ -471,6 +476,8 @@
 
 		// Notify all the user that winnings have been awarded
 		io.emit('notifyEvent_BalancedUpdated', JSON.stringify({'data': 'Match Completed and Balance Updated'}));
+
+		return winData; // return match winner information
 	}
 
 	async function findOneAndUpdateDB(client, dataBaseName, collectionName, findObject, updateObject, operation) {
