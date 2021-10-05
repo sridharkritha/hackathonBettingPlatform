@@ -14,7 +14,7 @@
 		/* font-family: Verdana, Arial, Helvetica, sans-serif; */
 		font-family: roboto condensed,HelveticaNeue,helvetica neue,Helvetica,Arial,lucida grande,sans-serif;
 		/* font-size: 140%; */
-		font-size: 14px;
+		font-size: 16px;
 	}
 
 	div {
@@ -50,7 +50,7 @@
 	}
 
 	#leftSidebar {
-		border: 1px solid #43444a;
+		border: 2px solid #43444a;
 		min-height: 500px;
 		min-width: 200px;
 		max-width: 200px;
@@ -80,9 +80,14 @@
 		padding: 5px 0 5px 15px;
 	}
 
-	#sportsEventContainer {
+	#rightMainInner {
 		border: 2px solid #43444a;
 		border-top: none;
+		clear: both;
+		min-height: 276px;
+	}
+
+	#sportsEventContainer {
 		padding: 10px;
 		min-height: 276px;
 	}
@@ -197,7 +202,7 @@
 		color: #fff;
 	}
 
-	#regLoginWrapperId .regLoginButton {
+	#regLoginWrapperId .regLoginButton, #rightMain .regLoginButton {
 		border: none;
 		color: white;
 		padding: 15px;
@@ -251,12 +256,20 @@
 	}
 
 	#gameSimulatorContainer {
-		display: display;
+		display: block;
 	}
 	
 	#matchResultSimulator {
-		display: display;
+		display: block;
+		margin:-230px 0 20px 0;
 	}
+
+	#startRace {
+		background-color: #0eb588;
+		color: #fff;
+		float: right;
+	}
+
 	/**************************** components (end) ******************************/
 
 	/********************* Grid over another Grid (start) *************************/
@@ -358,7 +371,7 @@
 	}
 
 	.totalAmt, .playerDesc {
-		font-size: 14px;
+		font-size: 16px;
 		opacity: .54;
 	}
 

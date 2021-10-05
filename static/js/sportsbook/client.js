@@ -1274,28 +1274,36 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 	let clockStr = null;
 
 	var last = 0; // timestamp of the last render() call
-	function countdownClock(now) {
-		if(!last || now - last >= 0.01 *1000) { // 0.01 sec elapsed time between the calls
-			last = now;
 
-			clockStr =  ("0" + (sec < 0 ? 0 : Math.floor(sec / (60 * 1)))).slice(-2)   + 
-						' : ' + 
-						("0" + (sec % 60 + 1)).slice(-2);
+	const startRaceBtn = document.getElementById("startRace");
+	startRaceBtn.addEventListener('click', startRace);
 
-			document.getElementById("digitalClock").textContent = clockStr;
+	function startRace(event){
 
-			if(--sec == -2) {
-				runClockCounter = false;
-				document.getElementById("marketStatusId").classList.remove('blink_me');
-				document.getElementById("marketStatusId").textContent = "NO MORE BETS";
-				setTimeout(()=> {
+		document.getElementById("matchResultSimulator").style.display = 'block';
+
+		[].forEach.call(document.querySelectorAll('.gameBetContainer'), function (el) {
+			el.remove();
+		});
+
+		function countdownClock(now) {
+			if(!last || now - last >= 0.01 *1000) { // 0.01 sec elapsed time between the calls
+				last = now;
+
+				clockStr =  ("0" + (sec < 0 ? 0 : Math.floor(sec / (60 * 1)))).slice(-2)   +
+					' : ' +
+					("0" + (sec % 60 + 1)).slice(-2);
+
+				document.getElementById("digitalClock").textContent = clockStr;
+
+				if(--sec == -2) {
+					runClockCounter = false;
+					document.getElementById("marketStatusId").classList.remove('blink_me');
+					document.getElementById("marketStatusId").textContent = "NO MORE BETS";
 					setTimeout(()=> {
-						document.getElementById("digitalClock").textContent = "MATCH GOING TO START SOON!!!";
-						document.getElementById("digitalClock").classList.add('blink_me');
-
 						setTimeout(()=> {
-							document.getElementById("digitalClock").classList.remove('blink_me');
-							document.getElementById("digitalClock").textContent = "MATCH STARTED !!!";
+							document.getElementById("digitalClock").textContent = "Race starting soon...";
+							document.getElementById("digitalClock").classList.add('blink_me');
 
 							// List players silk for slide over animation
 							winPredictorScroller(g_CurrentDisplayedMatch); // nPlayers
@@ -1303,10 +1311,17 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 							translationAnimation('shuffleItemsContainerId', { "pickerBoxOneId": g_CurrentDisplayedMatch.winData.winnerIndex || 0}, g_CurrentDisplayedMatch.winData.horseName);  // where to stop the slider 
 						}, 5000);
 					}, 1000);
-				}, 1000);
+				}
 			}
+			if(runClockCounter) requestAnimationFrame(countdownClock);
 		}
-		if(runClockCounter) requestAnimationFrame(countdownClock);
+
+		setTimeout(()=> {
+			countdownClock();
+			document.getElementById("marketStatusId").textContent = "Market closing soon...";
+		}, 2000);
+
+
 	}
 
 // 	setTimeout(()=> {
