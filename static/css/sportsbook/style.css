@@ -29,15 +29,21 @@
 	}
 
 	.header #headerLogo {
-		float: left;
 		background: #c51a1b;
-		padding: 0px 15px 0 15px;
-		margin: 15px 0 0 0;
+		float: left;
+		margin: 0;
+		padding: 0 15px;
 	}
 
 	.header #headerLogo h2 {
 		color: #e9f6fc;
 		font-size: 20px;
+	}
+
+	.header #headerLogo p {
+		color: #e9f6fc;
+		font-style: italic;
+		font-size: 80%;
 	}
 
 	.header #regLoginWrapperId {
@@ -84,7 +90,7 @@
 		border: 2px solid #43444a;
 		border-top: none;
 		clear: both;
-		min-height: 276px;
+		height: 100%;
 	}
 
 	#sportsEventContainer {
@@ -249,6 +255,10 @@
 	#betSlipContainer {
 		display: none;
 		padding: 10px 15px;
+	}
+
+	#showPublishedResultId{
+		display: none;
 	}
 
 	#betSlipContainer div.gridColumnLayout_5 {

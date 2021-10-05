@@ -47,7 +47,7 @@ window.addEventListener('load', function () {
 				console.log("Bet Placed Successfully");
 				console.log(res.data);
 
-				document.getElementById('showPublishedResultId').textContent = JSON.stringify(res.data);
+				document.getElementById('showPublishedResultId').textContent = JSON.stringify(res.data['winData']['horseName']);
 			} else {
 				console.error("Bet Placed Error: ", res.error);
 				// alert(res.error);
@@ -1296,7 +1296,8 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 					// exit condition - after 3 sec
 					if(arrayLength != countFinalPositionReached) window.requestAnimationFrame(callbackLoop);
 					else {
-						
+
+						document.getElementById("showPublishedResultId").style.display = 'block';
 						document.getElementById("resultDeclarationWrapper").textContent = "Winner: Team Ethereal !!!";
 					}
 				}
