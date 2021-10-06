@@ -40,6 +40,16 @@ window.addEventListener('load', function () {
 
 function hai(arg) {
 			Object.keys(g_SportsBook).forEach((key) => {
+// changedObject["Horse Race"].uk.Cartmel["09-10-2021"]["12:00"].players[0].bets
+// Object.keys(g_SportsBook[key].publishMatchResultStr)[0]    =>  'Horse Race.uk.Cartmel.09-10-2021.12:00.players'         <= stringify
+
+		// ['horseRace', 'uk', 'Cartmel', '2021-09-20', '12:00', 'players', '2', 'bets']
+		let keyStr = Object.keys(updateObject)[0];
+		let keyStrLst = Object.keys(updateObject)[0].split('.'); // str => object accessor
+
+		for(let i = 0, n = keyStrLst.length; i < n; ++i) {
+			bets = bets[keyStrLst[i]];
+		}
 
 			// this.changedObject = this.changedObject;
 			changedObject = changedObject;
