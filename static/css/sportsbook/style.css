@@ -29,15 +29,21 @@
 	}
 
 	.header #headerLogo {
-		float: left;
 		background: #c51a1b;
-		padding: 0px 15px 0 15px;
-		margin: 15px 0 0 0;
+		float: left;
+		margin: 0;
+		padding: 0 15px;
 	}
 
 	.header #headerLogo h2 {
 		color: #e9f6fc;
 		font-size: 20px;
+	}
+
+	.header #headerLogo p {
+		color: #e9f6fc;
+		font-style: italic;
+		font-size: 80%;
 	}
 
 	.header #regLoginWrapperId {
@@ -51,7 +57,7 @@
 
 	#leftSidebar {
 		border: 2px solid #43444a;
-		min-height: 500px;
+		min-height: 510px;
 		min-width: 200px;
 		max-width: 200px;
 		background: #2b2f35;
@@ -70,6 +76,7 @@
 		border-top: none;
 		flex: 0 0 25%;
 		margin: 10px 20px 0 0;
+		height: 635px;
 	}
 
 	.h1title {
@@ -84,12 +91,20 @@
 		border: 2px solid #43444a;
 		border-top: none;
 		clear: both;
-		min-height: 276px;
+		height: 600px;
+		margin-bottom: 10px;
 	}
 
 	#sportsEventContainer {
 		padding: 10px;
-		min-height: 276px;
+		height: 100%;
+		display: block;
+	}
+
+	.raceInProgress {
+		opacity: .3;
+		background: rgba(0, 0, 0, 0.2);
+		pointer-events:none;
 	}
 
 	.account {
@@ -100,7 +115,7 @@
 	.raceCardTitle {
 		font-size: 16px;
 		font-weight: bold;
-		margin-bottom: 20px;
+		margin-bottom: 10px;
 		padding: 2px;
 	}
 
@@ -139,17 +154,23 @@
 
 	#digitalClock {
 		width: 100%;
-		font-size: 400%;
+		font-size: 300%;
 		font-weight: bolder;
 		text-align: center;
 	}
 
 	#resultDeclarationWrapper {
 		width: 100%;
-		font-size: 400%;
+		font-size: 300%;
 		font-weight: bolder;
 		text-align: center;
 	}
+
+	#gameSimulatorWrapper {
+		clear: both;
+		margin-top: 175px;
+	}
+
 	/************************* Result Display (start) *************************/
 
 	/****************** General utility style (start) *************************/
@@ -159,7 +180,7 @@
 	.blink_me {
 		animation: blinker 1.5s linear infinite;
 	}
-	
+
 	@keyframes blinker {
 		30% {
 			opacity: 0;
@@ -242,13 +263,22 @@
 
 	/**************************** components (start) ******************************/
 
+	#sportsEventTitle {
+		padding: 10px 15px 0 15px;
+	}
+
 	#sportsEventContainer {
 		display: block;
+		clear: both;
 	}
 
 	#betSlipContainer {
 		display: none;
 		padding: 10px 15px;
+	}
+
+	#showPublishedResultId{
+		display: none;
 	}
 
 	#betSlipContainer div.gridColumnLayout_5 {
@@ -257,17 +287,24 @@
 
 	#gameSimulatorContainer {
 		display: block;
+		opacity: 1;
+		background: #e9f6fc;
 	}
-	
+
 	#matchResultSimulator {
 		display: block;
-		margin:-230px 0 20px 0;
+		margin:-310px 0 20px 0;
 	}
 
 	#publishResultId {
 		background-color: #0eb588;
 		color: #fff;
 		float: right;
+	}
+
+	#publishResultIdLoader {
+		float: right;
+		margin: 5px 30px;
 	}
 
 	/**************************** components (end) ******************************/
@@ -286,9 +323,8 @@
 	#pickerBoxOneId {
 		/* grid-area: 1/3; */
 		grid-area: 1/1;
-		border: 5px solid black;
+		border: 3px solid #0eb588;
 		height: 70px;
-		box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
 	}
 
 	#pickerBoxTwoId {
@@ -387,7 +423,7 @@
 	.gridCenterVH {
 		display: grid;
 		/* vertical align*/
-		align-items: center;  
+		align-items: center;
 		/* horizontal align */
 		justify-content: center;
 		text-align: center;
@@ -429,7 +465,7 @@
 		transition: 0.3s;
 	}
 
-	.tickButtonBackground:hover { 
+	.tickButtonBackground:hover {
 		background-color: #0eb588;
 		color: white;
 		cursor: pointer;
@@ -441,7 +477,7 @@
 		transition: 0.3s;
 	}
 
-	.binButtonBackground:hover { 
+	.binButtonBackground:hover {
 		background-color: #c51a1b;
 		color: white;
 		cursor: pointer;
@@ -453,7 +489,7 @@
 		transition: 0.3s;
 	}
 
-	.backMainBgColor:hover { 
+	.backMainBgColor:hover {
 		background-color: #00b3ff;
 		cursor: pointer;
 	}
@@ -462,7 +498,7 @@
 		background-color: #e9f6fc;
 	}
 
-	.backOthersBgColorHover:hover { 
+	.backOthersBgColorHover:hover {
 		background-color: #00b3ff;
 		cursor: pointer;
 	}
@@ -478,7 +514,7 @@
 		background-color: #feafb2;
 	}
 
-	.layMainBgColor:hover { 
+	.layMainBgColor:hover {
 		background-color: #FF7A7F;
 		cursor: pointer;
 	}
@@ -487,7 +523,7 @@
 		background-color: #fce3e4;
 	}
 
-	.layOthersBgColorHover:hover { 
+	.layOthersBgColorHover:hover {
 		background-color: #FF7A7F;
 		cursor: pointer;
 	}
@@ -499,7 +535,13 @@
 
 	/****************************** Bet Slip (end) ********************************/
 
-	/****************************** Gambling Copyrights (start) ********************************/
+
+
+
+
+
+
+/****************************** Gambling Copyrights (start) ********************************/
 	#copyrights {
 		background-color: #2b2f35;
 	}
@@ -509,7 +551,8 @@
 		color:white;
 		/* background-color: #2b2f35; */
 		font-weight: 400;
-		margin: 8px 0;
+		margin: 0;
+		padding: 10px 0 ;
 		font-size: 1.2em;
 	}
 

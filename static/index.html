@@ -11,7 +11,7 @@
 	<script src="js/sportsbook/login.js"></script>
 	<script src="js/sportsbook/client.js"></script>
 
-	<title>PBP - A Peer Betting Platform</title>
+	<title>ChallengeBet - A peer-to-peer Betting Platform</title>
 </head>
 
 <body>
@@ -20,7 +20,8 @@
 
 	<div class="header">
 		<div id="headerLogo">
-			<h2>Ethereal</h2>
+			<h2>ChallengeBet</h2>
+			<p>Peer-to-peer betting</p>
 		</div>
 		<!-- login(start) -->
 		<div id="regLoginWrapperId">
@@ -58,11 +59,26 @@
 		<div id="rightMain">
 			<div class="titleBar">
 				<div id="titleBarTxtId" class="h1title"></div>
-			</div> 
-			<!-- Event/Sports Container	 -->
-			<div id="sportsEventContainer" class="gridROw"></div>
-			<div id="matchResultSimulator"></div>
-			<input type="submit" id="publishResultId" value="Start Race" class="regLoginButton" >
+			</div>
+			<div id="rightMainInner">
+				<!-- Event/Sports Container	 -->
+				<div id="sportsEventTitle" class=""></div>
+				<div id="sportsEventContainer" class="gridROw" style="overflow:scroll; height:400px; margin: 0 10px;"></div>
+
+				<div id="matchResultSimulator">
+					<h1 id="marketStatusId" class = "blink_me centered"></h1>
+					<div id="digitalClock"  class = "centered"></div>
+					<!-- game simulator -->
+				</div>
+				<div id="gameSimulator" >
+					<div id="gameSimulatorWrapper"></div>
+					<div id="resultDeclarationWrapper" class="centered"></div>
+					<div id ="showPublishedResultId" class="centered"></div>
+				</div>
+			</div>
+			<input type="submit" id="publishResultId" value="Start Race" class="regLoginButton" />
+			<img src="assets/loading.gif" id="publishResultIdLoader" width="30px" style="display: none;" />
+
 		</div>
 
 		<div id="rightSidebar">
