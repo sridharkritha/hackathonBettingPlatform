@@ -1572,6 +1572,9 @@ function sendEventResultRequest() {
 			// everything went fine
 			document.getElementById('publishResultIdLoader').style.display = 'none';
 
+			document.getElementById('matchResultSimulator').style.display = 'block';
+			document.getElementById('gameSimulator').style.display = 'block';
+
 			console.log("Match Winner Recieved Successfully");
 			console.log(res.data);
 
