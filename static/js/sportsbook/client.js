@@ -25,9 +25,9 @@ window.addEventListener('load', function () {
 
 	///$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 	// On new bet offer from another gambler
-	socket.on("notifyEvent_New_Bet_Offer", (data) => { 
-		// updateBalanceAfterResult();
-	});
+	// socket.on("notifyEvent_New_Bet_Offer", (data) => { 
+	// 	// updateBalanceAfterResult();
+	// });
 	///$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
