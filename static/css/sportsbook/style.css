@@ -486,8 +486,53 @@
 
 	/****************************** Bet Slip (end) ********************************/
 
+	/****************************** Gambling Copyrights (start) ********************************/
+	#copyrights {
+		background-color: #2b2f35;
+	}
 
+	.footer-responsible-text {
+		display: block;
+		color:white;
+		/* background-color: #2b2f35; */
+		font-weight: 400;
+		margin: 8px 0;
+		font-size: 1.2em;
+	}
 
-
-
-
+	.bg-icon--logo-gambling-commision {
+		background-image: url("../../assets/copyrights/gambling-commission-logo.svg");
+		width: 93px;
+		height: 25px;
+	}
+	
+	.bg-icon--logo-gamcare-problem {
+		background-image: url("../../assets/copyrights/problem-gambling-logo-new.png");
+		width: 58px;
+		height: 24px;
+	}
+	
+	.bg-icon--logo-18-plus {
+		background-image: url("../../assets/copyrights/18-logo.svg");
+		width: 24px;
+		height: 24px;
+	}
+	
+	.bg-icon--gamstop-logo {
+		background-image: url("../../assets/copyrights/gamstop-logo.svg");
+		width: 132px;
+		height: 24px;
+	}
+	
+	.bg-icon {
+		background-repeat: no-repeat;
+		background-size: contain;
+		background-position: 50%;
+		display: inline-block;
+	}
+	.footer-logo-spaces {
+		margin: 20px 90px 0 0;
+		flex-shrink: 0;
+		margin-bottom: 20px;
+	}
+	/****************************** Gambling Copyrights (end) ********************************/
