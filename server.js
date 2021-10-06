@@ -434,7 +434,7 @@
 			}
 		}
 
-		winner = 1; // test - always 2nd player in the list wins - for testing purpose
+		winner = 0; // test - always 2nd player in the list wins - for testing purpose
 
 		let winData = {
 			"winnerIndex": winner,
