@@ -224,8 +224,8 @@
 	/////////////////////////// login(end) /////////////////////////////////////////////////////////////
 
 	const MONGO_DATABASE_NAME = 'p2pbettingplatformdb';
-	const MONGO_COLLECTION_NAME = 'sportscollection';
-	// const MONGO_COLLECTION_NAME = 'testcollection';
+	// const MONGO_COLLECTION_NAME = 'sportscollection';
+	const MONGO_COLLECTION_NAME = 'testcollection';
 	let client = null; // mongodb client
 	let DB = null;     // database
 	let COLL = null;   // collection
