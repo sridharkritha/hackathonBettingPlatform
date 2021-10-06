@@ -106,48 +106,37 @@ window.addEventListener('load', function () {
 
 	/////////////////////////////// Global Variables (start)////////////////////////////////////////////////////////////
 	// At the start display the horse race
-	let g_NextSportsToDisplay = intSportData('Horse Race');
+	let g_SportsBook = {};
+	let g_NextSportsToDisplay = null; // intSportData('Horse Race');
 	let g_CurrentDisplayedMatch = {};
 	let g_BetSlipSheet = {};
 	let g_WinLossByPlayers = []; // global variable for displaying win / loss by player 
 	/////////////////////////////// Global Variables (end)//////////////////////////////////////////////////////////////
 	function intSportData(sportsId) {
 		// <!-- "Horse Race", "Greyhound Race", "Motor Sport", "Golf" , "Cycling" -->
-		const matchUrlStr = {
-			'Horse Race':     {"Horse Race.uk.Cartmel.09-10-2021.12:00.players": 0 },
-			'Greyhound Race': {"Greyhound Race.uk.Towcester.09-10-2021.18:05.players": 0 },
-			'Motor Sport':    {"Motor Sport.uk.Formula 1 Turkey Grand Prix.12-10-2021.07:15.players": 0 },
-			'Golf':           {"Golf.uk.Open de Espana 2021.07-10-2021.07:45.players": 0 },
-			'Cycling':        {"Cycling.uk.Tour de France 2022.01-07-2022.08:30.players": 0 }
-		};
-
-		let obj = {};
-		obj.publishMatchResultStr = matchUrlStr[sportsId];
-		let arr = Object.keys(obj.publishMatchResultStr)[0].split('.');
-
-		obj.gameName              = arr[0];
-		obj.region                = arr[1];
-		obj.raceName              = arr[2];
-		obj.date                  = arr[3];
-		obj.time                  = arr[4];
-
-		obj.isWinPredictorActive  = false;
-
-		document.getElementById("matchResultSimulator").replaceChildren();
-
-		return obj;
+		g_SportsBook[sportsId].isWinPredictorActive  = false;
+		document.getElementById("matchResultSimulator").replaceChildren(); // clear all children
+		return g_SportsBook[sportsId];
 	}
 
-	let g_SportsBook = {};
+	// Populate the sports book
 	function populateSportsBook(data) {
+		let str = null;
+
+		if(data.games.length) g_SportsBook = {};
+
 		for(let i = 0, n = data.games.length; i < n; ++i) {
 			let obj = {};
+			let container = {};
 			obj.gameName = data.games[i];
 			obj.region   = data[obj.gameName].region[0];
 			obj.raceName = data[obj.gameName][obj.region].venues[0];
 			obj.date     = data[obj.gameName][obj.region][obj.raceName].dates[0];
 			obj.time     = data[obj.gameName][obj.region][obj.raceName][data[obj.gameName][obj.region][obj.raceName].dates[0]].timings[0];
-			obj.publishMatchResultStr = obj.gameName +'.'+ obj.region +'.'+obj.raceName +'.'+obj.date  +'.'+obj.time  +'.players';
+			str          = obj.gameName +'.'+ obj.region +'.'+obj.raceName +'.'+obj.date  +'.'+obj.time  +'.players';
+			container[str] = 0;
+			obj.publishMatchResultStr = container;
+			obj.isWinPredictorActive  = false;
 			g_SportsBook[obj.gameName] = obj;
 		}
 	}
@@ -166,31 +155,8 @@ window.addEventListener('load', function () {
 
 			let href = this.getAttribute("href"); // #
 
-			switch(href) {
-				case 'Horse Race':
-									g_NextSportsToDisplay = intSportData(href); // intSportData('Horse Race')
-									socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
-				break;
-				case 'Greyhound Race':
-									g_NextSportsToDisplay = intSportData(href);
-									socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
-									break;
-
-				case 'Motor Sport':
-									g_NextSportsToDisplay = intSportData(href);
-									socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
-									break;
-
-				case 'Golf':
-									g_NextSportsToDisplay = intSportData(href);
-									socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
-									break;
-
-				case 'Cycling':
-									g_NextSportsToDisplay = intSportData(href);
-									socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
-									break;
-			}
+			g_NextSportsToDisplay = intSportData(href); // intSportData('Horse Race')
+			socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
 
 			return false;
 		}, this); // this - MUST
@@ -201,10 +167,8 @@ window.addEventListener('load', function () {
 	function processInputData(data) {
 
 		populateSportsBook(data);
-
-
-
-
+		
+		if(!g_NextSportsToDisplay)  g_NextSportsToDisplay = intSportData('Horse Race');
 
 		const gameName = g_NextSportsToDisplay.gameName; // 'horseRace';
 		const region   = g_NextSportsToDisplay.region;   // 'uk';
