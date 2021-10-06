@@ -256,7 +256,8 @@ window.addEventListener('load', function () {
 			// Jockey and Trainer Name
 			elem4 = document.createElement("div");
 			elem4.classList = "playerDesc";
-			elem4.innerHTML = (players[i].jockeyName ? ('J:' + players[i].jockeyName) : '') + '&nbsp' + 'T:'+ players[i].trainerName;
+			elem4.innerHTML = 	(players[i].jockeyName  ? ('J:' + players[i].jockeyName) : '') + '&nbsp' + 
+								(players[i].trainerName ? ('T:'+ players[i].trainerName): '');
 			elem3.appendChild(elem4);
 			// display potential win/loss
 			elem4 = document.createElement("div");
