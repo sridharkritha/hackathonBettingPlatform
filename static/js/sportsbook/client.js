@@ -142,12 +142,13 @@ window.addEventListener('load', function () {
 	function populateSportsBook(data) {
 		for(let i = 0, n = data.games.length; i < n; ++i) {
 			let obj = {};
-		    obj.gameName = data.games[i];
-		    obj.region   = data[gameName].region[0];
-		    obj.raceName = data[gameName][region].venues[0];
-		    obj.date     = data[gameName][region][raceName].dates[0];
-		    obj.time     = data[gameName][region][raceName][data[gameName][region][raceName].dates[0]].timings[0];
-		    g_SportsBook[obj.gameName] = obj;
+			obj.gameName = data.games[i];
+			obj.region   = data[obj.gameName].region[0];
+			obj.raceName = data[obj.gameName][obj.region].venues[0];
+			obj.date     = data[obj.gameName][obj.region][obj.raceName].dates[0];
+			obj.time     = data[obj.gameName][obj.region][obj.raceName][data[obj.gameName][obj.region][obj.raceName].dates[0]].timings[0];
+			obj.publishMatchResultStr = obj.gameName +'.'+ obj.region +'.'+obj.raceName +'.'+obj.date  +'.'+obj.time  +'.players';
+			g_SportsBook[obj.gameName] = obj;
 		}
 	}
 
@@ -199,7 +200,7 @@ window.addEventListener('load', function () {
 	// data <-- server <-- db
 	function processInputData(data) {
 
-		// populateSportsBook(data);
+		populateSportsBook(data);
 
 
 
