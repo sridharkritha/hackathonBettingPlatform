@@ -138,6 +138,19 @@ window.addEventListener('load', function () {
 		return obj;
 	}
 
+	let g_SportsBook = {};
+	function populateSportsBook(data) {
+		for(let i = 0, n = data.games.length; i < n; ++i) {
+			let obj = {};
+		    obj.gameName = data.games[i];
+		    obj.region   = data[gameName].region[0];
+		    obj.raceName = data[gameName][region].venues[0];
+		    obj.date     = data[gameName][region][raceName].dates[0];
+		    obj.time     = data[gameName][region][raceName][data[gameName][region][raceName].dates[0]].timings[0];
+		    g_SportsBook[obj.gameName] = obj;
+		}
+	}
+
 	// All anchors tags only under '#rightSidebarLinks'
 	let rightSidebarLinks = document.querySelector('#rightSidebarLinks');
 	let anchorsElms = rightSidebarLinks.querySelectorAll('a'); // return array of all anchor elemRefs
@@ -156,31 +169,6 @@ window.addEventListener('load', function () {
 				case 'Horse Race':
 									g_NextSportsToDisplay = intSportData(href); // intSportData('Horse Race')
 									socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
-									// g_NextSportsToDisplay = new function() {
-									// 	this.gameName              = 'Horse Race';
-									// 	this.region                = 'uk';
-									// 	this.raceName              = 'Cartmel';
-									// 	this.date                  = '2021-09-20';
-									// 	this.time                  = '12:00';
-
-									// 	this.isWinPredictorActive  = false;
-									// 	this.matchStr = this.gameName +'.'+ this.region +'.'+ this.raceName  +'.'+ this.date  +'.'+ this.time  +'.players';
-									// 	this.publishMatchResultStr = { [this.matchStr] : 0 };
-									// }
-									// document.getElementById("matchResultSimulator").replaceChildren();
-									// socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
-
-									// g_NextSportsToDisplay = {
-									// 	'gameName': 'Horse Race',
-									// 	'region': 'uk',
-									// 	'raceName': 'Cartmel',
-									// 	'date': '2021-09-20',
-									// 	'time': '12:00',
-									// 	'publishMatchResultStr': {"Horse Race.uk.Cartmel.2021-09-20.12:00.players": 0 },
-									// 	'isWinPredictorActive': false
-									// };
-									// document.getElementById("matchResultSimulator").replaceChildren();
-									// socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
 				break;
 				case 'Greyhound Race':
 									g_NextSportsToDisplay = intSportData(href);
@@ -210,6 +198,13 @@ window.addEventListener('load', function () {
 	////////////////////// Dynamically construct - Race Card (start) ///////////////////////////////////////////////////
 	// data <-- server <-- db
 	function processInputData(data) {
+
+		// populateSportsBook(data);
+
+
+
+
+
 		const gameName = g_NextSportsToDisplay.gameName; // 'horseRace';
 		const region   = g_NextSportsToDisplay.region;   // 'uk';
 		const raceName = g_NextSportsToDisplay.raceName; // 'Cartmel';
