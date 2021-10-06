@@ -25,9 +25,40 @@ window.addEventListener('load', function () {
 
 	///$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 	// On new bet offer from another gambler
-	// socket.on("notifyEvent_New_Bet_Offer", (data) => { 
-	// 	// updateBalanceAfterResult();
-	// });
+	socket.on("notifyEvent_New_Bet_Offer", (data) => { 
+		
+		const changedObject = JSON.parse(data); // updateBalanceAfterResult();
+
+// 		Object.keys(g_SportsBook).forEach(function(key , q) {
+
+//       let k = q;
+// 			this.changedObject = this.changedObject;
+
+// 			let x = g_SportsBook[key].publishMatchResultStr.bets 
+//  // Object.keys(g_SportsBook[key].publishMatchResultStr)[0]  // 'Horse Race.uk.Cartmel.09-10-2021.12:00.players'
+// 		}.bind(this), changedObject);
+
+function hai(arg) {
+			Object.keys(g_SportsBook).forEach((key) => {
+
+			// this.changedObject = this.changedObject;
+			changedObject = changedObject;
+
+			let x = g_SportsBook[key].publishMatchResultStr.bets 
+ // Object.keys(g_SportsBook[key].publishMatchResultStr)[0]  // 'Horse Race.uk.Cartmel.09-10-2021.12:00.players'
+		});
+};
+
+hai(changedObject);
+
+
+
+
+		
+
+
+		console.log(data);
+	});
 	///$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
