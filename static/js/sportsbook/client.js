@@ -144,9 +144,12 @@ window.addEventListener('load', function () {
 	anchorsElms.forEach(anchor => {
 		anchor.addEventListener('click', function(e) {
 			console.log('Link is clicked!');
+
+			resetUI();
+
 			e.preventDefault();
 			e.stopPropagation();
-			
+
 			let href = this.getAttribute("href"); // #
 
 			switch(href) {
@@ -1539,6 +1542,20 @@ function publishResult(e) {
 // 		console.log(e.currentTarget); // element you clicked
 }
 
+function resetUI() {
+
+	if(document.getElementById("sportsEventContainer").classList.contains("raceInProgress")){
+		document.getElementById("sportsEventContainer").classList.remove("raceInProgress");
+		document.getElementById('matchResultSimulator').style.display = 'none';
+		document.getElementById('gameSimulator').style.display = 'none';
+	}
+
+	if(document.getElementById("publishResultId")) {
+		document.getElementById('publishResultId').style.display = 'block';
+	}
+
+}
+
 // Send a bet request to the server
 function sendEventResultRequest() {
 	(async () => {
@@ -1554,6 +1571,7 @@ function sendEventResultRequest() {
 		if (res.status === 'ok') {
 			// everything went fine
 			document.getElementById('publishResultIdLoader').style.display = 'none';
+
 			console.log("Match Winner Recieved Successfully");
 			console.log(res.data);
 
