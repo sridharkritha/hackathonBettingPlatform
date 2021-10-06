@@ -3,7 +3,58 @@ window.addEventListener('load', function () {
 	function randomIntFromInterval(min, max) { // min and max included 
 		return Math.floor(Math.random() * (max - min + 1) + min);
 	}
-	//////////////////////////// Utility Functions (end) ///////////////////////////////////////////////////////////////	
+	//////////////////////////// Utility Functions (end) ///////////////////////////////////////////////////////////////
+
+	//////////////////////////////// Tester (start) ////////////////////////////////////////////////////////////////////
+
+	function run() {
+		const elem = document.getElementById('publishResultId');
+		elem.addEventListener('click', publishResult); // works
+
+	}
+	run();
+
+	function publishResult(e) {
+
+		sendEventResultRequest();
+
+		[].forEach.call(document.querySelectorAll('.gameBetContainer'), function (el) {
+			el.remove();
+		});
+
+		startRace();
+
+		console.log(this);
+		console.log(e.currentTarget); // element you clicked
+		// console.log(JSON.parse(this.dataset.eventinfo));
+		// console.log(JSON.parse(this.dataset.playerinfo));
+	}
+
+	// Send a bet request to the server
+	function sendEventResultRequest() {
+		(async () => {
+			const res = await fetch('/api/publishResult', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					betstr: 'sridhar',
+					oddstr: 9999
+				})
+			}).then((res) => res.json());
+
+			if (res.status === 'ok') {
+				// everything went fine
+				console.log("Bet Placed Successfully");
+				console.log(res.data);
+
+				document.getElementById('showPublishedResultId').textContent = JSON.stringify(res.data);
+			} else {
+				console.error("Bet Placed Error: ", res.error);
+				// alert(res.error);
+			}
+		})();
+	}
+	/////////////////////////////// Tester (end) ///////////////////////////////////////////////////////////////////////
 
 	//////////////////////////// Client to Server communication (start) ////////////////////////////////////////////////	
 	// Using HTML - Load "client.html" (do NOT run "node client.js")
@@ -248,11 +299,8 @@ window.addEventListener('load', function () {
 											+ eventinfo.raceName +'.'+ eventinfo.date +'.'+ eventinfo.time;
 		g_CurrentDisplayedMatch.playerCount = playerCount;
 
-		g_CurrentDisplayedMatch.playerInfo = []; // stores player info for declaring the winner from the losers
-
 		for(let i = 0; i < playerCount; ++i) {
 			let playerinfo = { 'playerIndexString': 'players.' + i };
-			g_CurrentDisplayedMatch.playerInfo.push( {horseName: players[i].horseName , silk: players[i].silk});
 
 			// "horseRace.uk.Cartmel.2021-09-20.12:00.players.0."
 			let idString = g_CurrentDisplayedMatch.idString + '.' + 'players' + '.' + i + '.';
@@ -1218,6 +1266,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 		if(!currentDisplayedMatch.playerInfo) return;
 
 		const nPlayers = currentDisplayedMatch.playerInfo.length; // playerInfo. 
+	function winPredictorScroller(nPlayers) {
 		let elemRef = null;
 		let elemRef2 = null;
 		let str = null;
@@ -1246,8 +1295,8 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 			document.getElementById("shuffleItemsContainerId").appendChild(elemRef);
 		
 			elemRef2 = document.createElement("IMG");
-// 			str = "assets/silk/silk_" + i + ".png";
-			elemRef2.setAttribute("src",currentDisplayedMatch.playerInfo[i].silk); // image url
+			str = "assets/silk/silk_" + i + ".png";
+			elemRef2.setAttribute("src",str); // image url
 			elemRef2.setAttribute("alt","Trulli");
 			// elemRef.setAttribute("id","myParentId_myParentId_shuffleItemsContainerId_myId_5_myId_6");
 			elemRef.appendChild(elemRef2);
@@ -1301,7 +1350,6 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 			let arrayLength = sliderObjects.length;
 			let countFinalPositionReached = 0;
 			let startTimeStamp; //  = window.performance.now();
-			
 			
 			function callbackLoop(currentTimeStamp) {
 				if(!g_NextSportsToDisplay.isWinPredictorActive) return;
@@ -1359,35 +1407,136 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 
 	////////////////////////////////////////////////// win predictor animation (end) ///////////////////////////////////
 
-	//////////////////////////////////////////////// Digital Clock Countdown (start) ///////////////////////////////////
-	let runClockCounter = true;
-	let mins = 5;
-	let sec = mins * 60;
-	let clockStr = null;
+	////////////////////////////////////////////////// win predictor animation (start ) //////////////////////////////////////////
 
-	function startWinPreditor() {
-		g_NextSportsToDisplay.isWinPredictorActive = true;
-		runClockCounter = true;
-		mins = 5;
-		sec = mins * 60;
-		clockStr = null;
+	function translationAnimation(containerElementId, sliderObjs, winnerPlayer) {
+		if(!g_NextSportsToDisplay.isWinPredictorActive) return;
+		let shuffleItemsContainer = document.querySelector('#'+containerElementId);
+		let children = shuffleItemsContainer.children; // gets array of children from the parent
 
-		addChildrenToWinPreditor();
-		countdownClock();
-		document.getElementById("marketStatusId").textContent = "MARKET CLOSING DOWN SOON.....";
+		let startPos = children[0].offsetLeft;
+		let endPos = children[children.length -  1].offsetLeft - startPos; // containerWidth - shuffleItemWidth;
+
+		let sliderObjects = []; // array of objects
+		for (let key in sliderObjs) {
+			if (sliderObjs.hasOwnProperty(key)) {
+				let obj = {};
+				obj.sliderElement = document.querySelector('#'+key);  // slider element
+				obj.stopPos = children[sliderObjs[key]].offsetLeft - startPos; // stop position in pixels
+				obj.isForwardMove = true;
+				obj.isFinalPositionReached = false;
+				obj.currentPos = 0;
+				obj.delta = randomIntFromInterval(20, 40); // speed of movement = 18; // 
+				// obj.delta = randomIntFromInterval(60, 90); // speed of movement = 18; // 
+				obj.timeout = randomIntFromInterval(3500, 4500); // between 3 and 5 seconds = 4801; // 
+				// obj.timeout = randomIntFromInterval(3000, 9000); // between 3 and 9 seconds = 4801; // 
+				sliderObjects.push(obj);
+				console.log(`delta: ${obj.delta}, timeout: ${obj.timeout}`);
+			}
+		}
+
+
+		let arrayIndex = 0;
+		let arrayLength = sliderObjects.length;
+		let countFinalPositionReached = 0;
+		let startTimeStamp; //  = window.performance.now();
+		
+		
+		function callbackLoop(currentTimeStamp) {
+			if(!g_NextSportsToDisplay.isWinPredictorActive) return;
+
+			if (startTimeStamp === undefined) startTimeStamp = currentTimeStamp;
+			let elapsed = currentTimeStamp - startTimeStamp;
+			
+			if(!sliderObjects[arrayIndex].isFinalPositionReached) {
+				if(sliderObjects[arrayIndex].isForwardMove) {
+					// currentPos += elapsed * 0.01;
+					sliderObjects[arrayIndex].currentPos += sliderObjects[arrayIndex].delta;
+					if(sliderObjects[arrayIndex].currentPos < endPos) {
+						sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + sliderObjects[arrayIndex].currentPos + 'px)';
+					}
+					else {
+						sliderObjects[arrayIndex].isForwardMove = false;
+						sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + endPos + 'px)';
+					}
+				}
+				else {
+					// currentPos -= elapsed * 0.01;
+					sliderObjects[arrayIndex].currentPos -= sliderObjects[arrayIndex].delta;
+					if(sliderObjects[arrayIndex].currentPos > 0) {
+						sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + sliderObjects[arrayIndex].currentPos + 'px)';
+					}
+					else {
+						sliderObjects[arrayIndex].isForwardMove = true;
+						sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + 0 + 'px)';
+					}
+				}
+			}
+
+			if(!sliderObjects[arrayIndex].isFinalPositionReached && elapsed > sliderObjects[arrayIndex].timeout && 
+				Math.abs(sliderObjects[arrayIndex].currentPos - sliderObjects[arrayIndex].stopPos) <= sliderObjects[arrayIndex].delta &&
+				((sliderObjects[arrayIndex].isForwardMove && sliderObjects[arrayIndex].currentPos > sliderObjects[arrayIndex].stopPos) || 
+				(!sliderObjects[arrayIndex].isForwardMove && sliderObjects[arrayIndex].currentPos < sliderObjects[arrayIndex].stopPos))) {
+				sliderObjects[arrayIndex].isFinalPositionReached = true;
+				++countFinalPositionReached;
+				sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + sliderObjects[arrayIndex].stopPos + 'px)';
+				// exit condition - after 3 sec
+				if(arrayLength != countFinalPositionReached) window.requestAnimationFrame(callbackLoop);
+				else {
+					// declare the match winner
+					document.getElementById("resultDeclarationWrapper").textContent = "WINNER: " + winnerPlayer; // "Winner: Team Ethereal !!!";
+					updateBalanceAfterResult();
+				}
+			}
+			else {
+				arrayIndex = ++arrayIndex % arrayLength;
+				window.requestAnimationFrame(callbackLoop);
+			}
+		}
+		window.requestAnimationFrame(callbackLoop);
 	}
 
+////////////////////////////////////////////////// win predictor animation (end) ///////////////////////////////////
 
-	var last = 0; // timestamp of the last render() call
+//////////////////////////////////////////////// Digital Clock Countdown (start) ///////////////////////////////////
+let runClockCounter = true;
+let mins = 5;
+let sec = mins * 60;
+let clockStr = null;
+
+function startWinPreditor() {
+	g_NextSportsToDisplay.isWinPredictorActive = true;
+	runClockCounter = true;
+	mins = 5;
+	sec = mins * 60;
+	clockStr = null;
+
+	addChildrenToWinPreditor();
+	countdownClock();
+	document.getElementById("marketStatusId").textContent = "MARKET CLOSING DOWN SOON.....";
+}
+
+
+var last = 0; // timestamp of the last render() call
+
+const startRaceBtn = document.getElementById("startRace");
+startRaceBtn.addEventListener('click', startRace);
+
+function startRace(event){
+
+	document.getElementById("matchResultSimulator").style.display = 'block';
+
+	[].forEach.call(document.querySelectorAll('.gameBetContainer'), function (el) {
+		el.remove();
+	});
+
 	function countdownClock(now) {
-		if(!g_NextSportsToDisplay.isWinPredictorActive) return;
-
 		if(!last || now - last >= 0.01 *1000) { // 0.01 sec elapsed time between the calls
 			last = now;
 
-			clockStr =  ("0" + (sec < 0 ? 0 : Math.floor(sec / (60 * 1)))).slice(-2)   + 
-						' : ' + 
-						("0" + (sec % 60 + 1)).slice(-2);
+			clockStr =  ("0" + (sec < 0 ? 0 : Math.floor(sec / (60 * 1)))).slice(-2)   +
+				' : ' +
+				("0" + (sec % 60 + 1)).slice(-2);
 
 			document.getElementById("digitalClock").textContent = clockStr;
 
@@ -1397,17 +1546,17 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 				document.getElementById("marketStatusId").textContent = "NO MORE BETS";
 				setTimeout(()=> {
 					setTimeout(()=> {
-						document.getElementById("digitalClock").textContent = "MATCH GOING TO START SOON!!!";
+						document.getElementById("digitalClock").textContent = "Race starting soon...";
 						document.getElementById("digitalClock").classList.add('blink_me');
 
 						setTimeout(()=> {
 							document.getElementById("digitalClock").classList.remove('blink_me');
-							document.getElementById("digitalClock").textContent = "MATCH STARTED !!!";
+							document.getElementById("digitalClock").textContent = "Race Started!! ";
 
-							// List players silk for slide over animation
-							winPredictorScroller(g_CurrentDisplayedMatch); // nPlayers
-							//  player who won's the match
-							translationAnimation('shuffleItemsContainerId', { "pickerBoxOneId": g_CurrentDisplayedMatch.winData.winnerIndex || 0}, g_CurrentDisplayedMatch.winData.horseName);  // where to stop the slider 
+						// List players silk for slide over animation
+						winPredictorScroller(g_CurrentDisplayedMatch); // nPlayers
+						//  player who won's the match
+		  translationAnimation('shuffleItemsContainerId', { "pickerBoxOneId": g_CurrentDisplayedMatch.winData.winnerIndex || 0}, g_CurrentDisplayedMatch.winData.horseName);  // where to stop the slider 
 						}, 5000);
 					}, 1000);
 				}, 1000);
@@ -1416,86 +1565,86 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 		if(runClockCounter) requestAnimationFrame(countdownClock);
 	}
 
-	//////////////////////////////////////////////// Digital Clock Countdown (end) ///////////////////////////////////
+//////////////////////////////////////////////// Digital Clock Countdown (end) ///////////////////////////////////
 
-	//////////////////////////////// Tester (start) ////////////////////////////////////////////////////////////////////
+//////////////////////////////// Tester (start) ////////////////////////////////////////////////////////////////////
 
-	function run() {
-		const elem = document.getElementById('publishResultId');
-		elem.addEventListener('click', publishResult); // works
-	}
-	run();
+function run() {
+	const elem = document.getElementById('publishResultId');
+	elem.addEventListener('click', publishResult); // works
+}
+run();
 
-	function publishResult(e) {
+function publishResult(e) {
 
-		sendEventResultRequest();
+	sendEventResultRequest();
 
 // 		console.log(this);
 // 		console.log(e.currentTarget); // element you clicked
-	}
+}
 
-	// Send a bet request to the server
-	function sendEventResultRequest() {
-		(async () => {
-			const res = await fetch('/api/publishResult', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					'msg': 'PUBLISH_THE_MATCH_WINNER',
-					'matchstr': g_NextSportsToDisplay.publishMatchResultStr
-				})
-			}).then((res) => res.json());
+// Send a bet request to the server
+function sendEventResultRequest() {
+	(async () => {
+		const res = await fetch('/api/publishResult', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				'msg': 'PUBLISH_THE_MATCH_WINNER',
+				'matchstr': g_NextSportsToDisplay.publishMatchResultStr
+			})
+		}).then((res) => res.json());
 
-			if (res.status === 'ok') {
-				// everything went fine
-				console.log("Match Winner Recieved Successfully");
-				console.log(res.data);
+		if (res.status === 'ok') {
+			// everything went fine
+			console.log("Match Winner Recieved Successfully");
+			console.log(res.data);
 
-				g_CurrentDisplayedMatch.winData = res.data.winData;
-				
-				// Start Win perdition animation
-				setTimeout(()=> {
-					startWinPreditor();
-				}, 2000);
-
-			} else {
-				console.error("Bet Placed Error: ", res.error);
-				// alert(res.error);
-			}
-		})();
-	}
-
-	// Update the balance after the match result
-	async function updateBalanceAfterResult() {
-		const username = localStorage.getItem('username'); // get it from cookie
-		const password = localStorage.getItem('password'); // get it from cookie
-		if(username && username) {
+			g_CurrentDisplayedMatch.winData = res.data.winData;
 			
-			const result = await fetch('/api/login', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					username,
-					password
-				})
-			}).then((res) => res.json());
+			// Start Win perdition animation
+			setTimeout(()=> {
+				startWinPreditor();
+			}, 2000);
 
-			if (result.status === 'ok') {
-				// everything went fine
-				console.log('Got the token: ', result.data);
-				localStorage.setItem('token', result.data); // store in cookie
-				localStorage.setItem('username', username); // store in cookie
-				localStorage.setItem('password', password); // store in cookie
-				// alert('Success');
-				document.getElementById("regLoginFieldsId").style.display = 'none';
-				document.getElementById("welcomeUserName").textContent = "Welcome " + username;
-				document.getElementById("userBalanceAmount").textContent = "Balance: " + result.userBalance;
-			} else {
-				alert(result.error);
-			}
+		} else {
+			console.error("Bet Placed Error: ", res.error);
+			// alert(res.error);
+		}
+	})();
+}
+
+// Update the balance after the match result
+async function updateBalanceAfterResult() {
+	const username = localStorage.getItem('username'); // get it from cookie
+	const password = localStorage.getItem('password'); // get it from cookie
+	if(username && username) {
+		
+		const result = await fetch('/api/login', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				username,
+				password
+			})
+		}).then((res) => res.json());
+
+		if (result.status === 'ok') {
+			// everything went fine
+			console.log('Got the token: ', result.data);
+			localStorage.setItem('token', result.data); // store in cookie
+			localStorage.setItem('username', username); // store in cookie
+			localStorage.setItem('password', password); // store in cookie
+			// alert('Success');
+			document.getElementById("regLoginFieldsId").style.display = 'none';
+			document.getElementById("welcomeUserName").textContent = "Welcome " + username;
+			document.getElementById("userBalanceAmount").textContent = "Balance: " + result.userBalance;
+		} else {
+			alert(result.error);
 		}
 	}
-	/////////////////////////////// Tester (end) ///////////////////////////////////////////////////////////////////////
+}
+/////////////////////////////// Tester (end) ///////////////////////////////////////////////////////////////////////
 });
