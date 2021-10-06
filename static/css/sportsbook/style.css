@@ -29,22 +29,21 @@
 	}
 
 	.header #headerLogo {
-		background: #c51a1b;
 		float: left;
 		margin: 0;
 		padding: 0 15px;
 	}
 
-	.header #headerLogo h2 {
-		color: #e9f6fc;
-		font-size: 20px;
+	.header #headerLogo img {
+		height: 86px;
 	}
 
 	.header #headerLogo p {
-		color: #e9f6fc;
-		font-style: italic;
-		font-size: 80%;
+		color: #0eb588;
+		font-size: 10px;
+		font-weight: bold;
 	}
+
 
 	.header #regLoginWrapperId {
 		float: right;
