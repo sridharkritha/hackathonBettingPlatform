@@ -23,6 +23,14 @@ window.addEventListener('load', function () {
 	});
 
 
+	///$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+	// On new bet offer from another gambler
+	socket.on("notifyEvent_New_Bet_Offer", (data) => { 
+		// updateBalanceAfterResult();
+	});
+	///$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
 	// "{"horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.1":7}"
 	socket.on("myEventChangeHappened", (data) => { 
 		const changedObject = JSON.parse(data);

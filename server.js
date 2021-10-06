@@ -678,6 +678,11 @@
 
 		console.log(oddUpdate);
 
+	///$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+		const updatedBet = await client.db(dataBaseName).collection(collectionName).findOne({});
+		io.emit('notifyEvent_New_Bet_Offer', JSON.stringify(updatedBet));
+	///$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
 		return matchedOdds;
 	}
 
