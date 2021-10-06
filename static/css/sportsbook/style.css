@@ -58,8 +58,8 @@
 	#leftSidebar {
 		border: 2px solid #43444a;
 		min-height: 510px;
-		min-width: 200px;
-		max-width: 200px;
+		min-width: 220px;
+		max-width: 220px;
 		background: #2b2f35;
 		flex: 0 0 15%;
 		padding: 20px 0 0 10px;
@@ -141,14 +141,20 @@
 
 	.section {
 		margin: 10px 0 0 10px;
-		background: url("../../assets/horse-racing.svg") no-repeat left;
+	}
+
+	.section img {
+		float: left;
 	}
 
 	.section a {
 		color: #e9f6fc;
-		margin-left: 25px;
 		text-decoration: none;
+		display: block;
+		margin: 0 0 0 10px;
+		float: left;
 	}
+
 
 	/************************ Result Display (start) *************************/
 
