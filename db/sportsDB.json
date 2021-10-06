@@ -1,12 +1,12 @@
 {
-	"games": ["Horse Race", "Greyhound Race", "cricket"],
+	"games": ["Horse Race", "Greyhound Race", "Motor Sport", "Golf" , "Cycling"],
 	"Horse Race": {
 		"region": ["uk"],
 		"uk": {
 			"venues": ["Cartmel"],
 			"Cartmel": {
-					"dates": ["2021-09-20"],
-					"2021-09-20": {
+					"dates": ["09-10-2021"],
+					"09-10-2021": {
 						"timings": ["12:00"],
 						"12:00": {
 							"matchType": "Handicap",
@@ -133,8 +133,8 @@
 		"uk": {
 			"venues": ["Towcester"],
 			"Towcester": {
-					"dates": ["2021-10-09"],
-					"2021-10-09": {
+					"dates": ["09-10-2021"],
+					"09-10-2021": {
 						"timings": ["18:05"],
 						"18:05": {
 							"matchType": "Greyhound Racing",
@@ -206,173 +206,215 @@
 			}
 		}
 	},
-
-	"Cricket": {
-		"region": ["india", "england"],
-		"india": {
-			"venues": ["Chennai","Mumbai"],
-			"Chennai": {
-					"dates": ["2021-08-30","2021-09-05"],
-					"2021-08-30": {
-						"timings": [ "13:00"],
-						"13:00": {
-							"matchType": "One Day",
-							"runLength": "0m 6f 20y",
+	"Motor Sport": {
+		"region": ["uk"],
+		"uk": {
+			"venues": ["Formula 1 Turkey Grand Prix"],
+			"Formula 1 Turkey Grand Prix": {
+					"dates": ["12-10-2021"],
+					"12-10-2021": {
+						"timings": ["07:15"],
+						"07:15": {
+							"matchType": "Motor Sport",
+							"runLength": "190 miles",
 							"players": [
 								{
-										"teamName": "England",
-										"backOdds": [2.8,3.05,3.1],
-										"layOdds": [4.2,4.6,4.9]
+										"horseName": "1 Max Verstappen",
+										"silk": "assets\/dog\/dog_1.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
 								},
 								{
-										"teamName": "India",
-										"backOdds": [4.1,4.5,4.8],
-										"layOdds": [5.3,5.4,5.7]
-								}
-							]
-						}
-					},
-					"2021-09-05": {
-						"timings": ["10:00"],
-						"13:00": {
-							"matchType": "T20",
-							"runLength": "0m 6f 20y",
-							"players": [
-								{
-										"teamName": "Sri Lanka",
-										"backOdds": [2.8,3.05,3.1],
-										"layOdds": [4.2,4.6,4.9]
+										"horseName": "2 Lewis Hamilton",
+										"silk": "assets\/dog\/dog_2.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
 								},
 								{
-										"teamName": "Pakistan",
-										"backOdds": [4.1,4.5,4.8],
-										"layOdds": [5.3,5.4,5.7]
-								}
-							]
-						}
-					}
-			},
-			"Mumbai": {
-					"dates": ["2021-08-31","2021-09-20"],
-					"2021-08-30": {
-						"timings": ["13:00"],
-						"13:00": {
-							"matchType": "Test Match",
-							"runLength": "0m 6f 20y",
-							"players": [
-								{
-										"teamName": "England",
-										"backOdds": [2.8,3.05,3.1],
-										"layOdds": [4.2,4.6,4.9]
+										"horseName": "3 Valtteri Bottas",
+										"silk": "assets\/dog\/dog_3.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
 								},
 								{
-										"teamName": "India",
-										"backOdds": [4.1,4.5,4.8],
-										"layOdds": [5.3,5.4,5.7]
-								}
-							]
-						}
-					},
-					"2021-09-05": {
-						"timings": ["10:00"],
-						"13:00": {
-							"matchType": "T20",
-							"runLength": "0m 6f 20y",
-							"players": [
-								{
-										"teamName": "Sri Lanka",
-										"backOdds": [2.8,3.05,3.1],
-										"layOdds": [4.2,4.6,4.9]
+										"horseName": "4 Charles Leclerc",
+										"silk": "assets\/dog\/dog_4.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
 								},
 								{
-										"teamName": "Pakistan",
-										"backOdds": [4.1,4.5,4.8],
-										"layOdds": [5.3,5.4,5.7]
+										"horseName": "5 Sergio Perez",
+										"silk": "assets\/dog\/dog_5.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
+								},
+								{
+										"horseName": "6 Lando Norris",
+										"silk": "assets\/dog\/dog_6.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
 								}
 							]
 						}
 					}
 			}
-		},
-		"england": {
-			"venues": ["Oval","Lord's"],
-			"Oval": {
-					"dates": ["2021-08-30","2021-09-05"],
-					"2021-08-30": {
-						"timings": ["13:00"],
-						"13:00": {
-							"matchType": "One Day",
-							"runLength": "0m 6f 20y",
+		}
+	},
+	"Golf": {
+		"region": ["uk"],
+		"uk": {
+			"venues": ["Open de Espana 2021"],
+			"Open de Espana 2021": {
+					"dates": ["07-10-2021"],
+					"07-10-2021": {
+						"timings": ["07:45"],
+						"07:45": {
+							"matchType": "Golf",
+							"runLength": "6600 yards",
 							"players": [
 								{
-										"teamName": "England",
-										"backOdds": [2.8,3.05,3.1],
-										"layOdds": [4.2,4.6,4.9]
+										"horseName": "1 Jon Rahm",
+										"silk": "assets\/dog\/dog_1.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
 								},
 								{
-										"teamName": "India",
-										"backOdds": [4.1,4.5,4.8],
-										"layOdds": [5.3,5.4,5.7]
-								}
-							]
-						}
-					},
-					"2021-09-05": {
-						"timings": ["10:00"],
-						"13:00": {
-							"matchType": "T20",
-							"runLength": "0m 6f 20y",
-							"players": [
-								{
-										"teamName": "Sri Lanka",
-										"backOdds": [2.8,3.05,3.1],
-										"layOdds": [4.2,4.6,4.9]
+										"horseName": "2 Bernd Wiesberger",
+										"silk": "assets\/dog\/dog_2.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
 								},
 								{
-										"teamName": "Pakistan",
-										"backOdds": [4.1,4.5,4.8],
-										"layOdds": [5.3,5.4,5.7]
+										"horseName": "3 Adri Arnaus",
+										"silk": "assets\/dog\/dog_3.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
+								},
+								{
+										"horseName": "4 Calum Hill",
+										"silk": "assets\/dog\/dog_4.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
+								},
+								{
+										"horseName": "5 Masahiro Kawamura",
+										"silk": "assets\/dog\/dog_5.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
+								},
+								{
+										"horseName": "6 Jason Scrivener",
+										"silk": "assets\/dog\/dog_6.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
 								}
 							]
 						}
 					}
-			},
-			"Lord's": {
-					"dates": ["2021-08-31","2021-09-20"],
-					"2021-08-30": {
-						"timings": ["13:00"],
-						"13:00": {
-							"matchType": "Test Match",
-							"runLength": "0m 6f 20y",
+			}
+		}
+	},
+	"Cycling": {
+		"region": ["uk"],
+		"uk": {
+			"venues": ["Tour de France 2022"],
+			"Tour de France 2022": {
+					"dates": ["01-07-2022"],
+					"01-07-2022": {
+						"timings": ["08:30"],
+						"08:30": {
+							"matchType": "Cycling",
+							"runLength": "182 miles in total",
 							"players": [
 								{
-										"teamName": "England",
-										"backOdds": [2.8,3.05,3.1],
-										"layOdds": [4.2,4.6,4.9]
+										"horseName": "1 Adam Yates",
+										"silk": "assets\/dog\/dog_1.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
 								},
 								{
-										"teamName": "India",
-										"backOdds": [4.1,4.5,4.8],
-										"layOdds": [5.3,5.4,5.7]
-								}
-							]
-						}
-					},
-					"2021-09-05": {
-						"timings": ["10:00"],
-						"13:00": {
-							"matchType": "T20",
-							"runLength": "0m 6f 20y",
-							"players": [
-								{
-										"teamName": "Sri Lanka",
-										"backOdds": [2.8,3.05,3.1],
-										"layOdds": [4.2,4.6,4.9]
+										"horseName": "2 Alexander Vlasov",
+										"silk": "assets\/dog\/dog_2.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
 								},
 								{
-										"teamName": "Pakistan",
-										"backOdds": [4.1,4.5,4.8],
-										"layOdds": [5.3,5.4,5.7]
+										"horseName": "3 Brandon McNulty",
+										"silk": "assets\/dog\/dog_3.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
+								},
+								{
+										"horseName": "4 Chris Froome",
+										"silk": "assets\/dog\/dog_4.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
+								},
+								{
+										"horseName": "5 Damiano Caruso",
+										"silk": "assets\/dog\/dog_5.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
+								},
+								{
+										"horseName": "6 Alexey Lutsenko",
+										"silk": "assets\/dog\/dog_6.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
 								}
 							]
 						}

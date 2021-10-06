@@ -98,20 +98,37 @@ window.addEventListener('load', function () {
 
 	/////////////////////////////// Global Variables (start)////////////////////////////////////////////////////////////
 	// At the start display the horse race
-	let g_NextSportsToDisplay = {
-		'gameName': 'Horse Race',
-		'region': 'uk',
-		'raceName': 'Cartmel',
-		'date': '2021-09-20',
-		'time': '12:00',
-
-		'publishMatchResultStr': {"Horse Race.uk.Cartmel.2021-09-20.12:00.players": 0 },
-		'isWinPredictorActive': false
-	};
+	let g_NextSportsToDisplay = intSportData('Horse Race');
 	let g_CurrentDisplayedMatch = {};
 	let g_BetSlipSheet = {};
 	let g_WinLossByPlayers = []; // global variable for displaying win / loss by player 
 	/////////////////////////////// Global Variables (end)//////////////////////////////////////////////////////////////
+	function intSportData(sportsId) {
+		// <!-- "Horse Race", "Greyhound Race", "Motor Sport", "Golf" , "Cycling" -->
+		const matchUrlStr = {
+			'Horse Race':     {"Horse Race.uk.Cartmel.09-10-2021.12:00.players": 0 },
+			'Greyhound Race': {"Greyhound Race.uk.Towcester.09-10-2021.18:05.players": 0 },
+			'Motor Sport':    {"Motor Sport.uk.Formula 1 Turkey Grand Prix.12-10-2021.07:15.players": 0 },
+			'Golf':           {"Golf.uk.Open de Espana 2021.07-10-2021.07:45.players": 0 },
+			'Cycling':        {"Cycling.uk.Tour de France 2022.01-07-2022.08:30.players": 0 }
+		};
+
+		let obj = {};
+		obj.publishMatchResultStr = matchUrlStr[sportsId];
+		let arr = Object.keys(obj.publishMatchResultStr)[0].split('.');
+
+		obj.gameName              = arr[0];
+		obj.region                = arr[1];
+		obj.raceName              = arr[2];
+		obj.date                  = arr[3];
+		obj.time                  = arr[4];
+
+		obj.isWinPredictorActive  = false;
+
+		document.getElementById("matchResultSimulator").replaceChildren();
+
+		return obj;
+	}
 
 	// All anchors tags only under '#rightSidebarLinks'
 	let rightSidebarLinks = document.querySelector('#rightSidebarLinks');
@@ -125,32 +142,54 @@ window.addEventListener('load', function () {
 			let href = this.getAttribute("href"); // #
 
 			switch(href) {
-				case 'horseRace':
-									g_NextSportsToDisplay = {
-										'gameName': 'Horse Race',
-										'region': 'uk',
-										'raceName': 'Cartmel',
-										'date': '2021-09-20',
-										'time': '12:00',
-										'publishMatchResultStr': {"Horse Race.uk.Cartmel.2021-09-20.12:00.players": 0 },
-										'isWinPredictorActive': false
-									};
-									document.getElementById("matchResultSimulator").replaceChildren();
+				case 'Horse Race':
+									g_NextSportsToDisplay = intSportData(href); // intSportData('Horse Race')
 									socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
+									// g_NextSportsToDisplay = new function() {
+									// 	this.gameName              = 'Horse Race';
+									// 	this.region                = 'uk';
+									// 	this.raceName              = 'Cartmel';
+									// 	this.date                  = '2021-09-20';
+									// 	this.time                  = '12:00';
+
+									// 	this.isWinPredictorActive  = false;
+									// 	this.matchStr = this.gameName +'.'+ this.region +'.'+ this.raceName  +'.'+ this.date  +'.'+ this.time  +'.players';
+									// 	this.publishMatchResultStr = { [this.matchStr] : 0 };
+									// }
+									// document.getElementById("matchResultSimulator").replaceChildren();
+									// socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
+
+									// g_NextSportsToDisplay = {
+									// 	'gameName': 'Horse Race',
+									// 	'region': 'uk',
+									// 	'raceName': 'Cartmel',
+									// 	'date': '2021-09-20',
+									// 	'time': '12:00',
+									// 	'publishMatchResultStr': {"Horse Race.uk.Cartmel.2021-09-20.12:00.players": 0 },
+									// 	'isWinPredictorActive': false
+									// };
+									// document.getElementById("matchResultSimulator").replaceChildren();
+									// socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
 				break;
-				case 'greyhoundRace':
-									g_NextSportsToDisplay = {
-										'gameName': 'Greyhound Race',
-										'region': 'uk',
-										'raceName': 'Towcester',
-										'date': '2021-10-09',
-										'time': '18:05',
-										'publishMatchResultStr': {"Greyhound Race.uk.Towcester.2021-10-09.18:05.players": 0 },
-										'isWinPredictorActive': false
-									};
-									document.getElementById("matchResultSimulator").replaceChildren();
+				case 'Greyhound Race':
+									g_NextSportsToDisplay = intSportData(href);
 									socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
-				break;
+									break;
+
+				case 'Motor Sport':
+									g_NextSportsToDisplay = intSportData(href);
+									socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
+									break;
+
+				case 'Golf':
+									g_NextSportsToDisplay = intSportData(href);
+									socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
+									break;
+
+				case 'Cycling':
+									g_NextSportsToDisplay = intSportData(href);
+									socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
+									break;
 			}
 
 			return false;
