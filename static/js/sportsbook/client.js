@@ -27,15 +27,29 @@ window.addEventListener('load', function () {
 	// Update the balance after match has been completed
 	socket.on("notifyEvent_BalancedUpdated", (data) => {
 		const obj = JSON.parse(data); // 'finishedEventStrId': "Horse Race.uk.Cartmel.09-10-2021.12:00.players"
+		// removeCompletedEventStuffsFromBetSlip(obj.finishedEventStrId);
+
+		updateBalanceAfterResult();
+
+		
+// 		Object.keys(g_BetSlipSheet).forEach((key) => {
+// 			if(remove_N_WordsFromLast(key, 3) === obj.finishedEventStrId) {
+// 				deleteBetSlipByKey(key); 
+// 			}
+// 		});
+
+		// g_BetSlipSheet = g_BetSlipSheet; // Golf.uk.Open de Espana 2021.07-10-2021.07:45.players.0.layOdds.1
+
+	});
+
+
+	function removeCompletedEventStuffsFromBetSlip(betSlipEntryKey) {
 		Object.keys(g_BetSlipSheet).forEach((key) => {
-			if(remove_N_WordsFromLast(key, 3) === obj.finishedEventStrId) {
+			if(remove_N_WordsFromLast(key, 3) === betSlipEntryKey) {
 				deleteBetSlipByKey(key); 
 			}
 		});
-
-		// g_BetSlipSheet = g_BetSlipSheet; // Golf.uk.Open de Espana 2021.07-10-2021.07:45.players.0.layOdds.1
-		updateBalanceAfterResult();
-	});
+	}
 
 
 	// On new bet offer from another gambler
@@ -1406,6 +1420,8 @@ window.addEventListener('load', function () {
 					document.getElementById("resultDeclarationWrapper").textContent = "WINNER: " + winnerPlayer; // "Winner: Team Ethereal !!!";
 					document.getElementById("digitalClock").textContent = "Race Completed!! ";
 					updateBalanceAfterResult();
+					// Golf.uk.Open de Espana 2021.07-10-2021.07:45.players
+					removeCompletedEventStuffsFromBetSlip(Object.keys(g_NextSportsToDisplay.publishMatchResultStr)[0]);
 				}
 			}
 			else {
