@@ -213,6 +213,7 @@ window.addEventListener('load', function () {
 		const runLength = ref.runLength;
 		const players = ref.players;
 		const playerCount = players.length;
+		const isEventCompleted = ref.isEventCompleted ? ref.isEventCompleted : false;
 
 		// {'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.horseName': "11 French Company"},
 		// {'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds' : [1,2,3]});
@@ -255,6 +256,7 @@ window.addEventListener('load', function () {
 		g_CurrentDisplayedMatch.playerCount = playerCount;
 
 		g_CurrentDisplayedMatch.playerInfo = []; // stores player info for declaring the winner from the losers
+		
 
 		for(let i = 0; i < playerCount; ++i) {
 			let playerinfo = { 'playerIndexString': 'players.' + i };
@@ -462,6 +464,11 @@ window.addEventListener('load', function () {
 			elem4.setAttribute("id", idString + playerinfo["cashString"]+ "#cash");
 			elem4.innerHTML = "£ " + (players[i].layCash[2] ? players[i].layCash[2] : "0.00");
 			elem3.appendChild(elem4);	
+		}
+
+        // Already finished sports - So place a half opaque overlay to stop any further bets
+        if(isEventCompleted) {
+			document.getElementById("sportsEventContainer").classList.add("raceInProgress");
 		}
 	}
 	////////////////////// Dynamically construct - Race Card (end) /////////////////////////////////////////////////////
