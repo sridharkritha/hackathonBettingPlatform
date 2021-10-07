@@ -17,12 +17,26 @@
 	const bcrypt = require('bcryptjs');
 	const jwt = require('jsonwebtoken');
 
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// const MONGO_DATABASE_NAME = 'p2pbettingplatformdb';
+	// const MONGO_COLLECTION_NAME = 'sportscollection';
+	const MONGO_DATABASE_NAME = 'p2pbettingplatformdb_demo';
+	const MONGO_COLLECTION_NAME = 'sportscollection_demo';
+
+	let client = null; // mongodb client
+	let DB = null;     // database
+	let COLL = null;   // collection
 	const JWT_SECRET = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@bhjb2qiuhesdbhjdsfg839ujkdhfjk';
+	// Connection URI. Update <username>, <password>, and <your-cluster-url> to reflect your cluster.
+	const uri = "mongodb+srv://sridharkritha:2244@cluster0.02kdt.mongodb.net/" + MONGO_DATABASE_NAME + "?retryWrites=true&w=majority";
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	// https://mongoosejs.com/docs/connections.html
 
 	(async () => {
 		try {
-			await mongoose.connect('mongodb+srv://sridharkritha:2244@cluster0.02kdt.mongodb.net/p2pbettingplatformdb?retryWrites=true&w=majority', {
+			await mongoose.connect(uri, {
 				useNewUrlParser: true,
 				useUnifiedTopology: true,
 				useCreateIndex: true
@@ -223,12 +237,6 @@
 	});
 	/////////////////////////// login(end) /////////////////////////////////////////////////////////////
 
-	const MONGO_DATABASE_NAME = 'p2pbettingplatformdb';
-	// const MONGO_COLLECTION_NAME = 'sportscollection';
-	const MONGO_COLLECTION_NAME = 'testcollection';
-	let client = null; // mongodb client
-	let DB = null;     // database
-	let COLL = null;   // collection
 
 	/**
 	 * An aggregation pipeline that matches on new listings in the country of Australia and the Sydney market
@@ -246,66 +254,6 @@
 		}
 	];
 
-	async function main() {
-		// Connection URI. Update <username>, <password>, and <your-cluster-url> to reflect your cluster.
-		const uri = "mongodb+srv://sridharkritha:2244@cluster0.02kdt.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-
-
-		// The Mongo Client you will use to interact with your database
-		client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-		try {
-			// Connect to the MongoDB cluster
-			// await client.connect();
-
-			// await connectToCluster(client);
-			client.connect(async (err) => {
-			if (err) {
-				console.log("Cluster connection error");
-				return console.error(err);
-			}
-			console.log("Cluster connection is successfully");
-
-			DB = client.db(MONGO_DATABASE_NAME);
-			if(!DB) {
-				console.log(`Database - ${MONGO_DATABASE_NAME} - connection error`);
-				return console.error(DB);
-			}
-			console.log(`Database - ${MONGO_DATABASE_NAME} - connected successfully`);
-
-			COLL = client.db(MONGO_COLLECTION_NAME);
-			if(!COLL) {
-				console.log(`Collection - ${MONGO_COLLECTION_NAME} - connection error`);
-				return console.error(COLL);
-			}
-			console.log(`Collection - ${MONGO_COLLECTION_NAME} - connected successfully`);
-
-			// const result = await client.db(MONGO_DATABASE_NAME).collection(MONGO_COLLECTION_NAME).find( { }, {_id: 0, names: 1, wins: 1 } );
-			// console.log(result);
-
-			// await returnAllDouments(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME);
-			});
-
-			// 1. Add some documents inside the collection
-			// await createMultipleDocuments(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME);
-
-			// 2. Delete ALL documents inside the collection
-			// await dropAllDocuments(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME);
-
-			// 3. Update any single document with the new value ({ wins: 99 }) - only if the document has {name: "Sridhar"} entry.
-			// await updateListingByName(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, {name: "Sridhar"}, { wins: 99 });
-
-
-
-			// Monitor new listings using EventEmitter's on() function.
-			// await monitorListingsUsingEventEmitter(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 30000, pipeline);
-		} finally {
-			// Close the connection to the MongoDB cluster
-			// await client.close(); // why we need to close it ??
-		}
-	}
-
-	// main().catch(console.error);
 
 	async function returnAllDouments(client, dataBaseName, collectionName) {
 		// See https://mongodb.github.io/node-mongodb-native/3.6/api/Collection.html#find for the find() docs
@@ -577,7 +525,7 @@
 		}
 
 		console.log(oddsObj);
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		// Match the back/lay bets by the odd values
 
@@ -797,9 +745,6 @@
 
 	httpServer.listen(port, async () => {
 		console.log("Server is running on the port: " + httpServer.address().port);
-
-		// Connection URI. Update <username>, <password>, and <your-cluster-url> to reflect your cluster.
-		const uri = "mongodb+srv://sridharkritha:2244@cluster0.02kdt.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
 		// The Mongo Client you will use to interact with your database
 		client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });

@@ -605,7 +605,7 @@ hai(changedObject);
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_backValueContainerId");
 		document.getElementById(key+"_backOthersBgColorId").appendChild(elemRef); 
-		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		elemRef = document.createElement("INPUT");
 		elemRef.setAttribute("id", key+"_oddValueId");   // "backValueId");
 		elemRef.setAttribute("class","betSlipInputbox");
@@ -616,7 +616,7 @@ hai(changedObject);
 		elemRef.addEventListener('input', onInputValueUpdated);
 		elemRef.addEventListener('focusout', onInputFocusoutMinOddCorrection);
 		document.getElementById(key+"_backValueContainerId").appendChild(elemRef); 
-		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id", key+"_additionBackId");
@@ -717,68 +717,65 @@ hai(changedObject);
 		elemRef.setAttribute("placeholder","0.0");
 		elemRef.setAttribute("data-playercount", playerCount);
 		elemRef.addEventListener('input', onInputValueUpdated);
-		document.getElementById(key+"_profitValueBackMainFontColorId").appendChild(elemRef);
+				document.getElementById(key+"_profitValueBackMainFontColorId").appendChild(elemRef);
 
-//////////////////////////////// AFTER BET (START) /////////////////////////////////////////////////////////////////////
+		//////////////////////////////// AFTER BET (START) /////////////////////////////////////////////////////////////////////
 
-// 4th COLUMN - Confirm the accepted bet 
+		// 4th COLUMN - Confirm the accepted bet 
 
-elemRef = document.createElement("DIV");
-elemRef.setAttribute("id",key+"_betConfirmWrapper");
-elemRef.setAttribute("class","backOthersBgColor");
-elemRef.style.display = 'none'; // hide at start
-document.getElementById(key+"_backStakeProfitBetBinId").appendChild(elemRef); 
+		elemRef = document.createElement("DIV");
+		elemRef.setAttribute("id",key+"_betConfirmWrapper");
+		elemRef.setAttribute("class","backOthersBgColor");
+		elemRef.style.display = 'none'; // hide at start
+		document.getElementById(key+"_backStakeProfitBetBinId").appendChild(elemRef); 
 
-// TOP
-elemRef = document.createElement("DIV");
-elemRef.setAttribute("id",key+"_betConfirm");
+		// TOP
+		elemRef = document.createElement("DIV");
+		elemRef.setAttribute("id",key+"_betConfirm");
 
-elemRef.setAttribute("class","backMainFontColor");
-document.getElementById(key+"_betConfirmWrapper").appendChild(elemRef);
+		elemRef.setAttribute("class","backMainFontColor");
+		document.getElementById(key+"_betConfirmWrapper").appendChild(elemRef);
 
-elemRef = document.createTextNode("BET ACCEPTED ✔");
-document.getElementById(key+"_betConfirm").appendChild(elemRef);
+		elemRef = document.createTextNode("BET ACCEPTED ✔");
+		document.getElementById(key+"_betConfirm").appendChild(elemRef);
 
-// bottom
-elemRef = document.createElement("DIV");
-elemRef.setAttribute("id",key+"_betCancelWrapperId");
-elemRef.setAttribute("class","blink_me");
-
-
-document.getElementById(key+"_betConfirmWrapper").appendChild(elemRef); 
-elemRef = document.createTextNode("WAITING FOR THE MATCH BET...");
-
-document.getElementById(key+"_betCancelWrapperId").appendChild(elemRef);
+		// bottom
+		elemRef = document.createElement("DIV");
+		elemRef.setAttribute("id",key+"_betCancelWrapperId");
+		elemRef.setAttribute("class","blink_me");
 
 
+		document.getElementById(key+"_betConfirmWrapper").appendChild(elemRef); 
+		elemRef = document.createTextNode("WAITING FOR THE MATCH BET...");
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		document.getElementById(key+"_betCancelWrapperId").appendChild(elemRef);
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// 5th COLUMN - SHOW THE MATCHED MONEY
+		// 5th COLUMN - SHOW THE MATCHED MONEY
 
-elemRef = document.createElement("DIV");
-elemRef.setAttribute("id",key+"_betMatchingWrapperId");
-elemRef.setAttribute("class","backOthersBgColor");
-elemRef.style.display = 'none'; // hide at start
-document.getElementById(key+"_backStakeProfitBetBinId").appendChild(elemRef); 
+		elemRef = document.createElement("DIV");
+		elemRef.setAttribute("id",key+"_betMatchingWrapperId");
+		elemRef.setAttribute("class","backOthersBgColor");
+		elemRef.style.display = 'none'; // hide at start
+		document.getElementById(key+"_backStakeProfitBetBinId").appendChild(elemRef); 
 
-// TOP
-elemRef = document.createElement("DIV");
-elemRef.setAttribute("id",key+"_betMatchingId");
+		// TOP
+		elemRef = document.createElement("DIV");
+		elemRef.setAttribute("id",key+"_betMatchingId");
 
-elemRef.setAttribute("class","backMainFontColor");
-document.getElementById(key+"_betMatchingWrapperId").appendChild(elemRef);
+		elemRef.setAttribute("class","backMainFontColor");
+		document.getElementById(key+"_betMatchingWrapperId").appendChild(elemRef);
 
-elemRef = document.createTextNode("£ Matched / £ Total");
-document.getElementById(key+"_betMatchingId").appendChild(elemRef);
+		elemRef = document.createTextNode("£ Matched / £ Total");
+		document.getElementById(key+"_betMatchingId").appendChild(elemRef);
 
-// bottom
-elemRef = document.createElement("DIV");
-elemRef.setAttribute("id",key+"_betMatchedAmtWrapperId");
-document.getElementById(key+"_betMatchingWrapperId").appendChild(elemRef); 
-elemRef = document.createTextNode("£ 5.00 / £ 24.00");
-document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
-//////////////////////////////// AFTER BET (END) /////////////////////////////////////////////////////////////////////
+		// bottom
+		elemRef = document.createElement("DIV");
+		elemRef.setAttribute("id",key+"_betMatchedAmtWrapperId");
+		document.getElementById(key+"_betMatchingWrapperId").appendChild(elemRef); 
+		elemRef = document.createTextNode("£ 5.00 / £ 24.00");
+		document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
+		//////////////////////////////// AFTER BET (END) /////////////////////////////////////////////////////////////////////
 
 
 		elemRef = document.createElement("DIV");
@@ -1204,7 +1201,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 
 	//////////////// TEST bet request(end)//////////////////////////////////////////////////////////////////////////////
 
-	////////////////////////////////////////////////// win  predictor graphics animation (start) /////////////////////////
+	////////////////////////////////////////////////// win  predictor graphics animation (start) ///////////////////////
 	// win predictor element
 	function addChildrenToWinPreditor() {
 		let elemRef = null;
@@ -1284,97 +1281,7 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 	}
 	////////////////////////////////////////////////// win  predictor graphics animation (end) /////////////////////////
    
-	////////////////////////////////////////////////// win predictor animation (start ) //////////////////////////////////////////
-
-		function translationAnimation(containerElementId, sliderObjs, winnerPlayer) {
-			if(!g_NextSportsToDisplay.isWinPredictorActive) return;
-			let shuffleItemsContainer = document.querySelector('#'+containerElementId);
-			let children = shuffleItemsContainer.children; // gets array of children from the parent
-
-			let startPos = children[0].offsetLeft;
-			let endPos = children[children.length -  1].offsetLeft - startPos; // containerWidth - shuffleItemWidth;
-
-			let sliderObjects = []; // array of objects
-			for (let key in sliderObjs) {
-				if (sliderObjs.hasOwnProperty(key)) {
-					let obj = {};
-					obj.sliderElement = document.querySelector('#'+key);  // slider element
-					obj.stopPos = children[sliderObjs[key]].offsetLeft - startPos; // stop position in pixels
-					obj.isForwardMove = true;
-					obj.isFinalPositionReached = false;
-					obj.currentPos = 0;
-					obj.delta = randomIntFromInterval(20, 40); // speed of movement = 18; // 
-					// obj.delta = randomIntFromInterval(60, 90); // speed of movement = 18; // 
-					obj.timeout = randomIntFromInterval(3500, 4500); // between 3 and 5 seconds = 4801; // 
-					// obj.timeout = randomIntFromInterval(3000, 9000); // between 3 and 9 seconds = 4801; // 
-					sliderObjects.push(obj);
-					console.log(`delta: ${obj.delta}, timeout: ${obj.timeout}`);
-				}
-			}
-
-
-			let arrayIndex = 0;
-			let arrayLength = sliderObjects.length;
-			let countFinalPositionReached = 0;
-			let startTimeStamp; //  = window.performance.now();
-			
-			function callbackLoop(currentTimeStamp) {
-				if(!g_NextSportsToDisplay.isWinPredictorActive) return;
-
-				if (startTimeStamp === undefined) startTimeStamp = currentTimeStamp;
-				let elapsed = currentTimeStamp - startTimeStamp;
-				
-				if(!sliderObjects[arrayIndex].isFinalPositionReached) {
-					if(sliderObjects[arrayIndex].isForwardMove) {
-						// currentPos += elapsed * 0.01;
-						sliderObjects[arrayIndex].currentPos += sliderObjects[arrayIndex].delta;
-						if(sliderObjects[arrayIndex].currentPos < endPos) {
-							sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + sliderObjects[arrayIndex].currentPos + 'px)';
-						}
-						else {
-							sliderObjects[arrayIndex].isForwardMove = false;
-							sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + endPos + 'px)';
-						}
-					}
-					else {
-						// currentPos -= elapsed * 0.01;
-						sliderObjects[arrayIndex].currentPos -= sliderObjects[arrayIndex].delta;
-						if(sliderObjects[arrayIndex].currentPos > 0) {
-							sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + sliderObjects[arrayIndex].currentPos + 'px)';
-						}
-						else {
-							sliderObjects[arrayIndex].isForwardMove = true;
-							sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + 0 + 'px)';
-						}
-					}
-				}
-
-				if(!sliderObjects[arrayIndex].isFinalPositionReached && elapsed > sliderObjects[arrayIndex].timeout && 
-					Math.abs(sliderObjects[arrayIndex].currentPos - sliderObjects[arrayIndex].stopPos) <= sliderObjects[arrayIndex].delta &&
-					((sliderObjects[arrayIndex].isForwardMove && sliderObjects[arrayIndex].currentPos > sliderObjects[arrayIndex].stopPos) || 
-					(!sliderObjects[arrayIndex].isForwardMove && sliderObjects[arrayIndex].currentPos < sliderObjects[arrayIndex].stopPos))) {
-					sliderObjects[arrayIndex].isFinalPositionReached = true;
-					++countFinalPositionReached;
-					sliderObjects[arrayIndex].sliderElement.style.transform = 'translateX(' + sliderObjects[arrayIndex].stopPos + 'px)';
-					// exit condition - after 3 sec
-					if(arrayLength != countFinalPositionReached) window.requestAnimationFrame(callbackLoop);
-					else {
-						// declare the match winner
-						document.getElementById("resultDeclarationWrapper").textContent = "WINNER: " + winnerPlayer; // "Winner: Team Ethereal !!!";
-						updateBalanceAfterResult();
-					}
-				}
-				else {
-					arrayIndex = ++arrayIndex % arrayLength;
-					window.requestAnimationFrame(callbackLoop);
-				}
-			}
-			window.requestAnimationFrame(callbackLoop);
-		}
-
-	////////////////////////////////////////////////// win predictor animation (end) ///////////////////////////////////
-
-	////////////////////////////////////////////////// win predictor animation (start ) //////////////////////////////////////////
+	////////////////////////////////////////////////// win predictor animation (start ) ////////////////////////////////
 
 	function translationAnimation(containerElementId, sliderObjs, winnerPlayer) {
 		if(!g_NextSportsToDisplay.isWinPredictorActive) return;
@@ -1407,7 +1314,6 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 		let arrayLength = sliderObjects.length;
 		let countFinalPositionReached = 0;
 		let startTimeStamp; //  = window.performance.now();
-		
 		
 		function callbackLoop(currentTimeStamp) {
 			if(!g_NextSportsToDisplay.isWinPredictorActive) return;
@@ -1463,25 +1369,25 @@ document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
 		window.requestAnimationFrame(callbackLoop);
 	}
 
-////////////////////////////////////////////////// win predictor animation (end) ///////////////////////////////////
+////////////////////////////////////////////////////// win predictor animation (end) ///////////////////////////////////	
 
-//////////////////////////////////////////////// Digital Clock Countdown (start) ///////////////////////////////////
-let runClockCounter = true;
-let mins = 5;
-let sec = mins * 60;
-let clockStr = null;
+//////////////////////////////////////////////// Digital Clock Countdown (start) ///////////////////////////////////////
+	let runClockCounter = true;
+	let mins = 5;
+	let sec = mins * 60;
+	let clockStr = null;
 
-function startWinPreditor() {
-	g_NextSportsToDisplay.isWinPredictorActive = true;
-	runClockCounter = true;
-	mins = 5;
-	sec = mins * 60;
-	clockStr = null;
+	function startWinPreditor() {
+		g_NextSportsToDisplay.isWinPredictorActive = true;
+		runClockCounter = true;
+		mins = 5;
+		sec = mins * 60;
+		clockStr = null;
 
-	addChildrenToWinPreditor();
-	countdownClock();
-	document.getElementById("marketStatusId").textContent = "MARKET CLOSING DOWN SOON.....";
-}
+		addChildrenToWinPreditor();
+		countdownClock();
+		document.getElementById("marketStatusId").textContent = "MARKET CLOSING DOWN SOON.....";
+	}
 
 
 	var last = 0; // timestamp of the last render() call
@@ -1522,109 +1428,109 @@ function startWinPreditor() {
 		if(runClockCounter) requestAnimationFrame(countdownClock);
 	}
 
-//////////////////////////////////////////////// Digital Clock Countdown (end) ///////////////////////////////////
+//////////////////////////////////////////////// Digital Clock Countdown (end) /////////////////////////////////////////
 
-//////////////////////////////// Tester (start) ////////////////////////////////////////////////////////////////////
+//////////////////////////////// Tester (start) ////////////////////////////////////////////////////////////////////////
 
-function run() {
-	const elem = document.getElementById('publishResultId');
-	elem.addEventListener('click', publishResult); // works
-}
-run();
+	function run() {
+		const elem = document.getElementById('publishResultId');
+		elem.addEventListener('click', publishResult); // works
+	}
+	run();
 
-function publishResult(e) {
+	function publishResult(e) {
 
-	document.getElementById('publishResultId').style.display = 'none';
-	document.getElementById('publishResultIdLoader').style.display = 'block';
-	document.getElementById("sportsEventContainer").classList.add("raceInProgress");
+		document.getElementById('publishResultId').style.display = 'none';
+		document.getElementById('publishResultIdLoader').style.display = 'block';
+		document.getElementById("sportsEventContainer").classList.add("raceInProgress");
 
-	sendEventResultRequest();
+		sendEventResultRequest();
 
-// 		console.log(this);
-// 		console.log(e.currentTarget); // element you clicked
-}
-
-function resetUI() {
-
-	if(document.getElementById("sportsEventContainer").classList.contains("raceInProgress")){
-		document.getElementById("sportsEventContainer").classList.remove("raceInProgress");
-		document.getElementById('matchResultSimulator').style.display = 'none';
-		document.getElementById('gameSimulator').style.display = 'none';
+	// 		console.log(this);
+	// 		console.log(e.currentTarget); // element you clicked
 	}
 
-	if(document.getElementById("publishResultId")) {
-		document.getElementById('publishResultId').style.display = 'block';
+	function resetUI() {
+
+		if(document.getElementById("sportsEventContainer").classList.contains("raceInProgress")){
+			document.getElementById("sportsEventContainer").classList.remove("raceInProgress");
+			document.getElementById('matchResultSimulator').style.display = 'none';
+			document.getElementById('gameSimulator').style.display = 'none';
+		}
+
+		if(document.getElementById("publishResultId")) {
+			document.getElementById('publishResultId').style.display = 'block';
+		}
+
 	}
 
-}
+	// Send a bet request to the server
+	function sendEventResultRequest() {
+		(async () => {
+			const res = await fetch('/api/publishResult', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					'msg': 'PUBLISH_THE_MATCH_WINNER',
+					'matchstr': g_NextSportsToDisplay.publishMatchResultStr
+				})
+			}).then((res) => res.json());
 
-// Send a bet request to the server
-function sendEventResultRequest() {
-	(async () => {
-		const res = await fetch('/api/publishResult', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				'msg': 'PUBLISH_THE_MATCH_WINNER',
-				'matchstr': g_NextSportsToDisplay.publishMatchResultStr
-			})
-		}).then((res) => res.json());
+			if (res.status === 'ok') {
+				// everything went fine
+				document.getElementById('publishResultIdLoader').style.display = 'none';
 
-		if (res.status === 'ok') {
-			// everything went fine
-			document.getElementById('publishResultIdLoader').style.display = 'none';
+				document.getElementById('matchResultSimulator').style.display = 'block';
+				document.getElementById('gameSimulator').style.display = 'block';
 
-			document.getElementById('matchResultSimulator').style.display = 'block';
-			document.getElementById('gameSimulator').style.display = 'block';
+				console.log("Match Winner Recieved Successfully");
+				console.log(res.data);
 
-			console.log("Match Winner Recieved Successfully");
-			console.log(res.data);
+				g_CurrentDisplayedMatch.winData = res.data.winData;
+				
+				// Start Win perdition animation
+				setTimeout(()=> {
+					startWinPreditor();
+				}, 2000);
 
-			g_CurrentDisplayedMatch.winData = res.data.winData;
+			} else {
+				console.error("Bet Placed Error: ", res.error);
+				// alert(res.error);
+			}
+		})();
+	}
+
+	// Update the balance after the match result
+	async function updateBalanceAfterResult() {
+		const username = localStorage.getItem('username'); // get it from cookie
+		const password = localStorage.getItem('password'); // get it from cookie
+		if(username && username) {
 			
-			// Start Win perdition animation
-			setTimeout(()=> {
-				startWinPreditor();
-			}, 2000);
+			const result = await fetch('/api/login', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					username,
+					password
+				})
+			}).then((res) => res.json());
 
-		} else {
-			console.error("Bet Placed Error: ", res.error);
-			// alert(res.error);
-		}
-	})();
-}
-
-// Update the balance after the match result
-async function updateBalanceAfterResult() {
-	const username = localStorage.getItem('username'); // get it from cookie
-	const password = localStorage.getItem('password'); // get it from cookie
-	if(username && username) {
-		
-		const result = await fetch('/api/login', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				username,
-				password
-			})
-		}).then((res) => res.json());
-
-		if (result.status === 'ok') {
-			// everything went fine
-			console.log('Got the token: ', result.data);
-			localStorage.setItem('token', result.data); // store in cookie
-			localStorage.setItem('username', username); // store in cookie
-			localStorage.setItem('password', password); // store in cookie
-			// alert('Success');
-			document.getElementById("regLoginFieldsId").style.display = 'none';
-			document.getElementById("welcomeUserName").textContent = "Welcome " + username;
-			document.getElementById("userBalanceAmount").textContent = "Balance: " + result.userBalance;
-		} else {
-			alert(result.error);
+			if (result.status === 'ok') {
+				// everything went fine
+				console.log('Got the token: ', result.data);
+				localStorage.setItem('token', result.data); // store in cookie
+				localStorage.setItem('username', username); // store in cookie
+				localStorage.setItem('password', password); // store in cookie
+				// alert('Success');
+				document.getElementById("regLoginFieldsId").style.display = 'none';
+				document.getElementById("welcomeUserName").textContent = "Welcome " + username;
+				document.getElementById("userBalanceAmount").textContent = "Balance: " + result.userBalance;
+			} else {
+				alert(result.error);
+			}
 		}
 	}
-}
 /////////////////////////////// Tester (end) ///////////////////////////////////////////////////////////////////////
 });
