@@ -3,6 +3,13 @@ window.addEventListener('load', function () {
 	function randomIntFromInterval(min, max) { // min and max included 
 		return Math.floor(Math.random() * (max - min + 1) + min);
 	}
+
+	
+    // 'one.two.three.four'  ==== #2 ===>    'one.two'
+	function remove_N_WordsFromLast(str, N, delimiter) {
+		const delim = delimiter || '.';
+		return str ? str.split(delim).slice(0, -N).join(delim) : null;
+	}
 	//////////////////////////// Utility Functions (end) ///////////////////////////////////////////////////////////////	
 
 	//////////////////////////// Client to Server communication (start) ////////////////////////////////////////////////	
@@ -18,8 +25,16 @@ window.addEventListener('load', function () {
 
 
 	// Update the balance after match has been completed
-	socket.on("notifyEvent_BalancedUpdated", (data) => { 
-		 updateBalanceAfterResult();
+	socket.on("notifyEvent_BalancedUpdated", (data) => {
+		const obj = JSON.parse(data); // 'finishedEventStrId': "Horse Race.uk.Cartmel.09-10-2021.12:00.players"
+		Object.keys(g_BetSlipSheet).forEach((key) => {
+			if(remove_N_WordsFromLast(key, 3) === obj.finishedEventStrId) {
+				deleteBetSlipByKey(key); 
+			}
+		});
+
+		// g_BetSlipSheet = g_BetSlipSheet; // Golf.uk.Open de Espana 2021.07-10-2021.07:45.players.0.layOdds.1
+		updateBalanceAfterResult();
 	});
 
 
@@ -27,7 +42,7 @@ window.addEventListener('load', function () {
 	socket.on("notifyEvent_New_Bet_Offer", (data) => {
 		if (g_UserName) {
 			const username = getCookieData('username'); // localStorage.getItem(g_UserName + '.username'); // get it from cookie
-			const changedObject = JSON.parse(data); // updateBalanceAfterResult();
+			const changedObject = JSON.parse(data);
 			let bets = null;
 
 			Object.keys(changedObject).every(function (key) {
@@ -471,9 +486,7 @@ window.addEventListener('load', function () {
 			document.getElementById("sportsEventContainer").classList.add("raceInProgress"); // overlay
 			document.getElementById('publishResultId').style.display = 'none'; // remove button
 		}
-		else {
-			
-		}
+
 	}
 	////////////////////// Dynamically construct - Race Card (end) /////////////////////////////////////////////////////
 
@@ -1000,11 +1013,16 @@ window.addEventListener('load', function () {
 		// id = "horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.1_deleteBetButtonId"
 		const key = this.id.replace('_deleteBetButtonId',''); // src, dst
 
+		deleteBetSlipByKey(key);
+
+		updateProfitLossDisplay(); // display profit and loss for each players
+	}
+
+	// Delete the bet slip entry by key
+	function deleteBetSlipByKey(key) {
 		g_BetSlipSheet[key].parentElemRef.remove(); // remove element from DOM
 
 		delete g_BetSlipSheet[key]; // remove the prop from the object
-
-		updateProfitLossDisplay(); // display profit and loss for each players
 	}
 
 	// Update the profit and loss for each players 
@@ -1386,6 +1404,7 @@ window.addEventListener('load', function () {
 				else {
 					// declare the match winner
 					document.getElementById("resultDeclarationWrapper").textContent = "WINNER: " + winnerPlayer; // "Winner: Team Ethereal !!!";
+					document.getElementById("digitalClock").textContent = "Race Completed!! ";
 					updateBalanceAfterResult();
 				}
 			}
@@ -1444,10 +1463,10 @@ window.addEventListener('load', function () {
 							document.getElementById("digitalClock").classList.remove('blink_me');
 							document.getElementById("digitalClock").textContent = "Race Started!! ";
 
-						// List players silk for slide over animation
-						winPredictorScroller(g_CurrentDisplayedMatch); // nPlayers
-						//  player who won's the match
-		  translationAnimation('shuffleItemsContainerId', { "pickerBoxOneId": g_CurrentDisplayedMatch.winData.winnerIndex || 0}, g_CurrentDisplayedMatch.winData.horseName);  // where to stop the slider 
+							// List players silk for slide over animation
+							winPredictorScroller(g_CurrentDisplayedMatch); // nPlayers
+							//  player who won's the match
+							translationAnimation('shuffleItemsContainerId', { "pickerBoxOneId": g_CurrentDisplayedMatch.winData.winnerIndex || 0}, g_CurrentDisplayedMatch.winData.horseName);  // where to stop the slider 
 						}, 5000);
 					}, 1000);
 				}, 1000);

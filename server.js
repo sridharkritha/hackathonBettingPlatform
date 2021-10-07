@@ -432,7 +432,7 @@
 
 
 		// Notify all the user that winnings have been awarded
-		io.emit('notifyEvent_BalancedUpdated', JSON.stringify({'data': 'Match Completed and Balance Updated'}));
+		io.emit('notifyEvent_BalancedUpdated', JSON.stringify({'finishedEventStrId': keyStr}));
 
 		return winData; // return match winner information
 	}
