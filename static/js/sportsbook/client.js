@@ -466,9 +466,13 @@ window.addEventListener('load', function () {
 			elem3.appendChild(elem4);	
 		}
 
-        // Already finished sports - So place a half opaque overlay to stop any further bets
-        if(isEventCompleted) {
-			document.getElementById("sportsEventContainer").classList.add("raceInProgress");
+		// Already finished sports - So place a half opaque overlay to stop any further bets
+		if(isEventCompleted) {
+			document.getElementById("sportsEventContainer").classList.add("raceInProgress"); // overlay
+			document.getElementById('publishResultId').style.display = 'none'; // remove button
+		}
+		else {
+			
 		}
 	}
 	////////////////////// Dynamically construct - Race Card (end) /////////////////////////////////////////////////////
@@ -1465,7 +1469,7 @@ window.addEventListener('load', function () {
 	function publishResult(e) {
 
 		document.getElementById('publishResultId').style.display = 'none';
-		document.getElementById('publishResultIdLoader').style.display = 'block';
+		// document.getElementById('publishResultIdLoader').style.display = 'block';
 		document.getElementById("sportsEventContainer").classList.add("raceInProgress");
 
 		sendEventResultRequest();
