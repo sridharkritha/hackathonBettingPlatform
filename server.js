@@ -352,7 +352,7 @@
 
 	async function updateUserBalanceAfterMatch(findObject, updateObject) {
 				let result = await User.findOneAndUpdate(
-											findObject, // { username: 'sridhar123' }, 											
+											findObject, // { username: 'sridhar123' },
 											{$inc: updateObject},   // {$inc: { "userBalance": 4567 }},   // $inc
 											{returnOriginal: false }
 									);
@@ -365,9 +365,7 @@
 		// console.log(bets.value.horseRace.uk.Cartmel['2021-09-20']['12:00'].players[0].bets);
 
 		// updateObject = {"Horse Race.uk.Cartmel.2021-09-20.12:00.players": 0 }; // .2.bets
-
-		// updateObject = horseRace.uk.Cartmel.2021-09-20.12:00.players.2.bets
-		// ['horseRace', 'uk', 'Cartmel', '2021-09-20', '12:00', 'players', '2', 'bets']
+		// ['horseRace', 'uk', 'Cartmel', '2021-09-20', '12:00', 'players']
 		let keyStr = Object.keys(updateObject)[0];
 		let keyStrLst = Object.keys(updateObject)[0].split('.'); // str => object accessor
 		let winner = -1;
@@ -377,15 +375,22 @@
 			if(bets.players && bets.players.length) {
 				let nPlayers = bets.players.length;
 				winner = randomIntFromInterval(0 , nPlayers-1);
+
+				// Mark the Match has been completed and can't used for anymore bets.
+				let withoutLastWord = keyStr.split('.').slice(0, -1).join('.');// "Horse Race.uk.Cartmel.2021-09-20.12:00"
+				let changeObj = {};
+				changeObj[withoutLastWord + '.isEventCompleted'] =  true;
+				let result = await client.db(dataBaseName).collection(collectionName).updateOne({}, { $set: changeObj }); // bets on individual players
+				console.log(result);
 			}
 		}
 
 		winner = 0; // test - always 2nd player in the list wins - for testing purpose
 
-		let winData = {
-			"winnerIndex": winner,
-			"horseName": bets[1].horseName // winer of the match
-			};
+		let winData = 	{
+							"winnerIndex": winner,
+							"horseName": bets[1].horseName // winer of the match
+						};
 
 		// Win Calculation after the match has been completed
 		for(let i = 0, n = bets.length; i < n; ++i) {
@@ -440,11 +445,6 @@
 
 		if(operation == 'push') {
 			obj = { $push: updateObject };
-
-			// 'Horse Race.uk.Cartmel.09-10-2021.12:00.players.0.bets' ==> 'Horse Race.uk.Cartmel.09-10-2021.12:00.players'
-	//              withoutLastWord = Object.keys(updateObject)[0].split('.').slice(0, -2).join('.') + '.fullMatchBets' ;
-	//              obj2 = { $push: { withoutLastWord: updateObject[Object.keys(updateObject)[0]] } };
-
 		}
 		else {
 			obj = { $set: updateObject };
@@ -655,7 +655,7 @@
 		console.log(`${result.modifiedCount} document(s) was/were updated.`);
 	}
 
-		// Update an listing with the given name
+	// Update an listing with the given name
 	// Note: If more than one listing has the same name, only the first listing the database finds will be updated.
 	async function updateManyDB(client, dataBaseName, collectionName, findObject, updateObject, operation) {
 		let obj = null;

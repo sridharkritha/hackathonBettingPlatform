@@ -19,7 +19,7 @@ window.addEventListener('load', function () {
 
 	// Update the balance after match has been completed
 	socket.on("notifyEvent_BalancedUpdated", (data) => { 
-		// updateBalanceAfterResult();
+		 updateBalanceAfterResult();
 	});
 
 
@@ -907,6 +907,14 @@ window.addEventListener('load', function () {
 			typeof profitliabilityvalue == 'number' && profitliabilityvalue > 0 ) {
 			// oddstr = horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.2
 			// oddstr = horseRace.uk.Cartmel.2021-09-20.12:00.players.0.layOdds.2
+
+            if(!g_UserName) 
+            {
+            	alert("Please login before any BET!");
+            	return;
+            }
+
+
 			(async() => {
 				const res = await fetch('/api/placeBet', {
 					method: 'POST',
