@@ -18,7 +18,7 @@
 	const jwt = require('jsonwebtoken');
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	// const MONGO_DATABASE_NAME = 'p2pbettingplatformdb';
 	// const MONGO_COLLECTION_NAME = 'sportscollection';
 	const MONGO_DATABASE_NAME = 'p2pbettingplatformdb_demo';
@@ -236,8 +236,6 @@
 		}
 	});
 	/////////////////////////// login(end) /////////////////////////////////////////////////////////////
-
-
 	/**
 	 * An aggregation pipeline that matches on new listings in the country of Australia and the Sydney market
 	 */
@@ -436,25 +434,25 @@
 
 	async function findOneAndUpdateDB(client, dataBaseName, collectionName, findObject, updateObject, operation) {
 
-		let obj = null;
+		let obj  = null;
+		let obj2 = null;
+		let withoutLastWord = null;
 
 		if(operation == 'push') {
 			obj = { $push: updateObject };
+
+			// 'Horse Race.uk.Cartmel.09-10-2021.12:00.players.0.bets' ==> 'Horse Race.uk.Cartmel.09-10-2021.12:00.players'
+	//              withoutLastWord = Object.keys(updateObject)[0].split('.').slice(0, -2).join('.') + '.fullMatchBets' ;
+	//              obj2 = { $push: { withoutLastWord: updateObject[Object.keys(updateObject)[0]] } };
+
 		}
 		else {
 			obj = { $set: updateObject };
 		}
 
-	/*
-		const result = await client.db(dataBaseName).collection(collectionName).findOneAndUpdate(
-									findObject,
-									obj, // {$set: temp},   // $inc
-									{returnNewDocument: true}
-								);
-		let bets = result.value;
-	*/
 
-		let result = await client.db(dataBaseName).collection(collectionName).updateOne(findObject, obj);
+		let result = await client.db(dataBaseName).collection(collectionName).updateOne(findObject, obj); // bets on individual players
+		// result = await client.db(dataBaseName).collection(collectionName).updateOne(findObject, obj2); // fullMatchBets
 		result = await client.db(dataBaseName).collection(collectionName).findOne({});
 		let bets = result;
 
@@ -627,8 +625,11 @@
 		console.log(oddUpdate);
 
 	///$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-		const updatedBet = await client.db(dataBaseName).collection(collectionName).findOne({});
-		io.emit('notifyEvent_New_Bet_Offer', JSON.stringify(updatedBet));
+		// const updatedBet = await client.db(dataBaseName).collection(collectionName).findOne({});
+		// io.emit('notifyEvent_New_Bet_Offer', JSON.stringify(updatedBet));
+		
+		// const updatedBet = await client.db(dataBaseName).collection(collectionName).findOne({});
+		io.emit('notifyEvent_New_Bet_Offer', JSON.stringify(changeObj));
 	///$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 		return matchedOdds;

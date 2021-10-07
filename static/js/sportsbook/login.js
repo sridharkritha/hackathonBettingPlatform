@@ -3,6 +3,7 @@ window.addEventListener('load', function () {
 		  loginBtn.addEventListener('click', loginUser);
 	const joinBtn = document.getElementById("joinNowId");
 		  joinBtn.addEventListener('click', registerUser);
+	let   g_UserName = null;
 
 	// login method
 	async function login(username, password) {
@@ -19,10 +20,11 @@ window.addEventListener('load', function () {
 
 		if (result.status === 'ok') {
 			// everything went fine
+			g_UserName = username;
 			console.log('Got the token: ', result.data);
-			localStorage.setItem('token', result.data); // store in cookie
-			localStorage.setItem('username', username); // store in cookie
-			localStorage.setItem('password', password); // store in cookie
+			localStorage.setItem(username + '.token',    result.data); // store in cookie
+			localStorage.setItem(username + '.username', username); // store in cookie
+			localStorage.setItem(username + '.password', password); // store in cookie
 			// alert('Success');
 			document.getElementById("regLoginFieldsId").style.display = 'none';
 			document.getElementById("welcomeUserName").textContent = "Welcome " + username;
@@ -42,9 +44,11 @@ window.addEventListener('load', function () {
 
 	// Auto login on refresh
 	function autoLoginAfterRefresh() {
-		const username = localStorage.getItem('username'); // get it from cookie
-		const password = localStorage.getItem('password'); // get it from cookie
-		if(username && username) login(username, password);
+		if(g_UserName) {
+			const username = localStorage.getItem(g_UserName +'.username'); // get it from cookie
+			const password = localStorage.getItem(g_UserName +'.password'); // get it from cookie
+			if(username && username) login(username, password);
+		}
 	}
 	// autoLoginAfterRefresh();
 
@@ -69,9 +73,10 @@ window.addEventListener('load', function () {
 		if (result.status === 'ok') {
 			// everything went fine
 			console.log('Got the token: ', result.data);
-			localStorage.setItem('token', result.data); // store in cookie
-			localStorage.setItem('username', username); // store in cookie
-			localStorage.setItem('password', password); // store in cookie
+			g_UserName = username;
+			localStorage.setItem(username +'.token', result.data); // store in cookie
+			localStorage.setItem(username +'.username', username); // store in cookie
+			localStorage.setItem(username +'.password', password); // store in cookie
 			alert('Success');
 
 			document.getElementById("regLoginFieldsId").style.display = 'none';

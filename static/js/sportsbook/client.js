@@ -26,8 +26,83 @@ window.addEventListener('load', function () {
 	///$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 	// On new bet offer from another gambler
 	socket.on("notifyEvent_New_Bet_Offer", (data) => { 
+	const username = localStorage.getItem(g_UserName +'.username'); // get it from cookie
 		
 		const changedObject = JSON.parse(data); // updateBalanceAfterResult();
+		let bets = null;
+
+
+// 		Object.keys(changedObject).forEach((key) => {
+
+// 			if(key.split('.').splice(-1)[0]) === 'bets') {
+//                      bets = changedObject[key];
+// 			}
+
+// 		}
+
+Object.keys(changedObject).every(function(key) {
+
+			if(key.split('.').splice(-1)[0] === 'bets') {
+                     bets = changedObject[key];
+
+                     return false; // come out of the loop
+			}
+
+			console.log(key);
+			return true; // continue looping
+        });
+
+
+
+        if(bets.length) {
+
+
+        	for(let i = 0, n = bets.length; i < n; ++i) {
+
+        		if(bets[i].username === username && !bets[i].matchvalue) {
+  
+
+        			Object.keys(g_BetSlipSheet).every(function(key) {
+
+			if(bets[i].oddstr === key) {
+                     // bets = changedObject[key];
+
+
+                     // res.matchedOdds[i][key].oddstr + '_betCancelWrapperId'
+                    //  'Horse Race.uk.Cartmel.09-10-2021.12:00.players.1.backOdds.2_betCancelWrapperId'
+
+                     								
+				  document.getElementById(key + '_betCancelWrapperId').textContent = 'Matched !';
+				document.getElementById(key + '_betCancelWrapperId').classList.remove("blink_me");
+
+
+                     return false; // come out of the loop
+			}
+
+			console.log(key);
+			return true; // continue looping
+        }.bind(this), this);
+
+
+
+
+
+        		}
+
+        	}
+
+        }
+
+
+        /*
+
+// 		Object.keys(changedObject).every(function(key) {
+// 			if(key.split('.').splice(-1)[0]) === 'bets') {
+//                      bets = changedObject[key];
+
+//                      return false; // come out of the loop
+// 			}
+//         });
 
 // 		Object.keys(g_SportsBook).forEach(function(key , q) {
 
@@ -43,9 +118,7 @@ function hai(arg) {
 // changedObject["Horse Race"].uk.Cartmel["09-10-2021"]["12:00"].players[0].bets
 // Object.keys(g_SportsBook[key].publishMatchResultStr)[0]    =>  'Horse Race.uk.Cartmel.09-10-2021.12:00.players'         <= stringify
 
-		// ['horseRace', 'uk', 'Cartmel', '2021-09-20', '12:00', 'players', '2', 'bets']
-		let keyStr = Object.keys(updateObject)[0];
-		let keyStrLst = Object.keys(updateObject)[0].split('.'); // str => object accessor
+
 
 		for(let i = 0, n = keyStrLst.length; i < n; ++i) {
 			bets = bets[keyStrLst[i]];
@@ -55,14 +128,29 @@ function hai(arg) {
 			changedObject = changedObject;
 
 			let x = g_SportsBook[key].publishMatchResultStr.bets 
- // Object.keys(g_SportsBook[key].publishMatchResultStr)[0]  // 'Horse Race.uk.Cartmel.09-10-2021.12:00.players'
+            // Object.keys(g_SportsBook[key].publishMatchResultStr)[0]  // 'Horse Race.uk.Cartmel.09-10-2021.12:00.players'
+
+
+ 		// ['horseRace', 'uk', 'Cartmel', '2021-09-20', '12:00', 'players', '2', 'bets']
+// 		let keyStr = Object.keys(g_SportsBook[key].publishMatchResultStr)[0] + '.players[0].bets';
+// 		keyStr =
+// 		Object.keys(updateObject)[0];
+// 		let keyStrLst = Object.keys(updateObject)[0].split('.'); // str => object accessor
+
+
+
+
+
+
+
+
 		});
 };
 
 hai(changedObject);
 
 
-
+*/
 
 		
 
@@ -147,6 +235,7 @@ hai(changedObject);
 
 	/////////////////////////////// Global Variables (start)////////////////////////////////////////////////////////////
 	// At the start display the horse race
+	let g_UserName = null;
 	let g_SportsBook = {};
 	let g_NextSportsToDisplay = null; // intSportData('Horse Race');
 	let g_CurrentDisplayedMatch = {};
@@ -903,7 +992,7 @@ hai(changedObject);
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json'},
 					body: JSON.stringify({
-						token: localStorage.getItem('token'),
+						token: localStorage.getItem(g_UserName +'.token'),
 						betstr: betstr,
 						oddstr: oddstr,
 						oddvalue: oddvalue,
@@ -1502,8 +1591,8 @@ hai(changedObject);
 
 	// Update the balance after the match result
 	async function updateBalanceAfterResult() {
-		const username = localStorage.getItem('username'); // get it from cookie
-		const password = localStorage.getItem('password'); // get it from cookie
+		const username = localStorage.getItem(g_UserName +'.username'); // get it from cookie
+		const password = localStorage.getItem(g_UserName +'.password'); // get it from cookie
 		if(username && username) {
 			
 			const result = await fetch('/api/login', {
@@ -1519,10 +1608,11 @@ hai(changedObject);
 
 			if (result.status === 'ok') {
 				// everything went fine
+				g_UserName = username;
 				console.log('Got the token: ', result.data);
-				localStorage.setItem('token', result.data); // store in cookie
-				localStorage.setItem('username', username); // store in cookie
-				localStorage.setItem('password', password); // store in cookie
+				localStorage.setItem(username + '.token', result.data); // store in cookie
+				localStorage.setItem(username + '.username', username); // store in cookie
+				localStorage.setItem(username + '.password', password); // store in cookie
 				// alert('Success');
 				document.getElementById("regLoginFieldsId").style.display = 'none';
 				document.getElementById("welcomeUserName").textContent = "Welcome " + username;
