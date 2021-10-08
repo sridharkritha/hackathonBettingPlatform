@@ -29,17 +29,7 @@ window.addEventListener('load', function () {
 		const obj = JSON.parse(data); // 'finishedEventStrId': "Horse Race.uk.Cartmel.09-10-2021.12:00.players"
 		// removeCompletedEventStuffsFromBetSlip(obj.finishedEventStrId);
 
-		updateBalanceAfterResult();
-
-		
-// 		Object.keys(g_BetSlipSheet).forEach((key) => {
-// 			if(remove_N_WordsFromLast(key, 3) === obj.finishedEventStrId) {
-// 				deleteBetSlipByKey(key); 
-// 			}
-// 		});
-
-		// g_BetSlipSheet = g_BetSlipSheet; // Golf.uk.Open de Espana 2021.07-10-2021.07:45.players.0.layOdds.1
-
+		// updateBalanceAfterResult();
 	});
 
 
@@ -170,6 +160,7 @@ window.addEventListener('load', function () {
 	let g_SportsBook = {};
 	let g_NextSportsToDisplay = null; // intSportData('Horse Race');
 	let g_CurrentDisplayedMatch = {};
+	// let g_CurrentSimulatingMatch = {};
 	let g_BetSlipSheet = {};
 	let g_WinLossByPlayers = []; // global variable for displaying win / loss by player 
 	/////////////////////////////// Global Variables (end)//////////////////////////////////////////////////////////////
@@ -924,12 +915,12 @@ window.addEventListener('load', function () {
 	function getCookieData(arg) {
 
 			let storageObj = {};
-            const cbAuthObj = localStorage.getItem('cbAuth'); // get it from cookie
+			const cbAuthObj = localStorage.getItem('cbAuth'); // get it from cookie
 			if(cbAuthObj) storageObj = JSON.parse(cbAuthObj);
 			 if(storageObj[g_UserName + '.username']) {
 			 	switch(arg) {
 			 		case 'token'   : return storageObj[g_UserName + '.token'];
-			 		case 'username': return storageObj[g_UserName + '.username'];			 		
+			 		case 'username': return storageObj[g_UserName + '.username'];
 			 		case 'password': return storageObj[g_UserName + '.password'];
 
 			 	}
@@ -946,11 +937,11 @@ window.addEventListener('load', function () {
 			// oddstr = horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.2
 			// oddstr = horseRace.uk.Cartmel.2021-09-20.12:00.players.0.layOdds.2
 
-            if(!g_UserName) 
-            {
-            	alert("Please login before any BET!");
-            	return;
-            }
+			if(!g_UserName) 
+			{
+				alert("Please login before any BET!");
+				return;
+			}
 
 
 			(async() => {
@@ -1321,7 +1312,7 @@ window.addEventListener('load', function () {
 			elemRef2 = document.createElement("IMG");
 // 			str = "assets/silk/silk_" + i + ".png";
 			elemRef2.setAttribute("src",currentDisplayedMatch.playerInfo[i].silk); // image url
-			elemRef2.setAttribute("alt","Trulli");
+			elemRef2.setAttribute("alt","Silk");
 			// elemRef.setAttribute("id","myParentId_myParentId_shuffleItemsContainerId_myId_5_myId_6");
 			elemRef.appendChild(elemRef2);
 		}
@@ -1419,9 +1410,14 @@ window.addEventListener('load', function () {
 					// declare the match winner
 					document.getElementById("resultDeclarationWrapper").textContent = "WINNER: " + winnerPlayer; // "Winner: Team Ethereal !!!";
 					document.getElementById("digitalClock").textContent = "Race Completed!! ";
-					updateBalanceAfterResult();
-					// Golf.uk.Open de Espana 2021.07-10-2021.07:45.players
-					removeCompletedEventStuffsFromBetSlip(Object.keys(g_NextSportsToDisplay.publishMatchResultStr)[0]);
+
+					
+					// notify the server the match simulation has been completed. So server can notify ALL the clients to 
+					// update their balance and bet slip entries
+					notifyToServer('EVENT_CLIENT_MATCH_SIMULATION_COMPLETED',
+									JSON.stringify({ 'completedMatchStr': Object.keys(g_NextSportsToDisplay.publishMatchResultStr)[0] }));
+				
+					// Golf.uk.Open de Espana 2021.07-10-2021.07:45.players				
 				}
 			}
 			else {
@@ -1431,6 +1427,26 @@ window.addEventListener('load', function () {
 		}
 		window.requestAnimationFrame(callbackLoop);
 	}
+
+	// On match simulation completion notification from the server  => Update the balance and bet slip entries
+	socket.on("EVENT_SERVER_MATCH_SIMULATION_COMPLETED", (data) => {
+		const obj = JSON.parse(data); // 'completedMatchStr': "Horse Race.uk.Cartmel.09-10-2021.12:00.players"
+		removeCompletedEventStuffsFromBetSlip(obj.completedMatchStr);
+
+		updateBalanceAfterResult();
+	});
+
+
+	// Notify the server the match simulation has been completed. So server can notify ALL the clients to 
+	// update their balance and bet slip entries
+	function notifyToServer(event, data) {
+		switch(event) {
+			case 'EVENT_CLIENT_MATCH_SIMULATION_COMPLETED':
+				socket.emit(event, data);
+				break;
+		}		
+	}
+	
 
 ////////////////////////////////////////////////////// win predictor animation (end) ///////////////////////////////////	
 
@@ -1548,10 +1564,14 @@ window.addEventListener('load', function () {
 
 				console.log("Match Winner Recieved Successfully");
 				console.log(res.data);
-
-				g_CurrentDisplayedMatch.winData = res.data.winData;
 				
-				// Start Win perdition animation
+				// user window specific
+				g_CurrentDisplayedMatch.winData = res.data.winData;
+
+				// g_CurrentSimulatingMatch.winData  = res.data.winData;
+				// g_CurrentSimulatingMatch.matchStr = g_NextSportsToDisplay.publishMatchResultStr;
+				
+				/////////////////// Start Win perdition animation///////////////////////////////////////////////////////
 				setTimeout(()=> {
 					startWinPreditor();
 				}, 2000);

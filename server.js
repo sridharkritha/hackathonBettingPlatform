@@ -728,20 +728,35 @@
 		});
 
 		socket.on('mySubmitEvent', async (data) => {      // note: async
-			console.log('user joined room');
+			// console.log('user joined room');
 			console.log(data);
-			// socket.join(data.myID);
 			try {
-				
-
 				// await updateListingByName(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, {name: "Sridhar"}, { wins: 12799 });
 				await updateListingByName(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, JSON.parse(data).findObject, JSON.parse(data).updateObject);
 			} catch (e) {
 				console.error(e);
 			}
 		});
+
+		socket.on('EVENT_CLIENT_MATCH_SIMULATION_COMPLETED', async (data) => {
+			console.log("Server: Got a notification from a client that - Match simulation has been completed");
+			console.log(data);
+			notifyAllUser('EVENT_CLIENT_MATCH_SIMULATION_COMPLETED', data);
+			// if(JSON.parse(data).isClientReady) {
+			// 	await returnAllDouments(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME);
+			// }
+		});
 	});
 
+
+	function notifyAllUser(msg, data) {
+		switch(msg) {
+			case 'EVENT_CLIENT_MATCH_SIMULATION_COMPLETED':
+				// Notify all the user that match simulation has been completed
+				io.emit('EVENT_SERVER_MATCH_SIMULATION_COMPLETED', data);
+				break;
+		}
+	}
 
 
 	httpServer.listen(port, async () => {
