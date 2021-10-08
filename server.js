@@ -263,7 +263,7 @@
 			// Store the results in an array
 			const results = await cursor.toArray();
 
-			io.emit('myEvent', JSON.stringify({ ...results }));
+			notifyAllUser('EVENT_SERVER_SPORTS_DATA_UPDATE', JSON.stringify({ ...results }));
 
 			// Print the results
 			if (results.length > 0) {
@@ -432,7 +432,7 @@
 
 
 		// Notify all the user that winnings have been awarded
-		io.emit('notifyEvent_BalancedUpdated', JSON.stringify({'finishedEventStrId': keyStr}));
+		notifyAllUser('notifyEvent_BalancedUpdated', JSON.stringify({'finishedEventStrId': keyStr}));
 
 		return winData; // return match winner information
 	}
@@ -626,10 +626,10 @@
 
 	///$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 		// const updatedBet = await client.db(dataBaseName).collection(collectionName).findOne({});
-		// io.emit('notifyEvent_New_Bet_Offer', JSON.stringify(updatedBet));
+		// notifyAllUser('EVENT_SERVER_NEW_BET_OFFER', JSON.stringify(updatedBet));
 		
 		// const updatedBet = await client.db(dataBaseName).collection(collectionName).findOne({});
-		io.emit('notifyEvent_New_Bet_Offer', JSON.stringify(changeObj));
+		notifyAllUser('EVENT_SERVER_NEW_BET_OFFER', JSON.stringify(changeObj));
 	///$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 		return matchedOdds;
@@ -690,7 +690,7 @@
 			console.log(changedData);
 			if(changedData.operationType === 'update') {
 				const updatedFieldsObject = changedData.updateDescription.updatedFields;
-				io.emit('myEventChangeHappened', JSON.stringify(updatedFieldsObject));
+				notifyAllUser('EVENT_SERVER_DATABASE_UPDATED_TRIGGER', JSON.stringify(updatedFieldsObject));
 			} else if(change.operationType === 'insert') { 
 			} else if(change.operationType === 'delete') { }
 		});
@@ -720,8 +720,8 @@
 		await monitorListingsUsingEventEmitter(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 30000);
 
 		// client => server 
-		socket.on('myEventClientReady', async (data) => {
-			console.log("Server: Recieved 'myEventClientReady' even from client");
+		socket.on('EVENT_CLIENT_STATE_READY', async (data) => {
+			console.log("Server: Recieved 'EVENT_CLIENT_STATE_READY' even from client");
 			if(JSON.parse(data).isClientReady) {
 				await returnAllDouments(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME);
 			}
@@ -749,13 +749,14 @@
 	});
 
 
-	function notifyAllUser(msg, data) {
-		switch(msg) {
-			case 'EVENT_CLIENT_MATCH_SIMULATION_COMPLETED':
-				// Notify all the user that match simulation has been completed
-				io.emit('EVENT_SERVER_MATCH_SIMULATION_COMPLETED', data);
-				break;
-		}
+	function notifyAllUser(event, data) {
+		io.emit(event, data);
+		// switch(event) {
+		// 	case 'EVENT_CLIENT_MATCH_SIMULATION_COMPLETED':
+		// 		// Notify all the user that match simulation has been completed
+		// 		io.emit('EVENT_SERVER_MATCH_SIMULATION_COMPLETED', data);
+		// 		break;
+		// }
 	}
 
 

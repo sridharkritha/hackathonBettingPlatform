@@ -17,12 +17,33 @@ window.addEventListener('load', function () {
 	// It uses 'io' from the distributed version of socket.io from "client-dist/socket.io.js"
 	const socket = io("http://localhost:3000", { autoConnect:false, transports : ['websocket'] }); // internally emits "connection" event
 
+	//////////// ONE WAY TO SEND TO SERVER AND MULTIPLE WAYS OF RECEIVING FROM SERVER /////////////////////////////////////////////////////// 
+
+	// Notify the server the match simulation has been completed. So server can notify ALL the clients to 
+	// update their balance and bet slip entries
+	function notifyToServer(event, data) {
+		socket.emit(event, data);
+
+		// switch(event) {
+		// 	case 'EVENT_CLIENT_MATCH_SIMULATION_COMPLETED':
+		// 		socket.emit(event, data);
+		// 		break;
+		// }
+	}
+
 	socket.on("connect", async () => {
-		// console.log('myEventClientReady - event is sent');
-		// socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
+		// console.log('EVENT_CLIENT_STATE_READY - event is sent');
+		// socket.emit('EVENT_CLIENT_STATE_READY', JSON.stringify({ isClientReady: true }));
 	});
 	socket.connect(); // need bcos 'autoConnect:false'
 
+	// On match simulation completion notification from the server  => Update the balance and bet slip entries
+	socket.on("EVENT_SERVER_MATCH_SIMULATION_COMPLETED", (data) => {
+		const obj = JSON.parse(data); // 'completedMatchStr': "Horse Race.uk.Cartmel.09-10-2021.12:00.players"
+		removeCompletedEventStuffsFromBetSlip(obj.completedMatchStr);
+
+		updateBalanceAfterResult();
+	});
 
 	// Update the balance after match has been completed
 	socket.on("notifyEvent_BalancedUpdated", (data) => {
@@ -32,18 +53,8 @@ window.addEventListener('load', function () {
 		// updateBalanceAfterResult();
 	});
 
-
-	function removeCompletedEventStuffsFromBetSlip(betSlipEntryKey) {
-		Object.keys(g_BetSlipSheet).forEach((key) => {
-			if(remove_N_WordsFromLast(key, 3) === betSlipEntryKey) {
-				deleteBetSlipByKey(key); 
-			}
-		});
-	}
-
-
 	// On new bet offer from another gambler
-	socket.on("notifyEvent_New_Bet_Offer", (data) => {
+	socket.on("EVENT_SERVER_NEW_BET_OFFER", (data) => {
 		if (g_UserName) {
 			const username = getCookieData('username'); // localStorage.getItem(g_UserName + '.username'); // get it from cookie
 			const changedObject = JSON.parse(data);
@@ -83,7 +94,7 @@ window.addEventListener('load', function () {
 	});
 
 	// "{"horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.1":7}"
-	socket.on("myEventChangeHappened", (data) => { 
+	socket.on("EVENT_SERVER_DATABASE_UPDATED_TRIGGER", (data) => { 
 		const changedObject = JSON.parse(data);
 		// let key = Object.keys(changedObject)[0];
 		Object.keys(changedObject).forEach((key) => {
@@ -123,11 +134,11 @@ window.addEventListener('load', function () {
 	});
 
 	// socket.on => listener; socket.emit => sends event.
-	// Add listener for the event "myEvent" but NOT execute the callback
-	// Callback will be executed only after if you get the "myEvent"
-	// console.log('myEvent - addListener is ready for the server');
-	socket.on("myEvent", (data) => {
-		console.log("Message: ", data); // gets executed only after the "myEvent" arrives.
+	// Add listener for the event "EVENT_SERVER_SPORTS_DATA_UPDATE" but NOT execute the callback
+	// Callback will be executed only after if you get the "EVENT_SERVER_SPORTS_DATA_UPDATE"
+	// console.log('EVENT_SERVER_SPORTS_DATA_UPDATE - addListener is ready for the server');
+	socket.on("EVENT_SERVER_SPORTS_DATA_UPDATE", (data) => {
+		console.log("Message: ", data); // gets executed only after the "EVENT_SERVER_SPORTS_DATA_UPDATE" arrives.
 
 		const db = JSON.parse(data); // Read the json file from server.js from mongodb
 		console.log(db);
@@ -208,7 +219,8 @@ window.addEventListener('load', function () {
 			let href = this.getAttribute("href"); // #
 
 			g_NextSportsToDisplay = intSportData(href); // intSportData('Horse Race')
-			socket.emit('myEventClientReady', JSON.stringify({ isClientReady: true }));
+
+			notifyToServer('EVENT_CLIENT_STATE_READY', JSON.stringify({ isClientReady: true }));
 
 			return false;
 		}, this); // this - MUST
@@ -1030,6 +1042,14 @@ window.addEventListener('load', function () {
 		delete g_BetSlipSheet[key]; // remove the prop from the object
 	}
 
+	function removeCompletedEventStuffsFromBetSlip(betSlipEntryKey) {
+		Object.keys(g_BetSlipSheet).forEach((key) => {
+			if(remove_N_WordsFromLast(key, 3) === betSlipEntryKey) {
+				deleteBetSlipByKey(key); 
+			}
+		});
+	}
+
 	// Update the profit and loss for each players 
 	function updateProfitLossDisplay() {
 		let stakeValue = 0;
@@ -1427,26 +1447,6 @@ window.addEventListener('load', function () {
 		}
 		window.requestAnimationFrame(callbackLoop);
 	}
-
-	// On match simulation completion notification from the server  => Update the balance and bet slip entries
-	socket.on("EVENT_SERVER_MATCH_SIMULATION_COMPLETED", (data) => {
-		const obj = JSON.parse(data); // 'completedMatchStr': "Horse Race.uk.Cartmel.09-10-2021.12:00.players"
-		removeCompletedEventStuffsFromBetSlip(obj.completedMatchStr);
-
-		updateBalanceAfterResult();
-	});
-
-
-	// Notify the server the match simulation has been completed. So server can notify ALL the clients to 
-	// update their balance and bet slip entries
-	function notifyToServer(event, data) {
-		switch(event) {
-			case 'EVENT_CLIENT_MATCH_SIMULATION_COMPLETED':
-				socket.emit(event, data);
-				break;
-		}		
-	}
-	
 
 ////////////////////////////////////////////////////// win predictor animation (end) ///////////////////////////////////	
 
