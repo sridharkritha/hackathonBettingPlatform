@@ -741,7 +741,7 @@
 		socket.on('EVENT_CLIENT_MATCH_SIMULATION_COMPLETED', async (data) => {
 			console.log("Server: Got a notification from a client that - Match simulation has been completed");
 			console.log(data);
-			notifyAllUser('EVENT_CLIENT_MATCH_SIMULATION_COMPLETED', data);
+			notifyAllUser('EVENT_SERVER_MATCH_SIMULATION_COMPLETED', data);
 			// if(JSON.parse(data).isClientReady) {
 			// 	await returnAllDouments(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME);
 			// }
