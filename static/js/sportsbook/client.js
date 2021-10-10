@@ -5,17 +5,42 @@ window.addEventListener('load', function () {
 	}
 
 	
-    // 'one.two.three.four'  ==== #2 ===>    'one.two'
+	// 'one.two.three.four'  ==== #2 ===>    'one.two'
 	function remove_N_WordsFromLast(str, N, delimiter) {
 		const delim = delimiter || '.';
 		return str ? str.split(delim).slice(0, -N).join(delim) : null;
 	}
-	//////////////////////////// Utility Functions (end) ///////////////////////////////////////////////////////////////	
 
-	//////////////////////////// Client to Server communication (start) ////////////////////////////////////////////////	
+	// Universally unique identifier (RFC4122)
+	// Create a unique id for each client on page load without using username/password. 
+	// This uuid can be used by the server to identify the client and pass the client specific updated data.
+	function uuid() {
+		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+				var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+				return v.toString(16);
+		});
+	}
+	// console.log(uuid()); // 3df13fe4-d221-49c6-af20-b662fff1675b
+	//////////////////////////// Utility Functions (end) ///////////////////////////////////////////////////////////////
+
+	/////////////////////////////// Global Variables (start)////////////////////////////////////////////////////////////
+	// Global variable storage
+	let g_ClientGlobalStorage = { };
+	g_ClientGlobalStorage.uuid = uuid(); // generate a uuid on page load for client identification before the login
+
+	// At the start display the horse race
+	let g_SportsBook = {};
+	let g_NextSportsToDisplay = null; // intSportData('Horse Race');
+	let g_CurrentDisplayedMatch = {};
+	// let g_CurrentSimulatingMatch = {};
+	let g_BetSlipSheet = {};
+	let g_WinLossByPlayers = []; // global variable for displaying win / loss by player 
+	/////////////////////////////// Global Variables (end)//////////////////////////////////////////////////////////////
+	//////////////////////////// Client to Server communication (start) ////////////////////////////////////////////////
 	// Using HTML - Load "client.html" (do NOT run "node client.js")
 	// It uses 'io' from the distributed version of socket.io from "client-dist/socket.io.js"
-	const socket = io("http://localhost:3000", { autoConnect:false, transports : ['websocket'] }); // internally emits "connection" event
+	const keyValueString = 'uuid=' + g_ClientGlobalStorage.uuid; // "uuid=HexValue"
+	const socket = io("http://localhost:3000", { query: keyValueString, autoConnect:false, transports : ['websocket'] }); // internally emits "connection" event
 
 	//////////// ONE WAY TO SEND TO THE SERVER AND MULTIPLE WAYS OF RECEIVING FROM THE SERVER /////////////////////////////////////////////////////// 
 
@@ -187,9 +212,17 @@ window.addEventListener('load', function () {
 	socket.on("EVENT_SERVER_SPORTS_DATA_UPDATE", (data) => {
 		console.log("Message: ", data); // gets executed only after the "EVENT_SERVER_SPORTS_DATA_UPDATE" arrives.
 
-		const db = JSON.parse(data); // Read the json file from server.js from mongodb
-		console.log(db);
-		processInputData(db[0]);
+		const sportsData = JSON.parse(data); // Read the json file from server.js from mongodb
+
+		const clientInfo = typeof sportsData.clientInfo === 'object' ?  sportsData.clientInfo : JSON.parse(sportsData.clientInfo);
+		// 1. Update Data: When a new connection and page load :  uuid = null & isNewClientAdded = true
+		// 2. Update Data: Existing connection and Same uuid   :  uuid = same client id  & isNewClientAdded = false
+		// 3. NO update  : A new connection by another client
+
+		if(clientInfo && clientInfo.uuid === g_ClientGlobalStorage.uuid) {
+			console.log(sportsData);
+			processInputData(sportsData[0]);
+		}
 	});
 	//////////////////////////// Client to Server communication (end) //////////////////////////////////////////////////
 
@@ -213,15 +246,6 @@ window.addEventListener('load', function () {
 		deleteBet =   "horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.1_deleteBetButtonId"
 	*/
 
-	/////////////////////////////// Global Variables (start)////////////////////////////////////////////////////////////
-	// At the start display the horse race
-	let g_SportsBook = {};
-	let g_NextSportsToDisplay = null; // intSportData('Horse Race');
-	let g_CurrentDisplayedMatch = {};
-	// let g_CurrentSimulatingMatch = {};
-	let g_BetSlipSheet = {};
-	let g_WinLossByPlayers = []; // global variable for displaying win / loss by player 
-	/////////////////////////////// Global Variables (end)//////////////////////////////////////////////////////////////
 	function intSportData(sportsId) {
 		// <!-- "Horse Race", "Greyhound Race", "Motor Sport", "Golf" , "Cycling" -->
 		g_SportsBook[sportsId].isWinPredictorActive  = false;
@@ -267,9 +291,10 @@ window.addEventListener('load', function () {
 
 			g_NextSportsToDisplay = intSportData(href); // intSportData('Horse Race')
 
-			notifyToServer('EVENT_CLIENT_STATE_READY', JSON.stringify({ isClientReady: true }));
+			const clientInfo = { 'isNewClientAdded': false, 'uuid': g_ClientGlobalStorage.uuid };
+			notifyToServer('EVENT_CLIENT_STATE_READY', JSON.stringify(clientInfo));
 
-			return false;
+			return false; // must
 		}, this); // this - MUST
 	});
 	

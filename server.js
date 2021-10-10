@@ -259,7 +259,7 @@
 	];
 
 
-	async function returnAllDouments(client, dataBaseName, collectionName) {
+	async function returnAllDocuments(client, dataBaseName, collectionName, clientInfo) {
 		// See https://mongodb.github.io/node-mongodb-native/3.6/api/Collection.html#find for the find() docs
 		// const cursor = await client.db(dataBaseName).collection(collectionName).find({ }, {_id: 1, name: 1, wins: 1 });
 		// const cursor = await COLL.find({ }, {_id: 1, name: 1, wins: 1 });
@@ -269,7 +269,7 @@
 			// Store the results in an array
 			const results = await cursor.toArray();
 
-			notifyAllUser('EVENT_SERVER_SPORTS_DATA_UPDATE', JSON.stringify({ ...results }));
+			notifyAllUser('EVENT_SERVER_SPORTS_DATA_UPDATE', JSON.stringify({ ...results, clientInfo }));
 
 			// Print the results
 			if (results.length > 0) {
@@ -730,16 +730,16 @@
 		console.log('Server: A new client connected to me !');
 		console.log('No. of active Clients connected to the Server           : #', ++g_Storage.nClientsConnected);
 
-		await returnAllDouments(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME);
+		let clientInfo = { 'uuid': socket.handshake.query.uuid, 'isNewClientAdded': true };
+
+		await returnAllDocuments(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, clientInfo);
 		// await monitorListingsUsingEventEmitter(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 30000, pipeline);
 		await monitorListingsUsingEventEmitter(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 30000);
 
 		// client => server 
 		socket.on('EVENT_CLIENT_STATE_READY', async (data) => {
-			console.log("Server: Recieved 'EVENT_CLIENT_STATE_READY' even from client");
-			if(JSON.parse(data).isClientReady) {
-				await returnAllDouments(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME);
-			}
+			console.log("Server: Received 'EVENT_CLIENT_STATE_READY' event from client");
+			await returnAllDocuments(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, data);
 		});
 
 		socket.on('mySubmitEvent', async (data) => {      // note: async
@@ -757,9 +757,6 @@
 			console.log("Server: Got a notification from a client that - Match simulation has been completed");
 			console.log(data);
 			notifyAllUser('EVENT_SERVER_MATCH_SIMULATION_COMPLETED', data);
-			// if(JSON.parse(data).isClientReady) {
-			// 	await returnAllDouments(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME);
-			// }
 		});
 	});
 
