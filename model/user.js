@@ -6,7 +6,7 @@ const UserSchema = new mongoose.Schema(
 		password: { type: String, required: true },
 		userBalance:  { type: Number }
 	},
-	{ collection: 'useraccountcollection' }
+	{ collection: 'useraccountcollection_bugfix' }
 );
 
 // Compile model from schema

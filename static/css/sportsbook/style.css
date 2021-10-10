@@ -14,7 +14,7 @@
 		/* font-family: Verdana, Arial, Helvetica, sans-serif; */
 		font-family: roboto condensed,HelveticaNeue,helvetica neue,Helvetica,Arial,lucida grande,sans-serif;
 		/* font-size: 140%; */
-		font-size: 4vh;
+		font-size: 16px;
 	}
 
 	div {
@@ -22,11 +22,229 @@
 		padding: 10px; */
 	}
 
+	.header {
+		height: 100px;
+		background: #2b2f35;
+		padding: 10px;
+	}
+
+	.header #headerLogo {
+		float: left;
+		margin: 0;
+		padding: 0 15px;
+	}
+
+	.header #headerLogo img {
+		height: 84px;
+	}
+
+	.header #headerLogo p {
+		color: #0eb588;
+		font-size: 10px;
+		font-weight: bold;
+	}
+
+
+	.header #regLoginWrapperId {
+		float: right;
+		padding: 10px 10px 0 10px;
+	}
+
+	#bodyWrapper {
+		display: flex;
+	}
+
+	#leftSidebar {
+		border: 2px solid #43444a;
+		min-height: 510px;
+		min-width: 220px;
+		max-width: 220px;
+		background: #2b2f35;
+		flex: 0 0 15%;
+		padding: 20px 0 0 10px;
+		font-size: 18px;
+	}
+
+	#rightMain {
+		padding: 10px 20px 0 20px;
+		flex: 1;
+	}
+
+	#rightSidebar {
+		border: 2px solid #43444a;
+		border-top: none;
+		flex: 0 0 25%;
+		margin: 10px 20px 0 0;
+		height: 635px;
+	}
+
+	.h1title {
+		font-size: 20px;
+		font-weight: bold;
+		background: #43444a;
+		color: #e9f6fc;
+		padding: 5px 0 5px 15px;
+	}
+
+	#rightMainInner {
+		border: 2px solid #43444a;
+		border-top: none;
+		clear: both;
+		height: 600px;
+		margin-bottom: 10px;
+	}
+
+	#sportsEventContainer {
+		padding: 10px;
+		height: 100%;
+		display: block;
+	}
+
+	.raceInProgress {
+		opacity: .3;
+		background: rgba(0, 0, 0, 0.2);
+		pointer-events:none;
+	}
+
+	.account {
+		color: #e9f6fc;
+		font-size: 16px;
+	}
+
+	.raceCardTitle {
+		font-size: 16px;
+		font-weight: bold;
+		margin-bottom: 10px;
+		padding: 2px;
+	}
+
+	#raceName {
+		background: #0eb588;
+		min-width: 109px;
+		color: #e9f6fc;
+		float: left;
+		padding: 2px 10px;
+		border-radius: 6px;
+	}
+
+	#matchType {
+		float: left;
+		margin-left: 10px;
+		color: #43444a;
+	}
+
+	.sectionTitle {
+		color: #c51a1b;
+		font-weight: bold;
+	}
+
+	.section {
+		margin: 10px 0 0 10px;
+	}
+
+	.section img {
+		float: left;
+	}
+
+	.section a {
+		color: #e9f6fc;
+		text-decoration: none;
+		display: block;
+		margin: 0 0 0 10px;
+		float: left;
+	}
+
+
+	/************************ Result Display (start) *************************/
+
+	#digitalClock {
+		width: 100%;
+		font-size: 300%;
+		font-weight: bolder;
+		text-align: center;
+	}
+
+	#resultDeclarationWrapper {
+		width: 100%;
+		font-size: 300%;
+		font-weight: bolder;
+		text-align: center;
+	}
+
+	#gameSimulatorWrapper {
+		clear: both;
+		margin-top: 175px;
+	}
+
+	/************************* Result Display (start) *************************/
+
+	/****************** General utility style (start) *************************/
+
+	/****************** Blink the Element / Text (start) ***********************/
+
+	.blink_me {
+		animation: blinker 1.5s linear infinite;
+	}
+
+	@keyframes blinker {
+		30% {
+			opacity: 0;
+		}
+	}
+	/****************** Blink the Element / Text (start) ***********************/
+
+	.centered {
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		width: 100%;
+		text-align: center;
+	}
+
+	.hideOut {
+		display: none;
+	}
+
+	/****************** General utility style (end) ***************************/
+
 	/*********************** registration / login (start) *************************/
 
 	#regLoginWrapperId {
 		text-align: right;
 	}
+
+	#regLoginWrapperId #logInId {
+		background-color: #00b2ff;
+		color: #fff;
+	}
+
+	#regLoginWrapperId #logInId {
+		background-color: #00b2ff;
+		color: #fff;
+	}
+
+	#regLoginWrapperId #joinNowId {
+		background-color: #c51a1b;
+		color: #fff;
+	}
+
+	#regLoginWrapperId .regLoginButton, #rightMain .regLoginButton {
+		border: none;
+		color: white;
+		padding: 15px;
+		text-align: center;
+		text-decoration: none;
+		display: inline-block;
+		font-size: 16px;
+		margin: 4px 2px;
+		border-radius: 8px;
+	}
+
+	.textField {
+		padding: 10px;
+		font-size: 16px;
+	}
+
 	/*********************** registration / login (end) *************************/
 
 	.winLossValue {
@@ -36,55 +254,64 @@
 	}
 
 	.betSlipInputbox {
-
-	/* border-radius: 2px; */
-
-	height: 100%;
-
-	outline: 0;
-
-	width: 100%;
-
-	margin: 0;
-
-	/* padding: 15px 5px 0 0; */
-
-	border: 0;
-
-	text-align: center;
-
-	background-color: inherit;
-
-	/* color: #43444a; */
-
-	font-size: 38px;
-
-	font-weight: bolder;
-
-	/* -webkit-appearance: textfield; */
-
-	/* -moz-appearance: textfield; */
-
-	/* appearance: textfield; */
-
-	letter-spacing: 1px;
-
-	/* padding: 15px 23px 0 0; */
+		height: 100%;
+		outline: 0;
+		width: 100%;
+		margin: 0;
+		border: 0;
+		text-align: center;
+		background-color: inherit;
+		font-size: 16px;
+		font-weight: bolder;
+		letter-spacing: 1px;
 	}
 
 	/**************************** components (start) ******************************/
 
+	#sportsEventTitle {
+		padding: 10px 15px 0 15px;
+	}
+
 	#sportsEventContainer {
 		display: block;
+		clear: both;
 	}
 
 	#betSlipContainer {
 		display: none;
+		padding: 10px 15px;
+	}
+
+	#showPublishedResultId{
+		display: none;
+	}
+
+	#betSlipContainer div.gridColumnLayout_5 {
+		margin-bottom: 15px;
 	}
 
 	#gameSimulatorContainer {
-		display: none;
+		display: block;
+		opacity: 1;
+		background: #e9f6fc;
 	}
+
+	.matchResultSimulatorOverlayPanel {
+		display: block;
+		margin:-310px 0 20px 0;
+	}
+
+	#publishResultId {
+		background-color: #0eb588;
+		color: #fff;
+		float: right;
+	}
+
+	#publishResultIdLoader {
+		float: right;
+		margin: 5px 30px;
+	}
+
 	/**************************** components (end) ******************************/
 
 	/********************* Grid over another Grid (start) *************************/
@@ -101,7 +328,8 @@
 	#pickerBoxOneId {
 		/* grid-area: 1/3; */
 		grid-area: 1/1;
-		border: 5px solid blue;
+		border: 3px solid #0eb588;
+		height: 70px;
 	}
 
 	#pickerBoxTwoId {
@@ -167,6 +395,10 @@
 		grid-template-columns: repeat(6, 1fr);
 	}
 
+	.size_4_6 {
+		clear: both;
+	}
+
 	.size_1_9 {
 		grid-template-columns: 1fr 9fr;
 	}
@@ -176,12 +408,12 @@
 	}
 
 	.odd, .player {
-		font-size: 3vh;
+		font-size: 16px;
 		font-weight: bold;
 	}
 
 	.totalAmt, .playerDesc {
-		font-size: 2vh;
+		font-size: 16px;
 		opacity: .54;
 	}
 
@@ -196,7 +428,7 @@
 	.gridCenterVH {
 		display: grid;
 		/* vertical align*/
-		align-items: center;  
+		align-items: center;
 		/* horizontal align */
 		justify-content: center;
 		text-align: center;
@@ -238,7 +470,7 @@
 		transition: 0.3s;
 	}
 
-	.tickButtonBackground:hover { 
+	.tickButtonBackground:hover {
 		background-color: #0eb588;
 		color: white;
 		cursor: pointer;
@@ -250,19 +482,19 @@
 		transition: 0.3s;
 	}
 
-	.binButtonBackground:hover { 
+	.binButtonBackground:hover {
 		background-color: #c51a1b;
 		color: white;
 		cursor: pointer;
 	}
 
-	/* Back */
+	/* backOdds */
 	.backMainBgColor {
 		background-color: #8dd2f0;
 		transition: 0.3s;
 	}
 
-	.backMainBgColor:hover { 
+	.backMainBgColor:hover {
 		background-color: #00b3ff;
 		cursor: pointer;
 	}
@@ -271,7 +503,7 @@
 		background-color: #e9f6fc;
 	}
 
-	.backOthersBgColorHover:hover { 
+	.backOthersBgColorHover:hover {
 		background-color: #00b3ff;
 		cursor: pointer;
 	}
@@ -281,13 +513,13 @@
 		font-weight: bold;
 	}
 
-	/* Lay */
+	/* layOdds */
 
 	.layMainBgColor {
 		background-color: #feafb2;
 	}
 
-	.layMainBgColor:hover { 
+	.layMainBgColor:hover {
 		background-color: #FF7A7F;
 		cursor: pointer;
 	}
@@ -296,7 +528,7 @@
 		background-color: #fce3e4;
 	}
 
-	.layOthersBgColorHover:hover { 
+	.layOthersBgColorHover:hover {
 		background-color: #FF7A7F;
 		cursor: pointer;
 	}
@@ -313,3 +545,55 @@
 
 
 
+
+/****************************** Gambling Copyrights (start) ********************************/
+	#copyrights {
+		background-color: #2b2f35;
+	}
+
+	.footer-responsible-text {
+		display: block;
+		color:white;
+		/* background-color: #2b2f35; */
+		font-weight: 400;
+		margin: 0;
+		padding: 10px 0 ;
+		font-size: 1.2em;
+	}
+
+	.bg-icon--logo-gambling-commision {
+		background-image: url("../../assets/copyrights/gambling-commission-logo.svg");
+		width: 93px;
+		height: 25px;
+	}
+	
+	.bg-icon--logo-gamcare-problem {
+		background-image: url("../../assets/copyrights/problem-gambling-logo-new.png");
+		width: 58px;
+		height: 24px;
+	}
+	
+	.bg-icon--logo-18-plus {
+		background-image: url("../../assets/copyrights/18-logo.svg");
+		width: 24px;
+		height: 24px;
+	}
+	
+	.bg-icon--gamstop-logo {
+		background-image: url("../../assets/copyrights/gamstop-logo.svg");
+		width: 132px;
+		height: 24px;
+	}
+	
+	.bg-icon {
+		background-repeat: no-repeat;
+		background-size: contain;
+		background-position: 50%;
+		display: inline-block;
+	}
+	.footer-logo-spaces {
+		margin: 20px 90px 0 0;
+		flex-shrink: 0;
+		margin-bottom: 20px;
+	}
+	/****************************** Gambling Copyrights (end) ********************************/

@@ -1,5 +1,5 @@
 {
-	"games": ["Horse Race", "Greyhound Race", "Motor Sport", "Golf" , "Cycling"],
+	"games": ["Horse Race", "Greyhound Race", "Motor Sport", "Golf" , "Cycling", "Virtual Sport"],
 	"Horse Race": {
 		"region": ["uk"],
 		"uk": {
@@ -409,6 +409,82 @@
 								},
 								{
 										"horseName": "6 Alexey Lutsenko",
+										"silk": "assets\/dog\/dog_6.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
+								}
+							]
+						}
+					}
+			}
+		}
+	},
+
+
+
+	
+	"Virtual Sport": {
+		"region": ["uk"],
+		"uk": {
+			"venues": ["Some Virtual Sports"],
+			"Some Virtual Sports": {
+					"dates": ["01-07-2022"],
+					"01-07-2022": {
+						"timings": ["08:30"],
+						"08:30": {
+							"matchType": "Virtual",
+							"runLength": "xx miles in total",
+							"players": [
+								{
+										"horseName": "1 Player 1",
+										"silk": "assets\/dog\/dog_1.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
+								},
+								{
+										"horseName": "2 Player 2",
+										"silk": "assets\/dog\/dog_2.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
+								},
+								{
+										"horseName": "3 Player 3",
+										"silk": "assets\/dog\/dog_3.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
+								},
+								{
+										"horseName": "4 Player 4",
+										"silk": "assets\/dog\/dog_4.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
+								},
+								{
+										"horseName": "5 Player 5",
+										"silk": "assets\/dog\/dog_5.png",
+										"backOdds": [],
+										"layOdds": [],
+										"backCash":[],
+										"layCash": [],
+										"bets":[]
+								},
+								{
+										"horseName": "6 Player 6",
 										"silk": "assets\/dog\/dog_6.png",
 										"backOdds": [],
 										"layOdds": [],

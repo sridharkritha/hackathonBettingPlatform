@@ -11,30 +11,110 @@
 	<script src="js/sportsbook/login.js"></script>
 	<script src="js/sportsbook/client.js"></script>
 
-	<title>PBP - A Peer Betting Platform</title>
+	<title>ChallengeBets - A P2P Betting Platform</title>
 </head>
 
 <body>
-	<!-- login(start) -->
-	<div id="regLoginWrapperId">
-		<span id="welcomeUserName"></span>
-		<div  id="userBalanceAmount"></div>
-		<div id="regLoginFieldsId">
-			<input type="text" autocomplete="off" id="username" placeholder="Username" />
-			<input type="password" autocomplete="off" id="password" placeholder="Password" />
-			<input type="submit" id="logInId" value="Log in" />
-			<input type="submit" id="joinNowId" value="Join Now!" />
+
+<div class="parent">
+
+	<div class="header">
+		<div id="headerLogo">
+			<img src="logo.jpg">
+			<!--<p>A P2P Betting Platform</p>-->
+		</div>
+		<!-- login(start) -->
+		<div id="regLoginWrapperId">
+			<span id="welcomeUserName" class="account"></span>
+			<div  id="userBalanceAmount" class="account"></div>
+			<div id="regLoginFieldsId">
+				<input type="text" autocomplete="off" id="username" placeholder="Username" class="textField" />
+				<input type="password" autocomplete="off" id="password" placeholder="Password" class="textField" />
+				<input type="submit" id="logInId" value="Log in" class="regLoginButton" />
+				<input type="submit" id="joinNowId" value="Join Now!" class="regLoginButton" />
+			</div>
+		</div>
+		<!-- login(end) -->
+	</div>
+
+	<!-- "Horse Race", "Greyhound Race", "Motor Sport", "Golf" , "Cycling" -->
+
+	<div id="bodyWrapper">
+		<div id="leftSidebar">
+			<div class="sectionTitle">Racing</div>
+			<div id="rightSidebarLinks" class="section">
+				<img class="section-icon" src="assets/horse-3-24.png" height="24px" />
+				<a href="Horse Race">Horse Racing</a>
+				<br><br>
+				<img class="section-icon" src="assets/dog-32-24.png" height="24px" />
+				<a href="Greyhound Race">Greyhound Racing</a>
+				<br><br>
+				<img class="section-icon" src="assets/car-3-24.png" height="24px" />
+				<a href="Motor Sport">Motor Sport</a>
+				<br><br>
+				<img class="section-icon" src="assets/golf-24.png" height="24px" />
+				<a href="Golf">Golf</a>
+				<br><br>
+				<img class="section-icon" src="assets/bicycle-24.png" height="24px" />
+				<a href="Cycling">Cycling</a>
+
+				<!-- Example: Hook to fetch a new sports -->
+				<!-- <br><br>
+				<img class="section-icon" src="assets/virtuals.png" height="24px" />
+				<a href="Virtual Sport">Virtual Sport</a> -->
+
+
+
+			</div>
+		</div>
+
+	<!-- --------------------------------------------------------------------- -->
+		<div id="rightMain">
+			<div class="titleBar">
+				<div id="titleBarTxtId" class="h1title"></div>
+			</div>
+			<div id="rightMainInner">
+				<!-- Event/Sports Container	 -->
+				<div id="sportsEventTitle" class=""></div>
+				<div id="sportsEventContainer" class="gridROw" style="overflow:scroll; height:400px; margin: 0 10px; border: 1px solid #43444a;"></div>
+
+				<div id="matchResultSimulator" class = "matchResultSimulatorOverlayPanel">
+					<h1 id="marketStatusId" class = "blink_me centered"></h1>
+					<div id="digitalClock"  class = "centered"></div>
+					<!-- game simulator -->
+				</div>
+				<div id="gameSimulator" >
+					<div id="gameSimulatorWrapper"></div>
+					<div id="resultDeclarationWrapper" class="centered"></div>
+					<div id ="showPublishedResultId" class="centered"></div>
+				</div>
+			</div>
+			<input type="submit" id="publishResultId" value="Start Race" class="regLoginButton" />
+			<img src="assets/loading.gif" id="publishResultIdLoader" width="30px" style="display: none;" />
+
+		</div>
+
+		<div id="rightSidebar">
+			<div class="h1title">Bet Slip</div>
+			<!-- Bet Slip -->
+			<div id="betSlipContainer" class="unselectable"></div>
+
 		</div>
 	</div>
-	<!-- login(end) -->
 
-	<h1>Horse Race - Race Card</h1>
+	<!-- responsible gambling - warnings -->
+	<div id="copyrights" class="centered">	
+		<div class="footer-responsible-text">RESPONSIBLE GAMBLING</div>
 
-	<!-- Bet Slip -->
-	<div id="betSlipContainer" class="unselectable"></div>
-
-	<!-- Event/Sports Container	 -->
-	<div id="sportsEventContainer" class="gridROw"></div>
+		<a	href="https://www.gamstop.co.uk" target="_blank" 
+			rel="noopener noreferrer" class="bg-icon bg-icon--gamstop-logo footer-logo-spaces"></a>
+		<a	href="https://www.gamblingcommission.gov.uk/public-register/business/detail/39504" target="_blank"
+			rel="noopener noreferrer" class="bg-icon bg-icon--logo-gambling-commision footer-logo-spaces"></a>
+		<a	href="http://www.gamcare.org.uk" target="_blank" rel="noopener noreferrer"
+			class="bg-icon bg-icon--logo-gamcare-problem footer-logo-spaces"></a>
+		<a	href="https://www.gamblingcommission.gov.uk" target="_blank"
+			rel="noopener noreferrer" class="bg-icon bg-icon--logo-18-plus footer-logo-spaces"></a>
+	</div>
 
 </body>
 
