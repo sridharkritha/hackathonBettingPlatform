@@ -590,8 +590,9 @@ window.addEventListener('load', function () {
 		// key = "horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.0"
 		parentElemRef = document.createElement("DIV");
 		betSlipSheet[key].parentElemRef = parentElemRef;
-		document.getElementById("betSlipContainer").appendChild(parentElemRef); 
+		document.getElementById("betSlipContainer").appendChild(parentElemRef);
 
+		// Time & Venue
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_timeVenueId"); 
 		elemRef.setAttribute("class","gridColumnLayout gridColumnLayout_2");
@@ -611,6 +612,7 @@ window.addEventListener('load', function () {
 		elemRef = document.createTextNode(betSlipSheet[key].eventinfo.raceName); //("Cartmel");
 		document.getElementById(key+"_venueId").appendChild(elemRef); 
 
+		// backOdds & HorseName
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_outcomePlayerId");
 		elemRef.setAttribute("class","gridColumnLayout gridColumnLayout_2");
@@ -631,6 +633,7 @@ window.addEventListener('load', function () {
 		elemRef = document.createTextNode(betSlipSheet[key].playerinfo.horseName); // ("11 French Company");
 		document.getElementById(key+"_playerId").appendChild(elemRef); 
 
+		// Bet slip entires - backodd, stake, profit, tick & bin
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id", key+"_backStakeProfitBetBinId");
 		elemRef.setAttribute("class","gridColumnLayout gridColumnLayout_5 gridCenterVH");
