@@ -273,7 +273,7 @@
 	}
 
 	#sportsEventContainer {
-		display: block;
+		display: grid;
 		clear: both;
 	}
 
@@ -423,6 +423,7 @@
 
 	.odd, .totalAmt {
 		text-align: center;
+		margin-top: 7px;
 	}
 
 	.gridCenterVH {
