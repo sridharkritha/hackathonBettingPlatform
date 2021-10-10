@@ -976,19 +976,20 @@ window.addEventListener('load', function () {
 		}
 	}
 
-
+	// Store auth information inside the cookie
 	function getCookieData(arg) {
-
 			let storageObj = {};
 			const cbAuthObj = localStorage.getItem('cbAuth'); // get it from cookie
+			
 			if(cbAuthObj) storageObj = JSON.parse(cbAuthObj);
-			 if(storageObj[g_UserName + '.username']) {
-			 	switch(arg) {
-			 		case 'token'   : return storageObj[g_UserName + '.token'];
-			 		case 'username': return storageObj[g_UserName + '.username'];
-			 		case 'password': return storageObj[g_UserName + '.password'];
 
-			 	}
+			if(storageObj[g_UserName + '.username']) {
+				switch(arg) {
+					case 'token'   : return storageObj[g_UserName + '.token'];
+					case 'username': return storageObj[g_UserName + '.username'];
+					case 'password': return storageObj[g_UserName + '.password'];
+
+				}
 			}
 
 			return null;
@@ -1378,7 +1379,6 @@ window.addEventListener('load', function () {
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id","shuffleItemsContainerId");
 		elemRef.setAttribute("class","shuffleItemsContainer gridColumnLayout gridCenterVH");
-		// elemRef.classList.add('gridColumnLayout_'+nPlayers); // .gridColumnLayout_6
 		str = "repeat("+ nPlayers +", 1fr)";
 		elemRef.style.gridTemplateColumns = str;  // grid-template-columns: repeat(6, 1fr);
 		document.getElementById("myParentId_gameSimulatorContainer_myId_0").appendChild(elemRef);
@@ -1390,16 +1390,13 @@ window.addEventListener('load', function () {
 			document.getElementById("shuffleItemsContainerId").appendChild(elemRef);
 		
 			elemRef2 = document.createElement("IMG");
-// 			str = "assets/silk/silk_" + i + ".png";
 			elemRef2.setAttribute("src",currentDisplayedMatch.playerInfo[i].silk); // image url
 			elemRef2.setAttribute("alt","Silk");
-			// elemRef.setAttribute("id","myParentId_myParentId_shuffleItemsContainerId_myId_5_myId_6");
 			elemRef.appendChild(elemRef2);
 		}
 
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("class","pickerBox gridColumnLayout gridCenterVH");
-		// elemRef.classList.add('gridColumnLayout_'+nPlayers); // .gridColumnLayout_6
 		str = "repeat("+ nPlayers +", 1fr)";
 		elemRef.style.gridTemplateColumns = str;  // grid-template-columns: repeat(6, 1fr);
 		elemRef.setAttribute("id","myParentId_myParentId_gameSimulatorContainer_myId_0_myId_12");
