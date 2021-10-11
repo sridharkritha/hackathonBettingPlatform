@@ -12,7 +12,7 @@ window.addEventListener('load', function () {
 	}
 
 	// Universally unique identifier (RFC4122)
-	// Create a unique id for each client on page load without using username/password. 
+	// Create a unique id for a each client on the page load without using the username/password. 
 	// This uuid can be used by the server to identify the client and pass the client specific updated data.
 	function uuid() {
 		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -84,16 +84,10 @@ window.addEventListener('load', function () {
 			const username = getCookieData('username'); // localStorage.getItem(g_UserName + '.username'); // get it from cookie
 			const res = JSON.parse(data);
 
-/*
-			// hide (bet/bin) buttons and show (bet placed Confirm / Matched Bet Amt) text's
-			// 1. hide
-			document.getElementById(oddstr + '_placeBetButtonId').style.display = 'none';
-			document.getElementById(oddstr + '_deleteBetButtonId').style.display = 'none';
-			// 2. show
-			document.getElementById(oddstr + '_betConfirmWrapper').style.display = 'block';
-			document.getElementById(oddstr + '_betMatchingWrapperId').style.display = 'block';
 
-			let str = null;
+
+
+/*			let str = null;
 			str = (bettype == 'backOdds') ? '£ '+ 0 + ' / ' + '£ '+ stakevalue : '£ '+ 0 + ' / ' + '£ '+ profitliabilityvalue;
 			document.getElementById(oddstr + '_betMatchedAmtWrapperId').textContent = str;
 */
@@ -107,6 +101,17 @@ window.addEventListener('load', function () {
 						g_BetSlipSheet[key].playerinfo.betType === res.matchedOdds[i][Object.keys(res.matchedOdds[i])[0]].bettype
 					  )
 					{
+						/*
+									// hide (bet/bin) buttons and show (bet placed Confirm / Matched Bet Amt) text's
+			// 1. hide
+			document.getElementById(res.oddstr + '_placeBetButtonId').style.display = 'none';
+			document.getElementById(res.oddstr + '_deleteBetButtonId').style.display = 'none';
+			// 2. show
+			document.getElementById(res.oddstr + '_betConfirmWrapper').style.display = 'block';
+			document.getElementById(res.oddstr + '_betMatchingWrapperId').style.display = 'block';
+			*/
+
+			
 						key = Object.keys(res.matchedOdds[i])[0];
 						matchvalue = res.matchedOdds[i][key].matchvalue;
 						cashvalue = res.matchedOdds[i][key].bettype == 'backOdds' ? res.matchedOdds[i][key].stakevalue: res.matchedOdds[i][key].profitliabilityvalue;
@@ -1053,6 +1058,7 @@ window.addEventListener('load', function () {
 				if (res.status === 'ok') {
 					document.getElementById("userBalanceAmount").textContent = "Balance: " + res.userBalance;
 
+
 					// hide (bet/bin) buttons and show (bet placed Confirm / Matched Bet Amt) text's
 					// hide
 					document.getElementById(oddstr + '_placeBetButtonId').style.display = 'none';
@@ -1061,13 +1067,14 @@ window.addEventListener('load', function () {
 					document.getElementById(oddstr + '_betConfirmWrapper').style.display = 'block';
 					document.getElementById(oddstr + '_betMatchingWrapperId').style.display = 'block';
 
+
 					let str = null;
 
 					str = (bettype == 'backOdds') ? '£ '+ 0 + ' / ' + '£ '+ stakevalue : '£ '+ 0 + ' / ' + '£ '+ profitliabilityvalue;
 
 					document.getElementById(oddstr + '_betMatchedAmtWrapperId').textContent = str;
 
-/*
+
 					let key = null;
 					let matchvalue = 0;
 					let cashvalue = 0;
@@ -1092,7 +1099,7 @@ window.addEventListener('load', function () {
 							}
 						});
 					}
-*/
+
 
 
 

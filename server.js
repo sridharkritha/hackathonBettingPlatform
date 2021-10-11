@@ -205,7 +205,7 @@
 			const matchedOdds = await findOneAndUpdateDB(client, MONGO_DATABASE_NAME, MONGO_COLLECTION_NAME, 
 									{}, changeObj, 'push'); // 'push' - add a new element in the existing array.
 
-			notifyAllUser('EVENT_SERVER_MATCHED_BET_UPDATE', JSON.stringify({'matchedOdds': matchedOdds}));
+			notifyAllUser('EVENT_SERVER_MATCHED_BET_UPDATE', JSON.stringify({'matchedOdds': matchedOdds, 'oddstr':oddstr}));
 
 			// result = await User.updateOne(	{ _id },
 			// 								{$inc: { "userBalance": -betValue }}   // $inc
@@ -234,8 +234,8 @@
 									{}, changeObj, 'push');
 	*/
 
-			// res.json({ status: 'ok', matchedOdds: matchedOdds, "userBalance": result._doc.userBalance - betValue});
-			res.json({ status: 'ok', "userBalance": result._doc.userBalance - betValue});
+			res.json({ status: 'ok', matchedOdds: matchedOdds, "userBalance": result._doc.userBalance - betValue});
+			// res.json({ status: 'ok', "userBalance": result._doc.userBalance - betValue});
 		} catch (error) {
 			console.log(error);
 			res.json({ status: 'error', error });
