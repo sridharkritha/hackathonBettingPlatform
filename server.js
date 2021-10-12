@@ -395,7 +395,8 @@
 
 		let winData = 	{
 							"winnerIndex": winner,
-							"horseName": bets[1].horseName // winer of the match
+							"horseName": bets[winner].horseName, // winer of the match
+							"silk": bets[winner].silk
 						};
 
 		// Win Calculation after the match has been completed
@@ -403,7 +404,7 @@
 			for(let j = 0, m = bets[i].bets.length; j < m; ++j) {
 
 				// Calculate the winnings
-				if(winner === i && bets[i].bets[j].bettype === "backOdds" && bets[i].bets[j].matchvalue < bets[i].bets[j].stakevalue) {
+				if(winner === i && bets[i].bets[j].bettype === "backOdds" && bets[i].bets[j].matchvalue <= bets[i].bets[j].stakevalue) {
 					
 					bets[i].bets[j].wins = (bets[i].bets[j].matchvalue ? bets[i].bets[j].matchvalue + ((bets[i].bets[j].stakevalue - bets[i].bets[j].matchvalue) * bets[i].bets[j].oddvalue) : bets[i].bets[j].stakevalue + bets[i].bets[j].profitliabilityvalue).toFixed(2);
 					updateUserBalanceAfterMatch({ username: bets[i].bets[j].username }, { "userBalance": Number(bets[i].bets[j].wins) });
@@ -411,17 +412,23 @@
 					winData.horseName = bets[i].horseName; 
 					winData.silk = bets[i].silk;
 				}
-				else if(winner != i && bets[i].bets[j].bettype === "backOdds" && bets[i].bets[j].matchvalue < bets[i].bets[j].stakevalue) {
+				else if(winner != i && bets[i].bets[j].bettype === "backOdds" && bets[i].bets[j].matchvalue <= bets[i].bets[j].stakevalue) {
 					// return back the unmatched stake money back and no need to add additional stake value
 					bets[i].bets[j].wins = (bets[i].bets[j].matchvalue ? bets[i].bets[j].matchvalue : 0).toFixed(2);
 					updateUserBalanceAfterMatch({ username: bets[i].bets[j].username }, { "userBalance": Number(bets[i].bets[j].wins) });
 				}
-				else if(winner == i && bets[i].bets[j].bettype === "layOdds" && bets[i].bets[j].matchvalue < bets[i].bets[j].profitliabilityvalue) {
+				else if(winner == i && bets[i].bets[j].bettype === "layOdds" && bets[i].bets[j].matchvalue <= bets[i].bets[j].profitliabilityvalue) {
 					bets[i].bets[j].wins = (bets[i].bets[j].matchvalue ? bets[i].bets[j].matchvalue : 0).toFixed(2);
 					updateUserBalanceAfterMatch({ username: bets[i].bets[j].username }, { "userBalance": Number(bets[i].bets[j].wins) });
 				}
-				else if(winner != i && bets[i].bets[j].bettype === "layOdds" && bets[i].bets[j].matchvalue < bets[i].bets[j].profitliabilityvalue) {
-					bets[i].bets[j].wins = (bets[i].bets[j].matchvalue ? bets[i].bets[j].matchvalue * 2 : 2 * bets[i].bets[j].stakevalue).toFixed(2);
+				else if(winner != i && bets[i].bets[j].bettype === "layOdds" && bets[i].bets[j].matchvalue <= bets[i].bets[j].profitliabilityvalue) {
+					if(bets[i].bets[j].matchvalue === bets[i].bets[j].profitliabilityvalue) {
+						bets[i].bets[j].wins = (bets[i].bets[j].profitliabilityvalue).toFixed(2);
+					}
+					else {
+						bets[i].bets[j].wins = (bets[i].bets[j].matchvalue ? bets[i].bets[j].matchvalue * 2 : 2 * bets[i].bets[j].stakevalue).toFixed(2);
+					}
+
 					updateUserBalanceAfterMatch({ username: bets[i].bets[j].username }, { "userBalance": Number(bets[i].bets[j].wins) });
 				}
 				else {
