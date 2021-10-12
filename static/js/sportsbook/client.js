@@ -254,7 +254,11 @@ window.addEventListener('load', function () {
 	function intSportData(sportsId) {
 		// <!-- "Horse Race", "Greyhound Race", "Motor Sport", "Golf" , "Cycling" -->
 		g_SportsBook[sportsId].isWinPredictorActive  = false;
-		document.getElementById("matchResultSimulator").replaceChildren(); // clear all children
+
+		const refSimulatorElm = document.getElementById("matchResultSimulator");
+		if(refSimulatorElm) refSimulatorElm.innerHTML = ''; // clear all children - supports all the browsers
+		// document.getElementById("matchResultSimulator").replaceChildren(); // clear all children
+
 		return g_SportsBook[sportsId];
 	}
 
