@@ -3,7 +3,6 @@ window.addEventListener('load', function () {
 	function randomIntFromInterval(min, max) { // min and max included 
 		return Math.floor(Math.random() * (max - min + 1) + min);
 	}
-
 	
 	// 'one.two.three.four'  ==== #2 ===>    'one.two'
 	function remove_N_WordsFromLast(str, N, delimiter) {
@@ -48,14 +47,9 @@ window.addEventListener('load', function () {
 	// update their balance and bet slip entries
 	function notifyToServer(event, data) {
 		socket.emit(event, data);
-
-		// switch(event) {
-		// 	case 'EVENT_CLIENT_MATCH_SIMULATION_COMPLETED':
-		// 		socket.emit(event, data);
-		// 		break;
-		// }
 	}
 
+	// Connect the client to the server
 	socket.on("connect", async () => {
 		// console.log('EVENT_CLIENT_STATE_READY - event is sent');
 		// socket.emit('EVENT_CLIENT_STATE_READY', JSON.stringify({ isClientReady: true }));
@@ -84,14 +78,6 @@ window.addEventListener('load', function () {
 			const username = getCookieData('username'); // localStorage.getItem(g_UserName + '.username'); // get it from cookie
 			const res = JSON.parse(data);
 
-
-
-
-/*			let str = null;
-			str = (bettype == 'backOdds') ? '£ '+ 0 + ' / ' + '£ '+ stakevalue : '£ '+ 0 + ' / ' + '£ '+ profitliabilityvalue;
-			document.getElementById(oddstr + '_betMatchedAmtWrapperId').textContent = str;
-*/
-
 			let matchvalue = 0;
 			let cashvalue = 0;
 			for(let i = 0, n = res.matchedOdds.length; i < n; ++i) {
@@ -101,17 +87,6 @@ window.addEventListener('load', function () {
 						g_BetSlipSheet[key].playerinfo.betType === res.matchedOdds[i][Object.keys(res.matchedOdds[i])[0]].bettype
 					  )
 					{
-						/*
-									// hide (bet/bin) buttons and show (bet placed Confirm / Matched Bet Amt) text's
-			// 1. hide
-			document.getElementById(res.oddstr + '_placeBetButtonId').style.display = 'none';
-			document.getElementById(res.oddstr + '_deleteBetButtonId').style.display = 'none';
-			// 2. show
-			document.getElementById(res.oddstr + '_betConfirmWrapper').style.display = 'block';
-			document.getElementById(res.oddstr + '_betMatchingWrapperId').style.display = 'block';
-			*/
-
-			
 						key = Object.keys(res.matchedOdds[i])[0];
 						matchvalue = res.matchedOdds[i][key].matchvalue;
 						cashvalue = res.matchedOdds[i][key].bettype == 'backOdds' ? res.matchedOdds[i][key].stakevalue: res.matchedOdds[i][key].profitliabilityvalue;
@@ -584,7 +559,6 @@ window.addEventListener('load', function () {
 			document.getElementById("sportsEventContainer").classList.add("raceInProgress"); // overlay
 			document.getElementById('publishResultId').style.display = 'none'; // remove button
 		}
-
 	}
 	////////////////////// Dynamically construct - Race Card (end) /////////////////////////////////////////////////////
 
@@ -833,12 +807,10 @@ window.addEventListener('load', function () {
 		elemRef.setAttribute("placeholder","0.0");
 		elemRef.setAttribute("data-playercount", playerCount);
 		elemRef.addEventListener('input', onInputValueUpdated);
-				document.getElementById(key+"_profitValueBackMainFontColorId").appendChild(elemRef);
-
+		document.getElementById(key+"_profitValueBackMainFontColorId").appendChild(elemRef);
 		//////////////////////////////// AFTER BET (START) /////////////////////////////////////////////////////////////////////
 
-		// 4th COLUMN - Confirm the accepted bet 
-
+		// 4th COLUMN - Confirm the accepted bet
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_betConfirmWrapper");
 		elemRef.setAttribute("class","backOthersBgColor");
@@ -860,7 +832,6 @@ window.addEventListener('load', function () {
 		elemRef.setAttribute("id",key+"_betCancelWrapperId");
 		elemRef.setAttribute("class","blink_me");
 
-
 		document.getElementById(key+"_betConfirmWrapper").appendChild(elemRef); 
 		elemRef = document.createTextNode("WAITING FOR THE MATCH BET...");
 
@@ -868,7 +839,6 @@ window.addEventListener('load', function () {
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		// 5th COLUMN - SHOW THE MATCHED MONEY
-
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_betMatchingWrapperId");
 		elemRef.setAttribute("class","backOthersBgColor");
@@ -891,8 +861,7 @@ window.addEventListener('load', function () {
 		document.getElementById(key+"_betMatchingWrapperId").appendChild(elemRef); 
 		elemRef = document.createTextNode("£ 5.00 / £ 24.00");
 		document.getElementById(key+"_betMatchedAmtWrapperId").appendChild(elemRef);
-		//////////////////////////////// AFTER BET (END) /////////////////////////////////////////////////////////////////////
-
+		//////////////////////////////// AFTER BET (END) ///////////////////////////////////////////////////////////////
 
 		elemRef = document.createElement("DIV");
 		elemRef.setAttribute("id",key+"_placeBetButtonId");
@@ -925,11 +894,8 @@ window.addEventListener('load', function () {
 	////////////////// stack addition and subtraction (start) //////////////////////////////////////////////////////////
 	// Decrement the odd
 	function subtractOdd(e) {
-
 		const oddId = this.id.replace('_subtractBackId','_oddValueId'); // src, dst
-
-		const oddValue = document.getElementById(oddId); 
-
+		const oddValue = document.getElementById(oddId);
 		let value = Number(oddValue.value);
 
 		if(typeof value == 'number') {
@@ -952,9 +918,7 @@ window.addEventListener('load', function () {
 	function addOdd(e) {
 		// id = "horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.0_additionBackId"
 		const oddId = this.id.replace('_additionBackId','_oddValueId'); // src, dst
-
-		const oddValue = document.getElementById(oddId); 
-
+		const oddValue = document.getElementById(oddId);
 		let value = Number(oddValue.value);
 
 		if(typeof value == 'number') {
@@ -976,7 +940,6 @@ window.addEventListener('load', function () {
 
 	// Place a bet
 	function placeBet(e) {
-
 		// oddstr = horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.2
 		// oddstr = horseRace.uk.Cartmel.2021-09-20.12:00.players.0.layOdds.2
 		const oddstr = this.id.replace('_placeBetButtonId',''); // src, dst
@@ -987,22 +950,12 @@ window.addEventListener('load', function () {
 		const profitliabilityvalue = Number(document.getElementById(oddstr + '_profitLiabilityValueId').value);
 
 		if( typeof stakevalue == 'number' && stakevalue > 0 &&
-		    typeof oddvalue == 'number' && oddvalue > 0 &&
+			typeof oddvalue == 'number' && oddvalue > 0 &&
 			typeof profitliabilityvalue == 'number' && profitliabilityvalue > 0 ) {
-
-			// {'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.horseName': "11 French Company"}, 
+			// {'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.horseName': "11 French Company"},
 			// {'horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds' : [1,2,3]});
 			// console.log(JSON.parse(this.dataset.betinfo));
 			sendBetRequest(betstr, oddstr, oddvalue, stakevalue, profitliabilityvalue, bettype);
-
-			// hide (bet/bin) buttons and show (bet placed Confirm / Matched Bet Amt) text's
-			// hide
-// 			document.getElementById(this.id).style.display = 'none';
-// 			document.getElementById(this.id.replace('_placeBetButtonId','_deleteBetButtonId')).style.display = 'none';
-// 			// show
-// 			document.getElementById(this.id.replace('_placeBetButtonId','_betConfirmWrapper')).style.display = 'block';
-// 			document.getElementById(this.id.replace('_placeBetButtonId','_betMatchingWrapperId')).style.display = 'block';
-
 		}
 		else {
 			console.error("Invalid bet amount: ", stakevalue);
@@ -1043,7 +996,6 @@ window.addEventListener('load', function () {
 				return;
 			}
 
-
 			(async() => {
 				const res = await fetch('/api/placeBet', {
 					method: 'POST',
@@ -1062,7 +1014,6 @@ window.addEventListener('load', function () {
 				if (res.status === 'ok') {
 					document.getElementById("userBalanceAmount").textContent = "Balance: " + res.userBalance;
 
-
 					// hide (bet/bin) buttons and show (bet placed Confirm / Matched Bet Amt) text's
 					// hide
 					document.getElementById(oddstr + '_placeBetButtonId').style.display = 'none';
@@ -1071,13 +1022,10 @@ window.addEventListener('load', function () {
 					document.getElementById(oddstr + '_betConfirmWrapper').style.display = 'block';
 					document.getElementById(oddstr + '_betMatchingWrapperId').style.display = 'block';
 
-
 					let str = null;
-
 					str = (bettype == 'backOdds') ? '£ '+ 0 + ' / ' + '£ '+ stakevalue : '£ '+ 0 + ' / ' + '£ '+ profitliabilityvalue;
 
 					document.getElementById(oddstr + '_betMatchedAmtWrapperId').textContent = str;
-
 
 					let key = null;
 					let matchvalue = 0;
@@ -1104,9 +1052,6 @@ window.addEventListener('load', function () {
 						});
 					}
 
-
-
-
 					// everything went fine
 					console.log("Bet Placed Successfully");
 				} else {
@@ -1123,22 +1068,19 @@ window.addEventListener('load', function () {
 
 	// Delete the bet slip
 	function deleteBetSlip(e) {
-
 		// id = "horseRace.uk.Cartmel.2021-09-20.12:00.players.0.backOdds.1_deleteBetButtonId"
 		const key = this.id.replace('_deleteBetButtonId',''); // src, dst
-
 		deleteBetSlipByKey(key);
-
 		updateProfitLossDisplay(); // display profit and loss for each players
 	}
 
 	// Delete the bet slip entry by key
 	function deleteBetSlipByKey(key) {
 		g_BetSlipSheet[key].parentElemRef.remove(); // remove element from DOM
-
 		delete g_BetSlipSheet[key]; // remove the prop from the object
 	}
 
+	// Remove the bet slip entries
 	function removeCompletedEventStuffsFromBetSlip(betSlipEntryKey) {
 		Object.keys(g_BetSlipSheet).forEach((key) => {
 			if(remove_N_WordsFromLast(key, 3) === betSlipEntryKey) {
@@ -1153,8 +1095,8 @@ window.addEventListener('load', function () {
 		let profitLiabilityValue = 0;
 		let loss = 0;
 		const playerCount = g_CurrentDisplayedMatch.playerCount;
-
 		let playerProfitLoss = [...Array(playerCount).fill(0)];
+
 		for(let i = 0; i < playerCount; ++i) {
 			// explore the full bet slip
 			Object.keys(g_BetSlipSheet).forEach((key) => {
@@ -1216,7 +1158,6 @@ window.addEventListener('load', function () {
 
 	// Calculate and auto fill the input fields
 	function fillInputFields(elementId, numValue, playercount) {
-
 		numValue = Number(numValue);
 
 		if (typeof numValue === 'number') {
@@ -1253,7 +1194,6 @@ window.addEventListener('load', function () {
 				backLay = 1.01;
 			}
 
-
 			if(lastWord === 'oddValueId') {
 				profitLiability = stake * (numValue - 1);
 				document.getElementById(profitLiabilityValueId).value = profitLiability.toFixed(2);
@@ -1272,10 +1212,8 @@ window.addEventListener('load', function () {
 		else console.error("Invalid number: ", numValue);
 	}
 
-
 	// Read the input box value
 	function onInputValueUpdated(e) {
-
 		const numValue = Number(e.target.value);
 		if (typeof numValue === 'number') {
 			fillInputFields(this.id, numValue, Number(e.currentTarget.dataset.playercount));
@@ -1285,7 +1223,6 @@ window.addEventListener('load', function () {
 
 	// Correct the odd value on focus out
 	function onInputFocusoutMinOddCorrection(e) {
-
 		let backLay = Number(e.target.value);
 		if (typeof backLay === 'number') {
 				// Minimum odd
@@ -1561,7 +1498,7 @@ window.addEventListener('load', function () {
 		document.getElementById("marketStatusId").textContent = "MARKET CLOSING DOWN SOON.....";
 	}
 
-
+	// clock count down
 	var last = 0; // timestamp of the last render() call
 	function countdownClock(now) {
 		if(!g_NextSportsToDisplay.isWinPredictorActive) return;
@@ -1599,7 +1536,6 @@ window.addEventListener('load', function () {
 		}
 		if(runClockCounter) requestAnimationFrame(countdownClock);
 	}
-
 //////////////////////////////////////////////// Digital Clock Countdown (end) /////////////////////////////////////////
 
 //////////////////////////////// Tester (start) ////////////////////////////////////////////////////////////////////////
@@ -1611,7 +1547,6 @@ window.addEventListener('load', function () {
 	run();
 
 	function publishResult(e) {
-
 		document.getElementById('publishResultId').style.display = 'none';
 		// document.getElementById('publishResultIdLoader').style.display = 'block';
 		document.getElementById("sportsEventContainer").classList.add("raceInProgress");
@@ -1623,7 +1558,6 @@ window.addEventListener('load', function () {
 	}
 
 	function resetUI() {
-
 		if(document.getElementById("sportsEventContainer").classList.contains("raceInProgress")){
 			document.getElementById("sportsEventContainer").classList.remove("raceInProgress");
 			document.getElementById('matchResultSimulator').style.display = 'none';
@@ -1633,7 +1567,6 @@ window.addEventListener('load', function () {
 		if(document.getElementById("publishResultId")) {
 			document.getElementById('publishResultId').style.display = 'block';
 		}
-
 	}
 
 	// Send a bet request to the server

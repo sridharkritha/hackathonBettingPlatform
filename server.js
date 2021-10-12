@@ -16,7 +16,6 @@
 	const User = require('./model/user');
 	const bcrypt = require('bcryptjs');
 	const jwt = require('jsonwebtoken');
-
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// const MONGO_DATABASE_NAME = 'p2pbettingplatformdb';
@@ -35,6 +34,12 @@
 	g_Storage.nClientsConnected = 0; // no.of active client connections
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	//////////////////////////// Utility Functions (start) /////////////////////////////////////////////////////////////
+	function randomIntFromInterval(min, max) { // min and max included 
+		return Math.floor(Math.random() * (max - min + 1) + min);
+	}
+	//////////////////////////// Utility Functions (end) ///////////////////////////////////////////////////////////////
+
 	// https://mongoosejs.com/docs/connections.html
 
 	(async () => {
@@ -48,7 +53,6 @@
 		} catch (error) {
 			console.log("UserAccount DB connection error :", error);
 		}
-
 	})();
 	/////////////////////////////////////////////// Tester(start) //////////////////////////////////////////////////////
 
@@ -258,7 +262,7 @@
 		}
 	];
 
-
+	// Return all the documents inside the collection
 	async function returnAllDocuments(client, dataBaseName, collectionName, clientInfo) {
 		// See https://mongodb.github.io/node-mongodb-native/3.6/api/Collection.html#find for the find() docs
 		// const cursor = await client.db(dataBaseName).collection(collectionName).find({ }, {_id: 1, name: 1, wins: 1 });
@@ -283,7 +287,6 @@
 			}
 		}
 	}
-
 
 	// Read the json file from local storage and move to mongodb atlas
 	function uploadLocalJsonCollectionToDB(client, dataBaseName, collectionName) {
@@ -318,6 +321,7 @@
 		console.log(result.insertedIds);
 	}
 
+	// Drop/Delete all the documents inside the collection
 	async function dropAllDocuments(client, dataBaseName, collectionName) {
 		// Delete collection including all its documents
 		let result = await client.db(dataBaseName).collection(collectionName).drop();
@@ -328,6 +332,7 @@
 		// console.log(result);
 	}
 
+	// Find the document inside the collection
 	async function findDocument(client, dataBaseName, collectionName, findObject, updateObject, operation) {
 		// findOne - working
 		// client.db(dataBaseName).collection(collectionName).findOne({}, function(err, result) {
@@ -350,12 +355,7 @@
 		// console.log(result.value.horseRace.uk.Cartmel['2021-09-20']['12:00'].players[0].backOdds);
 	}
 
-	//////////////////////////// Utility Functions (start) /////////////////////////////////////////////////////////////
-	function randomIntFromInterval(min, max) { // min and max included 
-		return Math.floor(Math.random() * (max - min + 1) + min);
-	}
-	//////////////////////////// Utility Functions (end) ///////////////////////////////////////////////////////////////
-
+	// Update the user balance
 	async function updateUserBalanceAfterMatch(findObject, updateObject) {
 				let result = await User.findOneAndUpdate(
 											findObject, // { username: 'sridhar123' },
@@ -450,6 +450,7 @@
 		return winData; // return match winner information
 	}
 
+	// Update the document
 	async function findOneAndUpdateDB(client, dataBaseName, collectionName, findObject, updateObject, operation) {
 
 		let obj  = null;
@@ -555,11 +556,9 @@
 					backCashTotal = oddsObj.backList['cash'][i] * (oddsObj.backList['odd'][i] - 1);
 
 					if(backCashTotal > oddsObj.layList['cash'][j]) {
-						// cashMatched = oddsObj.backList['cash'][i] - oddsObj.layList['cash'][j];
 						cashMatched = oddsObj.layList['cash'][j];
 					}
 					else {
-						// cashMatched = oddsObj.layList['cash'][j] - oddsObj.backList['cash'][i];
 						cashMatched = backCashTotal;
 					}
 
@@ -613,8 +612,6 @@
 				}
 			}
 		}
-
-
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		// horseRace.uk.Cartmel.2021-09-20.12:00.players.2.bets
@@ -767,18 +764,12 @@
 		});
 	});
 
-
+	// Notify all the connected clients
 	function notifyAllUser(event, data) {
 		io.emit(event, data);
-		// switch(event) {
-		// 	case 'EVENT_CLIENT_MATCH_SIMULATION_COMPLETED':
-		// 		// Notify all the user that match simulation has been completed
-		// 		io.emit('EVENT_SERVER_MATCH_SIMULATION_COMPLETED', data);
-		// 		break;
-		// }
 	}
 
-
+	// Server listen at the given port number
 	httpServer.listen(port, async () => {
 		console.log("ChallengeBets P2P Betting Server is running on the port : " + httpServer.address().port);
 
@@ -788,7 +779,6 @@
 		try {
 				await client.connect();
 				console.log("Cluster connection                                      : Success");
-
 
 				DB = client.db(MONGO_DATABASE_NAME);
 				if(!DB) {
